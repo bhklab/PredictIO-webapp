@@ -1,0 +1,9 @@
+#ignoring the node module folder and package lock.
+node_modules/
+package-lock.json
+
+# ds store and env. variables.
+.DS_Store
+.env
+.vscode
+
