@@ -137,5 +137,3 @@ write.csv(dataset, 'csv/dataset.csv', row.names=F)
 write.csv(gene, file='csv/gene.csv', row.names=F)
 write.csv(dataset_gene, 'csv/dataset_gene.csv', row.names=F)
 write.csv(clinical_info, 'csv/clinical_info.csv', row.names=F)
-
-tmp <- read.csv('results/Liu/SNV.csv.gz', sep=';', header=T)

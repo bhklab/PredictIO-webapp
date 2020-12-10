@@ -53,7 +53,7 @@ const Home = () => {
                     Predict a patient response to ICB therapy.
                 </AppDescription>
                 <HomeButtons>
-                    <LinkButton href='/' text='Explore' style={{}} />
+                    <LinkButton href='/explore' text='Explore' style={{}} />
                     <LinkButton href='/' text='IO Predict' style={{}} />
                 </HomeButtons>
             </StyledHome>

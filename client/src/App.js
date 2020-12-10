@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 // individual page components
 import {
-  Home
+  Home, 
+  Explore
 } from './Components/index';
 
 // styled component
@@ -16,6 +17,7 @@ const App = () => {
         <Router>
           <Switch>
             <Route path='/' exact component={Home} />
+            <Route path='/explore' exact component={Explore} />
           </Switch>
         </Router>
     </React.Fragment>
