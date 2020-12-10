@@ -4,21 +4,20 @@ Schema is found in https://lucid.app/lucidchart/invitations/accept/279ab4e7-6f6a
 */
 USE iodb;
 
-DROP TABLE expression;
-DROP TABLE snv;
-DROP TABLE cna;
-DROP TABLE cna_features;
-DROP TABLE snv_features;
+DROP TABLE dataset_gene;
 DROP TABLE clinical_info;
-DROP TABLE genes;
+DROP TABLE gene;
 DROP TABLE dataset;
 
 CREATE TABLE dataset (
 	dataset_id varchar(255) NOT NULL,
+    expr boolean,
+    cna boolean,
+    snv boolean,
     PRIMARY KEY (dataset_id)
 );
 
-CREATE TABLE genes (
+CREATE TABLE gene (
 	gene_id varchar(255) NOT NULL,
     PRIMARY KEY (gene_id)
 );
@@ -37,65 +36,17 @@ CREATE TABLE clinical_info (
     drug_type varchar(255),
     dna varchar(255),
     rna varchar(255),
-    t_pfs double,
-    pfs boolean,
-    t_os double,
-    os boolean,
+	expr boolean,
+    cna boolean,
+    snv boolean,
     PRIMARY KEY (dataset_id, patient),
     FOREIGN KEY (dataset_id) REFERENCES dataset(dataset_id)
 );
 
-CREATE TABLE cna_features (
+CREATE TABLE dataset_gene (
 	dataset_id varchar(255) NOT NULL,
-	patient varchar(255) NOT NULL,
-    cna_tot double,
-    amp double,
-    del double,
-    PRIMARY KEY (dataset_id, patient),
-    FOREIGN KEY (dataset_id, patient) REFERENCES clinical_info(dataset_id, patient)
-);
-
-CREATE TABLE snv_features (
-	dataset_id varchar(255) NOT NULL,
-	patient varchar(255) NOT NULL,
-    nsTMB_perMb double,
-    indel_TMB_perMb double,
-    indel_nsTMB_perMb double,
-    PRIMARY KEY (dataset_id, patient),
-    FOREIGN KEY (dataset_id, patient) REFERENCES clinical_info(dataset_id, patient)
-);
-
-CREATE TABLE expression (
-	dataset_id varchar(255) NOT NULL,
-	patient varchar(255) NOT NULL,
-    gene_id varchar(255) NOT NULL,
-    exp_value double,
-    PRIMARY KEY (gene_id, dataset_id, patient),
-	FOREIGN KEY (dataset_id, patient) REFERENCES clinical_info(dataset_id, patient),
-    FOREIGN KEY (gene_id) REFERENCES genes(gene_id)
-);
-
-CREATE TABLE cna (
-	dataset_id varchar(255) NOT NULL,
-	patient varchar(255) NOT NULL,
-    gene_id varchar(255) NOT NULL,
-    cna_value double,
-    PRIMARY KEY (gene_id, dataset_id, patient),
-    FOREIGN KEY (dataset_id, patient) REFERENCES clinical_info(dataset_id, patient),
-    FOREIGN KEY (gene_id) REFERENCES genes(gene_id)
-);
-
-CREATE TABLE snv (
-	dataset_id varchar(255) NOT NULL,
-	patient varchar(255) NOT NULL,
-    gene_id varchar(255) NOT NULL,
-    chr varchar(255) NOT NULL,
-    pos int,
-    ref varchar(255),
-	alt varchar(255),
-	effect varchar(255),
-    mut_type varchar(255),
-    PRIMARY KEY (gene_id, dataset_id, patient),
-    FOREIGN KEY (dataset_id, patient) REFERENCES clinical_info(dataset_id, patient),
-    FOREIGN KEY (gene_id) REFERENCES genes(gene_id)
+	gene_id varchar(255) NOT NULL,
+    PRIMARY KEY (dataset_id, gene_id),
+    FOREIGN KEY (dataset_id) REFERENCES dataset(dataset_id),
+    FOREIGN KEY (gene_id) REFERENCES gene(gene_id)
 );
