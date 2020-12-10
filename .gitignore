@@ -7,3 +7,6 @@ package-lock.json
 .env
 .vscode
 
+# python
+venv/
+__pycache__/
