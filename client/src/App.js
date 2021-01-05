@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // individual page components
 import {
   Home, 
-  Explore
+  Explore,
+  ForestPlot
 } from './Components/index';
 
 // styled component
@@ -17,7 +18,7 @@ const App = () => {
         <Router>
           <Switch>
             <Route path='/' exact component={Home} />
-            <Route path='/explore' exact component={Explore} />
+            <Route path='/explore' exact component={ForestPlot} />
           </Switch>
         </Router>
     </React.Fragment>
