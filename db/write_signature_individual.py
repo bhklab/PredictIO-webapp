@@ -41,7 +41,7 @@ cursor = db.cursor()
 for row in df.itertuples():
     query = """
     INSERT INTO signature_individual
-        (signature, outcome, model, study, primary_tissue, sequencing, n, effect_size, se, ci95_low, ci95_high, pval) \
+        (signature, outcome, model, study, primary_tissue, sequencing, n, effect_size, se, _95ci_low, _95ci_high, pval) \
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     values = (

@@ -4,7 +4,7 @@ Schema is found in https://lucid.app/lucidchart/invitations/accept/279ab4e7-6f6a
 */
 USE iodb;
 
-DROP TABLE signature_metanalysis;
+DROP TABLE signature_meta;
 DROP TABLE signature_individual;
 
 CREATE TABLE signature_meta (
@@ -16,8 +16,8 @@ CREATE TABLE signature_meta (
     n int,
     effect_size double,
     se double,
-    x95ci_low double,
-    x95ci_high double,
+    _95ci_low double,
+    _95ci_high double,
     pval double,
     i2 double,
     pval_i2 double,
@@ -34,8 +34,8 @@ CREATE TABLE signature_individual (
     n int,
     effect_size double,
     se double,
-    x95ci_low double,
-    x95ci_high double,
+	_95ci_low double,
+    _95ci_high double,
     pval double,
     PRIMARY KEY (signature, outcome, model, study, primary_tissue)
 );
