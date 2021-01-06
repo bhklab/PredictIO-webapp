@@ -1,3 +1,7 @@
+'''
+CURRENTLY UNUSED
+'''
+
 import pandas as pd 
 import pymysql
 from decouple import config
