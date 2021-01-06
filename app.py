@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, send_from_directory, jsonify
+from flask import Flask, send_from_directory
 from flask_restful import Api
 from flask_cors import CORS
 
