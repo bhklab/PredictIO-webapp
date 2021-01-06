@@ -8,7 +8,7 @@ const Explore = () => {
     const [data, setData] = useState({data: {}, ready: false});
 
     const getData = async () => {
-        const res = await fetch('/api/test', {
+        const res = await fetch('/api/explore', {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
