@@ -8,12 +8,19 @@ from models.signature_meta import Meta
 
 class Explore(Resource):
     def get(self):
-
-        # individuals = Individual.query.limit(10).all()
-        # serialized = Individual.serialize_list(individuals)
-        meta = Meta.query.limit(10).all()
-        serialized = Meta.serialize_list(meta)
-        return serialized, 200
+        parser = reqparse.RequestParser()
+        parser.add_argument('type', type=str, help='signature table type')
+        args = parser.parse_args()
+        
+        result = []
+        if(args.type == 'individual'):
+            individuals = Individual.query.limit(10).all()
+            result = Individual.serialize_list(individuals)
+        elif(args.type == 'meta'):
+            meta = Meta.query.all()
+            result = Meta.serialize_list(meta)
+        
+        return result, 200
     
     def post(self):
         print("Submitting the explore request.")
