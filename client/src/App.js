@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 // individual page components
 import {
-  Home, 
+  Home,
   Explore,
   ForestPlot
 } from './Components/index';
@@ -18,7 +18,7 @@ const App = () => {
         <Router>
           <Switch>
             <Route path='/' exact component={Home} />
-            <Route path='/explore' exact component={ForestPlot} />
+            <Route path='/explore' exact component={Explore} />
             <Route path='/test' exact component={Explore} />
           </Switch>
         </Router>
