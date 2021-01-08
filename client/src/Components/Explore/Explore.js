@@ -7,8 +7,16 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 const StyledForm = styled.div`
-    width: 500px;
+    width: 100%;
     .formField {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+`
+
+const StyledResult = styled.div`
+    margin-top: 50px;
+    .resultElement {
         margin-top: 10px;
         margin-bottom: 10px;
     }
@@ -70,33 +78,36 @@ const Explore = () => {
 
     return(
         <Layout>
-            {
-                data.ready ?
-                <div>
-                    <ActionButton onClick={(e) => {setData({data: {}, ready: false})}} text='Reset' style={{with: '50%', height: '50px'}} />
-                    <ForestPlot individuals={data.data.individuals} meta={data.data.meta} />
+            <StyledForm>
+                <div className='formField'>
+                    <Select 
+                        options={signatureOptions.map(option => ({value: option, label: option}))} 
+                        onChange={(e) => {setParameters({...parameters, signature: e.value})}} />
                 </div>
-                :
-                <StyledForm>
-                    <div className='formField'>
-                        <Select 
-                            options={signatureOptions.map(option => ({value: option, label: option}))} 
-                            onChange={(e) => {setParameters({...parameters, signature: e.value})}} />
+                <div className='formField'>
+                    <Select 
+                        options={outcomeOptions.map(option => ({value: option, label: option}))} 
+                        onChange={(e) => {setParameters({...parameters, outcome: e.value})}} />
+                </div>
+                <div className='formField'>
+                    <Select 
+                        options={modelOptions.map(option => ({value: option, label: option}))} 
+                        onChange={(e) => {setParameters({...parameters, model: e.value})}} />
+                </div>
+                <div className='formField'>
+                    <ActionButton onClick={(e) => {getData()}} text='Submit' style={{width: '100px', height: '25px', fontSize: '14px'}} />
+                </div>
+            </StyledForm>
+            {
+                data.ready &&
+                <StyledResult>
+                    <div className='resultElement'>
+                        <ActionButton onClick={(e) => {setData({data: {}, ready: false})}} text='Reset' style={{width: '100px', height: '25px', fontSize: '14px'}} />
                     </div>
-                    <div className='formField'>
-                        <Select 
-                            options={outcomeOptions.map(option => ({value: option, label: option}))} 
-                            onChange={(e) => {setParameters({...parameters, outcome: e.value})}} />
+                    <div className='resultElement'>
+                        <ForestPlot individuals={data.data.individuals} meta={data.data.meta} />
                     </div>
-                    <div className='formField'>
-                        <Select 
-                            options={modelOptions.map(option => ({value: option, label: option}))} 
-                            onChange={(e) => {setParameters({...parameters, model: e.value})}} />
-                    </div>
-                    <div className='formField'>
-                        <ActionButton onClick={(e) => {getData()}} text='Submit' style={{with: '50%', height: '50px'}} />
-                    </div>
-                </StyledForm>
+                </StyledResult>
             }
         </Layout>
     );

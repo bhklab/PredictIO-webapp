@@ -121,8 +121,7 @@ style = {
   studies[d].study + " (" + studies[d].Primary + "; " + studies[d].Sequencing + "): " +
   "N=" + studies[d].N + "; coef=" + studies[d].coef + "; P-value=" + Number(studies[d].Pval).toFixed(4)
 }
-<
-/div>
+</div>
 )
 ;
 
@@ -132,7 +131,7 @@ style = {
 
 const ForestPlot = () => {
   return (
-    < StyledHome >
+    <StyledHome>
     < svg
   height = "800"
   width = "800" >
@@ -156,7 +155,7 @@ const ForestPlot = () => {
 }
   stroke = "#0C3544"
   strokeWidth = "2"
-    / >
+    />
     < line
   id = {"yAxe"}
   x1 = {xScale(1
@@ -173,8 +172,8 @@ const ForestPlot = () => {
 }
   stroke = "#0C3544"
   strokeWidth = "2"
-    / >
-    < line
+    />
+    <line
   strokeDasharray = "3,4"
   id = {"yAxe"}
   x1 = {xScale(overall.coef
@@ -191,7 +190,7 @@ const ForestPlot = () => {
 }
   stroke = "#EF8020"
   strokeWidth = "1"
-    / >
+    />
     {
       Object.keys(xAxeTag).map((key, index) =>
         < text
@@ -209,12 +208,12 @@ const ForestPlot = () => {
   fill = "#0C3544"
     >
     {xAxeTag[index]}
-    < /text>
+    </text>
 )
 }
   {
     Object.keys(xAxeTag).map((key, index) =>
-    < line
+    <line
     id = {"xAxeDash"+index}
     key = {key}
     x1 = {xScale(xAxeTag[index]
@@ -234,11 +233,10 @@ const ForestPlot = () => {
     stroke = "#0C3544"
     strokeWidth = "2"
       >
-      < /line>
+      </line>
   )
   }
-<
-  /g>
+</g>
 
   {/*Creating Data Point*/
   }
@@ -257,13 +255,11 @@ const ForestPlot = () => {
     }
   }
   >
-  <
-    g
+  <g
     id = {"datapoint-" +index}
     onClick = {() => console.log(index)}>
     /*Tags*/
-  <
-    text
+  <text
     id = {"tag-"+index}
     key = {key}
     x = {initial.leftMargin / 3}
@@ -273,9 +269,9 @@ const ForestPlot = () => {
     fill = "#0C3544"
       >
       {dataset[key].study}({dataset[key].Primary}, {dataset[key].Sequencing})
-      < /text>
+      </text>
 
-      /*Intervals*/
+      /* Intervals */
       < line
     id = {"interval-"+index}
     x1 = {xScale(Number(dataset[key]["95CI_low"])
@@ -289,14 +285,14 @@ const ForestPlot = () => {
     stroke = "#73848E"
     strokeWidth = "2" >
 
-      < title >
+      <title>
       95
     CI:({data()[key]["95CI_low"]}, {data()[key]["95CI_high"]})
-    < /title>
-    < /line>
+    </title>
+    </line>
 
     /*Data point marks*/
-    < rect
+    <rect
     id = {"datPoint-" +index}
     x = {xScale(Number(dataset[key]["coef"])
   )
@@ -307,23 +303,22 @@ const ForestPlot = () => {
     width = {initial.edgeSize}
     height = {initial.edgeSize}
     fill = "#236e96" >
-      < /rect>
-      < /g>
-      < /OverlayTrigger>
-      < /React.Fragment>
+      </rect>
+      </g>
+      </OverlayTrigger>
+      </React.Fragment>
   )
   }
   {/*Creating Diamond*/
   }
-<
-  polygon
+<polygon
   id = "diamond"
   points = {polygonPoints()}
   fill = "#F2950B"
     >
-    < /polygon>
-    < /svg>
-    < /StyledHome>
+    </polygon>
+    </svg>
+    </StyledHome>
 )
 }
 
