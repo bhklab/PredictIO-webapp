@@ -3,10 +3,18 @@ import Layout from '../UtilComponents/Layout';
 import LinkButton from '../UtilComponents/LinkButton';
 import styled from 'styled-components';
 
+const HomeContainer = styled.div`
+    width: 100%;
+    height: calc(100vh - 105px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`
+
 const StyledHome = styled.div`
     width: 60%;
     height: 60%;
-    margin-top: -150px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -43,20 +51,22 @@ const HomeButtons = styled.div`
 const Home = () => {
     return (
         <Layout>
-            <StyledHome>
-                <HomeLogo>
-                    <img alt='IO.db' src='./images/logos/IOdb-logo-main.png' />
-                </HomeLogo>
-                <AppDescription>
-                    Investigate predictive and prognostic values of your gene.
-                    <br />
-                    Predict a patient response to ICB therapy.
-                </AppDescription>
-                <HomeButtons>
-                    <LinkButton href='/explore' text='Explore' style={{}} />
-                    <LinkButton href='/' text='IO Predict' style={{}} />
-                </HomeButtons>
-            </StyledHome>
+            <HomeContainer>
+                <StyledHome>
+                    <HomeLogo>
+                        <img alt='IO.db' src='./images/logos/IOdb-logo-main.png' />
+                    </HomeLogo>
+                    <AppDescription>
+                        Investigate predictive and prognostic values of your gene.
+                        <br />
+                        Predict a patient response to ICB therapy.
+                    </AppDescription>
+                    <HomeButtons>
+                        <LinkButton href='/explore' text='Explore' style={{}} />
+                        <LinkButton href='/' text='IO Predict' style={{}} />
+                    </HomeButtons>
+                </StyledHome>
+            </HomeContainer>
         </Layout>
     );
 };

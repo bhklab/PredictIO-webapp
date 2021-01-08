@@ -3,7 +3,7 @@ import { createGlobalStyle } from 'styled-components';
 import colors from './colors';
 
 const GlobalStyles = createGlobalStyle`
-    html, body, #root {
+    html, body {
         height: 100%;
         margin: 0;
     }
@@ -20,16 +20,19 @@ const GlobalStyles = createGlobalStyle`
         font-weight: 400;
     }
 
+    #root {
+        height: 100%;
+        min-height: 100vh;
+    }
+
     main {
-        height: calc(100% - 105px);
+        min-height: calc(100vh - 105px);
         width: 85%;
         max-width: 1500px;
         margin-left: auto;
         margin-right: auto;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
     }
 
     a {
