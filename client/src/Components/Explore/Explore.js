@@ -80,13 +80,13 @@ const Explore = () => {
     const getVolcanoPlotData = async () => {
         setVolcanoPlotData({data: {}, ready: false});
         setForestPlotData({data: {}, ready: false});
-        const res = await axios.post('/api/explore/signature_meta_analysis', parameters);
+        const res = await axios.post('/api/explore/volcano_plot', parameters);
         setVolcanoPlotData({data: res.data, ready: true});
     };
 
     const getForestPlotData = async (params) => {
         setForestPlotData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
-        const res = await axios.post('/api/explore/signature_individual', params);
+        const res = await axios.post('/api/explore/forest_plot', params);
         console.log(res.data.individuals);
         setForestPlotData({data: res.data, ready: true});
     };
