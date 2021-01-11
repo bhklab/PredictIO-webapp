@@ -1,5 +1,5 @@
 # model used for signature_meta table
-from app import db
+from .db import db
 from utils.serializer import Serializer
 
 class Meta(db.Model, Serializer):

@@ -3,22 +3,25 @@ from flask import Flask, send_from_directory
 from flask_restful import Api
 from flask_cors import CORS
 
+# used to get values from .env file
+from decouple import config
+
+# db object
+from models.db import db
+
+# modules used for routes in 'resources' directory
+from resources.test import Test
+from resources.signature_individual import SignatureIndividual
+from resources.signature_meta_analysis import SignatureMetaAnalysis
+from resources.io_predict import IOPredict
+
 app = Flask(__name__,
             static_url_path='',
             static_folder='client/build')
 
-# used to get values from .env file
-from decouple import config
-
 # initialize flask_sqlalchemy
-from flask_sqlalchemy import SQLAlchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = config('CONN_STR')
-db = SQLAlchemy(app)
-
-# modules used for routes in 'resources' directory
-from resources.test import Test
-from resources.explore import Explore
-from resources.io_predict import IOPredict
+db.init_app(app)
 
 CORS(app)
 
@@ -26,7 +29,8 @@ api = Api(app)
 
 # routes
 api.add_resource(Test, '/api/test')
-api.add_resource(Explore, '/api/explore')
+api.add_resource(SignatureIndividual, '/api/explore/signature_individual')
+api.add_resource(SignatureMetaAnalysis, '/api/explore/signature_meta_analysis')
 api.add_resource(IOPredict, '/api/iopredict')
 
 # Setup that enables react routing when serving static files

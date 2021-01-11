@@ -2,24 +2,30 @@ import React, {useState} from 'react';
 import Layout from '../UtilComponents/Layout';
 import ActionButton from '../UtilComponents/ActionButton';
 import ForestPlot from '../Diagram/ForestPlot2';
+import VolcanoPlot from '../Diagram/VolcanoPlot';
 import Select from 'react-select';
 import styled from 'styled-components';
 import axios from 'axios';
 
 const StyledForm = styled.div`
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
     .formField {
-        margin-top: 10px;
-        margin-bottom: 10px;
+        width: 250px;
     }
 `
 
-const StyledResult = styled.div`
+const StyledPlotArea = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+`
+
+const StyledPlot = styled.div`
     margin-top: 50px;
-    .resultElement {
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
 `
 
 const signatureOptions = [
@@ -63,27 +69,32 @@ const modelOptions = ['COX', 'DI', 'Log_regression'];
 
 const Explore = () => {
 
-    const [data, setData] = useState({data: {}, ready: false});
+    const [volcanoPlotData, setVolcanoPlotData] = useState({data: {}, ready: false});
+    const [forestPlotData, setForestPlotData] = useState({data: {}, ready: false});
     const [parameters, setParameters] = useState({
         signature: '',
         outcome: '',
         model: ''
-    })
+    });
 
-    const getData = async () => {
-        const res = await axios.post('/api/explore', parameters);
+    const getVolcanoPlotData = async () => {
+        setVolcanoPlotData({data: {}, ready: false});
+        setForestPlotData({data: {}, ready: false});
+        const res = await axios.post('/api/explore/signature_meta_analysis', parameters);
+        setVolcanoPlotData({data: res.data, ready: true});
+    };
+
+    const getForestPlotData = async (params) => {
+        setForestPlotData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
+        const res = await axios.post('/api/explore/signature_individual', params);
         console.log(res.data.individuals);
-        setData({data: res.data, ready: true});
-    }
+        setForestPlotData({data: res.data, ready: true});
+    };
 
     return(
         <Layout>
+            <h2>Explore the pre-computed signature data</h2>
             <StyledForm>
-                <div className='formField'>
-                    <Select 
-                        options={signatureOptions.map(option => ({value: option, label: option}))} 
-                        onChange={(e) => {setParameters({...parameters, signature: e.value})}} />
-                </div>
                 <div className='formField'>
                     <Select 
                         options={outcomeOptions.map(option => ({value: option, label: option}))} 
@@ -95,20 +106,23 @@ const Explore = () => {
                         onChange={(e) => {setParameters({...parameters, model: e.value})}} />
                 </div>
                 <div className='formField'>
-                    <ActionButton onClick={(e) => {getData()}} text='Submit' style={{width: '100px', height: '25px', fontSize: '14px'}} />
+                    <ActionButton onClick={(e) => {getVolcanoPlotData()}} text='Submit' style={{width: '100px', height: '40px', fontSize: '14px'}} />
                 </div>
             </StyledForm>
-            {
-                data.ready &&
-                <StyledResult>
-                    <div className='resultElement'>
-                        <ActionButton onClick={(e) => {setData({data: {}, ready: false})}} text='Reset' style={{width: '100px', height: '25px', fontSize: '14px'}} />
-                    </div>
-                    <div className='resultElement'>
-                        <ForestPlot individuals={data.data.individuals} meta={data.data.meta} />
-                    </div>
-                </StyledResult>
-            }
+            <StyledPlotArea>
+                <StyledPlot className='volcano'>
+                {
+                    volcanoPlotData.ready &&
+                    <VolcanoPlot plotId='volcano-plot' data={volcanoPlotData.data} getForestPlotData={getForestPlotData}/>
+                }
+                </StyledPlot>
+                <StyledPlot className='forest'>
+                {
+                    forestPlotData.ready &&
+                    <ForestPlot individuals={forestPlotData.data.individuals} meta={forestPlotData.data.meta} />
+                }
+                </StyledPlot>
+            </StyledPlotArea>
         </Layout>
     );
 }
