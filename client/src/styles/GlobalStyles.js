@@ -7,12 +7,12 @@ const GlobalStyles = createGlobalStyle`
         height: 100%;
         margin: 0;
     }
-    html {
-        background-image: url('./images/background.png');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
+    // html {
+    //     background-image: url('./images/background.png');
+    //     background-size: cover;
+    //     background-position: center;
+    //     background-repeat: no-repeat;
+    // }
 
     body {
         color: ${colors.gray_text};
