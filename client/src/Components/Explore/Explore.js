@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 const StyledForm = styled.div`
-    width: 100%;
+    width: 60%;
     display: flex;
     justify-content: space-between;
     align-items: center;
