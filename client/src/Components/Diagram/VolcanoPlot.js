@@ -2,12 +2,23 @@
 import React, {useState, useEffect} from 'react';
 import Plotly from 'plotly.js-dist';
 import createPlotlyComponent from 'react-plotly.js/factory';
+import {withSize} from 'react-sizeme';
 import colors from '../../styles/colors';
+import * as d3 from 'd3';
 
 const Plot = createPlotlyComponent(Plotly);
 
+// for changing the cursor on hover of points
+const hover = () => {
+    d3.selectAll('.nsewdrag').style('cursor', 'pointer');
+};
+
+const unhover = () => {
+    d3.selectAll('.nsewdrag').style('cursor', '');
+};
+
 const VolcanoPlot = (props) => {
-    const {data, plotId} = props;
+    const {data, plotId, getForestPlotData, parameters, setParameters} = props;
 
     const [plotData, setPlotData] = useState({
         x: [], 
@@ -32,7 +43,8 @@ const VolcanoPlot = (props) => {
     const onClick = (data) => {
         let selectedPoint = props.data[data.points[0].data.click_ids[data.points[0].pointIndex]]
         console.log(selectedPoint);
-        props.getForestPlotData({
+        setParameters({...parameters, signature: selectedPoint.signature});
+        getForestPlotData({
             signature: selectedPoint.signature, 
             outcome: selectedPoint.outcome, 
             model: selectedPoint.model
@@ -69,7 +81,7 @@ const VolcanoPlot = (props) => {
             if(point.logPval < -Math.log10(0.05)){
                 pointColors.push(colors.gray_text);
             }else{
-                if(point.effect_size > 1){
+                if(point.effect_size > 0){
                     pointColors.push(colors.red);
                 }else{
                     pointColors.push(colors.blue);
@@ -92,68 +104,85 @@ const VolcanoPlot = (props) => {
     }
 
     return(
-        <Plot
-            data={[
-                {
-                    showlegend: false,
-                    type: 'scatter',
-                    mode: 'markers',
-                    x: plotData.x,
-                    y: plotData.y,
-                    click_ids: plotData.click_ids,
-                    hoverinfo: 'text',
-                    hovertext: plotData.hovertext,
-                    marker: {
-                        color: plotData.pointColor,
-                        size: plotData.pointSize
-                    },
-                    name: 'points',
-                }
-            ]}
-            layout={{
-                height: 500,
-                autosize: true,
-                // width: 800,
-                paper_bgcolor: 'white',
-                plot_bgcolor: 'white',
-                orientation: 'v',
-                yaxis: { ticklen: 0, title: '-log10(p value)' },
-                xaxis: { title: 'Hazard Ratio', zeroline: false },
-                hovermode: 'closest',
-                font: {
-                    size: 14,
-                    family: 'Arial',
-                },
-                margin: {
-                    l: 45,
-                    r: 0,
-                    t: 0,
-                    b: 40,
-                },
-                shapes: [
+        <div>
+            <Plot
+                data={[
                     {
-                        type: 'line',
-                        xref: 'paper',
-                        x0: 0,
-                        y0: -Math.log10(0.05),
-                        x1: 1,
-                        y1: -Math.log10(0.05),
-                        line: {
-                            color: colors.light_gray,
-                            width: 2,
-                            dash: 'dot'
-                        }
+                        showlegend: false,
+                        type: 'scatter',
+                        mode: 'markers',
+                        x: plotData.x,
+                        y: plotData.y,
+                        click_ids: plotData.click_ids,
+                        hoverinfo: 'text',
+                        hovertext: plotData.hovertext,
+                        marker: {
+                            color: plotData.pointColor,
+                            size: plotData.pointSize
+                        },
+                        name: 'points',
                     }
-                ]
-            }}
-            graphDiv={plotId}
-            config={{
-                responsive: true,
-                displayModeBar: false,
-            }}
-            onClick={(data) => onClick(data)}
-        />
+                ]}
+                layout={{
+                    width: props.size.width,
+                    autosize: true,
+                    paper_bgcolor: 'white',
+                    plot_bgcolor: 'white',
+                    orientation: 'v',
+                    yaxis: { ticklen: 0, title: '-log10(p value)' },
+                    xaxis: { title: 'Hazard Ratio', zeroline: false },
+                    hovermode: 'closest',
+                    font: {
+                        size: 14,
+                        family: 'Arial',
+                    },
+                    margin: {
+                        l: 45,
+                        r: 10,
+                        t: 10,
+                        b: 40,
+                    },
+                    shapes: [
+                        {
+                            type: 'line',
+                            xref: 'paper',
+                            x0: 0,
+                            y0: -Math.log10(0.05),
+                            x1: 1,
+                            y1: -Math.log10(0.05),
+                            line: {
+                                color: colors.light_gray,
+                                width: 2,
+                                dash: 'dot'
+                            }
+                        },
+                        {
+                            type: 'line',
+                            xref: 'x',
+                            yref: 'paper',
+                            x0: 0,
+                            y0: 0,
+                            x1: 0,
+                            y1: 1,
+                            line: {
+                                color: colors.light_gray,
+                                width: 2,
+                                dash: 'dot'
+                            }
+                        }
+                    ]
+                }}
+                graphDiv={plotId}
+                config={{
+                    responsive: true,
+                    displayModeBar: false,
+                }}
+                onClick={(data) => onClick(data)}
+                onHover={() => hover()}
+                onUnhover={() => unhover()}
+            />
+        </div>
     );
 }
 
-export default VolcanoPlot;
+export default withSize()(VolcanoPlot);

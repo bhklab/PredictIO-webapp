@@ -18,8 +18,7 @@ const App = () => {
         <Router>
           <Switch>
             <Route path='/' exact component={Home} />
-            <Route path='/explore' exact component={ForestPlot} />
-            <Route path='/test' exact component={Explore} />
+            <Route path='/explore' exact component={Explore} />
           </Switch>
         </Router>
     </React.Fragment>
