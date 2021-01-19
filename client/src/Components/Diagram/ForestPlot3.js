@@ -3,6 +3,12 @@ import * as d3 from 'd3';
 import {withSize} from 'react-sizeme';
 import styled from 'styled-components';
 
+/**
+ * A responsive version of forest plot.
+ * The plot rendering process is in 'draw()' function 
+ * which is called every time a window size changes.
+ */
+
 const Container = styled.div`
     width: 100%;
     height: 80%;
