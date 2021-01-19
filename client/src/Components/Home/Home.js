@@ -1,20 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Layout from '../UtilComponents/Layout';
-import LinkButton from '../UtilComponents/LinkButton';
+import VolcanoPlotInput from '../Explore/VolcanoPlotInput';
+import Explore from '../Explore/Explore';
 import styled from 'styled-components';
 
 const HomeContainer = styled.div`
     width: 100%;
     height: calc(100vh - 105px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-`
-
-const StyledHome = styled.div`
-    width: 60%;
-    height: 60%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -38,21 +30,40 @@ const AppDescription = styled.div`
     letter-spacing: 1.5px;
 `;
 
-const HomeButtons = styled.div`
+const HomeInput = styled.div`
     width: 90%;
     max-width: 550px;
     min-width: 415px;
-    margin-top: 50px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-`;
+    flex-direction: column;
+    aling-items: center;
+    margin-top: 30px;
+
+    .subText {
+        font-size: 20px;
+        font-weight: bold;
+    }
+`
 
 const Home = () => {
+
+    const [displayHome, setDisplayHome] = useState(true);
+
+    const [parameters, setParameters] = useState({
+        signature: '',
+        outcome: '',
+        model: ''
+    });
+
+    const onSubmit = async () => {
+        setDisplayHome(false);
+    };
+
     return (
         <Layout>
-            <HomeContainer>
-                <StyledHome>
+            {
+                displayHome ?
+                <HomeContainer>
                     <HomeLogo>
                         <img alt='IO.db' src='./images/logos/IOdb-logo-main.png' />
                     </HomeLogo>
@@ -61,12 +72,18 @@ const Home = () => {
                         <br />
                         Predict a patient response to ICB therapy.
                     </AppDescription>
-                    <HomeButtons>
-                        <LinkButton href='/explore' text='Explore' style={{}} />
-                        <LinkButton href='/' text='IO Predict' style={{}} />
-                    </HomeButtons>
-                </StyledHome>
-            </HomeContainer>
+                    <HomeInput>
+                        <div className='subText'>Explore pre-computed signature data</div>
+                        <VolcanoPlotInput 
+                                parameters={parameters} 
+                                setParameters={setParameters} 
+                                onSubmit={onSubmit} 
+                                flexDirection='column' />
+                    </HomeInput>
+                </HomeContainer>
+                :
+                <Explore parameters={parameters} setParameters={setParameters} />
+            }
         </Layout>
     );
 };

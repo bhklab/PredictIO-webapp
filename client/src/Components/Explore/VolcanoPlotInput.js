@@ -4,10 +4,15 @@ import styled from 'styled-components';
 import ActionButton from '../UtilComponents/ActionButton';
 
 const StyledForm = styled.div`
-    width: 100%;
+    width: ${props => props.flexDirection === 'column' ? '100%' : '70%'};
     margin-top: 30px;
+    display: flex;
+    flex-direction: ${props => props.flexDirection};
+    align-items: center;
+    justify-content: space-between;
+
     .formField {
-        width: 50%;
+        width: ${props => props.flexDirection === 'column' ? '100%' : '30%'};
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -19,11 +24,24 @@ const StyledForm = styled.div`
             width: 70%;
         }
     }
-`
 
-const outcomeOptions = ['OS', 'PFS', 'Response'];
+    .buttonField {
+        display: flex;
+        justify-content: ${props => props.flexDirection === 'column' ? 'flex-end' : 'flex-start'};
+    }
+`;
 
-const modelOptions = ['COX', 'DI', 'Log_regression'];
+const outcomeOptions = [
+    { value: 'OS', label: 'OS' }, 
+    { value: 'PFS', label: 'PFS' }, 
+    { value: 'Response', label: 'Response' }
+];
+
+const modelOptions = [
+    { value: 'COX', label: 'COX' }, 
+    { value: 'DI', label: 'DI' }, 
+    { value: 'Log_regression', label: 'Log_regression' }
+];
 
 // const signatureOptions = [
 //     'Woundhealing', 
@@ -62,26 +80,36 @@ const modelOptions = ['COX', 'DI', 'Log_regression'];
 
 const VolcanoPlotInput = (props) => {
     
-    const {parameters, setParameters, getVolcanoPlotData} = props;
+    const {parameters, setParameters, onSubmit} = props;
 
     return(
-        <StyledForm>
+        <StyledForm flexDirection={props.flexDirection}>
             <div className='formField'>
                 <div className='label'>Outcome: </div>
                 <Select 
                     className='select'
-                    options={outcomeOptions.map(option => ({value: option, label: option}))} 
+                    value={outcomeOptions.filter(option => option.value === parameters.outcome)}
+                    options={outcomeOptions} 
                     onChange={(e) => {setParameters({...parameters, outcome: e.value})}} />
             </div>
             <div className='formField'>
                 <div className='label'>Model: </div> 
                 <Select 
                     className='select'
-                    options={modelOptions.map(option => ({value: option, label: option}))} 
+                    value={modelOptions.filter(option => option.value === parameters.model)}
+                    options={modelOptions} 
                     onChange={(e) => {setParameters({...parameters, model: e.value})}} />
             </div>
-            <div className='formField'>
-                <ActionButton onClick={(e) => {getVolcanoPlotData()}} text='Submit' style={{width: '100px', height: '40px', fontSize: '14px'}} />
+            <div className='formField buttonField'>
+                <ActionButton onClick={(e) => {onSubmit()}} text='Submit' disabled={(parameters.model === '' || parameters.outcome === '')} style={{width: '100px', height: '40px', fontSize: '14px'}} />
+                {
+                    props.resetButton &&
+                    <ActionButton 
+                        onClick={(e) => {props.onReset()}} 
+                        text='Reset'
+                        type='reset' 
+                        style={{width: '100px', height: '40px', fontSize: '14px', marginLeft: '10px'}} />
+                }
             </div>
         </StyledForm>
     );

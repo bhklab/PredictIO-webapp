@@ -1,22 +1,25 @@
-import React, {useState} from 'react';
-import Layout from '../UtilComponents/Layout';
+import React, {useState, useEffect} from 'react';
 import ForestPlot from '../Diagram/ForestPlot3';
 import VolcanoPlot from '../Diagram/VolcanoPlot';
 import VolcanoPlotInput from './VolcanoPlotInput';
 import styled from 'styled-components';
 import axios from 'axios';
 
-const Container = styled.div`
+const ExploreContainer = styled.div`
+    width: 100%;
+`;
+
+const PlotContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
-`
+`;
 
 const StyledPlotArea = styled.div`
     width: 48%;
     min-width: 540px;
     padding 10px;
-`
+`;
 
 const PlotParameters = styled.div`
     display: flex;
@@ -24,21 +27,18 @@ const PlotParameters = styled.div`
     .parameterLine {
         margin-right: 10px;
     }
-`
+`;
 
-const Explore = () => {
+const Explore = (props) => {
 
+    const {parameters, setParameters} = props;
+    
     const [volcanoPlotData, setVolcanoPlotData] = useState({data: {}, ready: false});
     const [forestPlotData, setForestPlotData] = useState({data: {}, ready: false});
-    const [parameters, setParameters] = useState({
-        signature: '',
-        outcome: '',
-        model: ''
-    });
 
     const getVolcanoPlotData = async () => {
-        setVolcanoPlotData({data: {}, ready: false});
-        setForestPlotData({data: {}, ready: false});
+        setVolcanoPlotData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
+        setForestPlotData({data: {}, ready: false}); 
         const res = await axios.post('/api/explore/volcano_plot', parameters);
         setVolcanoPlotData({data: res.data, ready: true});
     };
@@ -50,13 +50,24 @@ const Explore = () => {
         setForestPlotData({data: res.data, ready: true});
     };
 
+    useEffect(() => {
+        getVolcanoPlotData();
+    }, []);
+
     return(
-        <Layout>
-            <h2>Explore the pre-computed signature data</h2>
-            <Container>
+        <ExploreContainer>
+            <h2>Explore pre-computed signature data</h2>
+            <VolcanoPlotInput 
+                parameters={parameters} 
+                setParameters={setParameters} 
+                onSubmit={getVolcanoPlotData} 
+                flexDirection='row' 
+                resetButton={true} 
+                onReset={() => {window.location.reload()}} />
+            <PlotContainer>
                 <StyledPlotArea className='volcano'>
                 {
-                    volcanoPlotData.ready ?
+                    volcanoPlotData.ready &&
                     <div>
                         <h3>Volcano Plot</h3>
                         <PlotParameters>
@@ -69,15 +80,6 @@ const Explore = () => {
                             setParameters={setParameters} 
                             data={volcanoPlotData.data} 
                             getForestPlotData={getForestPlotData}/>
-                    </div>
-                    :
-                    <div>
-                        <h3>Show Volcano Plot</h3>
-                        <div>Select Outcome and Model, then click Submit.</div>
-                        <VolcanoPlotInput 
-                            parameters={parameters} 
-                            setParameters={setParameters} 
-                            getVolcanoPlotData={getVolcanoPlotData} />
                     </div>
                 }
                 </StyledPlotArea>
@@ -95,13 +97,13 @@ const Explore = () => {
                     </div>
                     :
                     <div>
-                        <h3>Show Forest Plot</h3>
+                        <h3>Forest Plot</h3>
                         <div>Click on a signature point on the volcano plot to display a corresponding forest plot.</div>
                     </div>
                 }
                 </StyledPlotArea>
-            </Container>
-        </Layout>
+            </PlotContainer>
+        </ExploreContainer>
     );
 }
 
