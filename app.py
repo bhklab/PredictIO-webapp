@@ -20,6 +20,10 @@ app = Flask(__name__,
 
 # initialize flask_sqlalchemy
 app.config['SQLALCHEMY_DATABASE_URI'] = config('CONN_STR')
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    "pool_pre_ping": True,
+    "pool_recycle": 300,
+}
 db.init_app(app)
 
 CORS(app)
