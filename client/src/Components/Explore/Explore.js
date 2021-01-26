@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import Loader from 'react-loader-spinner';
 
 import ForestPlotContainer from './ForestPlotContainer';
 import VolcanoPlotInput from './VolcanoPlotInput';
 import VolcanoPlotContainer from './VolcanoPlotContainer';
+import colors from '../../styles/colors';
 
 const ExploreContainer = styled.div`
     width: 100%;
@@ -22,24 +24,32 @@ const StyledPlotArea = styled.div`
     padding 10px;
 `;
 
+const LoaderContainer = styled.div`
+    width: 100%;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;
+
 const Explore = (props) => {
 
     const {parameters, setParameters} = props;
     
     const [volcanoPlotData, setVolcanoPlotData] = useState({data: {}, ready: false});
-    const [forestPlotData, setForestPlotData] = useState({data: {}, ready: false});
+    const [forestPlotData, setForestPlotData] = useState({data: {}, loading: false, ready: false});
 
     const getVolcanoPlotData = async () => {
         setVolcanoPlotData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
-        setForestPlotData({data: {}, ready: false}); 
+        setForestPlotData({data: {}, loading: false, ready: false}); 
         const res = await axios.post('/api/explore/volcano_plot', parameters);
         setVolcanoPlotData({data: res.data, ready: true});
     };
 
     const getForestPlotData = async (params) => {
-        setForestPlotData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
+        setForestPlotData({data: {}, loading: true, ready: false}); // reset the data object so that the plot is redrawn.
         const res = await axios.post('/api/explore/forest_plot', params);
-        setForestPlotData({data: res.data, ready: true});
+        setForestPlotData({data: res.data, loading: false, ready: true});
     };
 
     useEffect(() => {
@@ -59,13 +69,17 @@ const Explore = (props) => {
             <PlotContainer>
                 <StyledPlotArea className='volcano'>
                 {
-                    volcanoPlotData.ready &&
+                    volcanoPlotData.ready ?
                     <VolcanoPlotContainer 
                         parameters={parameters} 
                         setParameters={setParameters} 
                         volcanoPlotData={volcanoPlotData} 
                         getForestPlotData={getForestPlotData} 
                     />
+                    :
+                    <LoaderContainer>
+                        <Loader type="Oval" color={colors.blue} height={80} width={80}/>
+                    </LoaderContainer>
                 }
                 </StyledPlotArea>
                 <StyledPlotArea className='forest'>
@@ -73,10 +87,15 @@ const Explore = (props) => {
                     forestPlotData.ready ?
                     <ForestPlotContainer parameters={parameters} forestPlotData={forestPlotData} />
                     :
-                    <div>
-                        <h3>Forest Plot</h3>
-                        <div>Click on a signature point on the volcano plot to display a corresponding forest plot.</div>
-                    </div>
+                    forestPlotData.loading ?
+                        <LoaderContainer>
+                            <Loader type="Oval" color={colors.blue} height={80} width={80}/>
+                        </LoaderContainer>
+                        :
+                        <div>
+                            <h3>Forest Plot</h3>
+                            <div>Click on a signature point on the volcano plot to display a corresponding forest plot.</div>
+                        </div>
                 }
                 </StyledPlotArea>
             </PlotContainer>
