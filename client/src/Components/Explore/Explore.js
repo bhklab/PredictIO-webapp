@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import ForestPlot from '../Diagram/ForestPlot3';
-import VolcanoPlot from '../Diagram/VolcanoPlot';
-import VolcanoPlotInput from './VolcanoPlotInput';
 import styled from 'styled-components';
 import axios from 'axios';
+
+import ForestPlotContainer from './ForestPlotContainer';
+import VolcanoPlotInput from './VolcanoPlotInput';
+import VolcanoPlotContainer from './VolcanoPlotContainer';
 
 const ExploreContainer = styled.div`
     width: 100%;
@@ -20,37 +21,6 @@ const StyledPlotArea = styled.div`
     min-width: 540px;
     padding 10px;
 `;
-
-const PlotParameters = styled.div`
-    width: 100%;
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    .parameterLine {
-        margin-right: 20px;
-    }
-    .value {
-        font-weight: bold;
-    }
-`;
-
-const EffectSizeValues = styled.div`
-    width: 100%;
-    margin-bottom: 15px;
-    .title {
-        font-weight: bold;
-    }
-    .effectSizeValues {
-        display: flex;
-        margin-left: 10px;
-    }
-    .valueLine {
-        margin-right: 20px;
-    }
-    .value {
-        font-weight: bold;
-    }
-`
 
 const Explore = (props) => {
 
@@ -69,7 +39,6 @@ const Explore = (props) => {
     const getForestPlotData = async (params) => {
         setForestPlotData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
         const res = await axios.post('/api/explore/forest_plot', params);
-        console.log(res.data.individuals);
         setForestPlotData({data: res.data, ready: true});
     };
 
@@ -91,41 +60,18 @@ const Explore = (props) => {
                 <StyledPlotArea className='volcano'>
                 {
                     volcanoPlotData.ready &&
-                    <div>
-                        <h3>Volcano Plot</h3>
-                        <PlotParameters>
-                            <div className='parameterLine'>Outcome: <span className='value'>{parameters.outcome}</span></div>
-                            <div className='parameterLine'>Model: <span className='value'>{parameters.model}</span></div>
-                            <div className='parameterLine'>Subgroup: <span className='value'>{parameters.subgroup}</span></div>
-                        </PlotParameters>
-                        <VolcanoPlot 
-                            plotId='volcano-plot' 
-                            parameters={parameters} 
-                            setParameters={setParameters} 
-                            data={volcanoPlotData.data} 
-                            getForestPlotData={getForestPlotData}/>
-                    </div>
+                    <VolcanoPlotContainer 
+                        parameters={parameters} 
+                        setParameters={setParameters} 
+                        volcanoPlotData={volcanoPlotData} 
+                        getForestPlotData={getForestPlotData} 
+                    />
                 }
                 </StyledPlotArea>
                 <StyledPlotArea className='forest'>
                 {
                     forestPlotData.ready ?
-                    <div>
-                        <h3>Forest Plot</h3>
-                        <PlotParameters>
-                            <div className='parameterLine'>Signature: <span className='value'>{parameters.signature}</span></div>
-                        </PlotParameters>
-                        <EffectSizeValues>
-                            <div className='title'>Pooled Effect Sizes: </div>
-                            <div className='effectSizeValues'>
-                                <div className='valueLine'>P-value: <span className='value'>{Math.round(forestPlotData.data.meta[0].pval * 100) / 100}</span></div>
-                                <div className='valueLine'>Coef: <span className='value'>{Math.round(forestPlotData.data.meta[0].se * 100) / 100}</span></div>
-                                <div className='valueLine'>95CI Low: <span className='value'>{Math.round(forestPlotData.data.meta[0]._95ci_low * 100) / 100}</span></div>
-                                <div className='valueLine'>95CI High: <span className='value'>{Math.round(forestPlotData.data.meta[0]._95ci_high * 100) / 100}</span></div>
-                            </div>    
-                        </EffectSizeValues>
-                        <ForestPlot id='forestplot' individuals={forestPlotData.data.individuals} meta={forestPlotData.data.meta} />
-                    </div>
+                    <ForestPlotContainer parameters={parameters} forestPlotData={forestPlotData} />
                     :
                     <div>
                         <h3>Forest Plot</h3>

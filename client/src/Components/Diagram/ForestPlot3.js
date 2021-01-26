@@ -23,16 +23,17 @@ const Container = styled.div`
         padding: 2px 10px; 
         color: rgb(7,28,44);
         border-radius: 3;
-	}
+    }
+    .pointLink:hover {
+        text-decoration: underline;
+    }
 `
 
 const ForestPlot = (props) => {
 
     useEffect(() => {
-        console.log(props.size.width);
-        console.log(props.meta);
         draw();
-    }, [props.size.width]);
+    }, [props.size.width, props.individuals]);
 
     const draw = () => {
         
@@ -111,23 +112,35 @@ const ForestPlot = (props) => {
         /***
         * Mouseover data point group (text+interval+rect)
         */
-       const renderToolTip = (key) => {
-            d3.select(`#${props.id}PlotContainer`)
-                .append('div')
-                .attr('id', `point-${dataset[key].study.replace(/[^a-zA-Z]/g, "")}`)
-                .attr('class', 'tooltip')
-                .style('left', `${xScale(1) + 10}px`)
-                .style('top', `${yScale(key) - 30}px`)
-                .html(
-                    dataset[key].study + " (" + dataset[key].primary_tissue + "; " + dataset[key].sequencing + ")" +  
-                    "<br />N=" + dataset[key].n + 
-                    "<br />hazard ratio=" + dataset[key].effect_size + 
-                    "<br />P-value=" + Number(dataset[key].pval).toFixed(4));
-       }
+        const renderToolTip = (key, id, point) => {
+            let tooltip = d3.select(`#${props.id}PlotContainer`)
+                    .append('div')
+                    .attr('id', id)
+                    .attr('class', 'tooltip')
+                    .style('left', `${xScale(1) + 10}px`)
+                    .style('top', `${yScale(key) - 30}px`);
+            if(point.study){
+                tooltip.html(
+                    point.study + " (" + point.primary_tissue + "; " + point.sequencing + ")" +  
+                    "<br />N=" + point.n + 
+                    "<br />hazard ratio=" + Number(point.effect_size).toFixed(4) + 
+                    "<br />P-value=" + Number(point.pval).toFixed(4));
+            }else{
+                tooltip.html(
+                    "Pooled Effect Size" +  
+                    "<br />N=" + point.n + 
+                    "<br />hazard ratio=" + Number(point.effect_size).toFixed(4) + 
+                    "<br />P-value=" + Number(point.pval).toFixed(4));
+            }
+        }
 
-       const removeToolTip = (key) => {
-           d3.select(`#point-${dataset[key].study.replace(/[^a-zA-Z]/g, "")}`).remove();
-       }
+        const removeToolTip = (id) => {
+            d3.select(id).remove();
+        }
+
+        /**
+         *  start drawing plot
+         */
 
         let svg = d3.select(`#${props.id}`);
         svg.selectAll("*").remove(); // redraw every time the width changes
@@ -197,23 +210,30 @@ const ForestPlot = (props) => {
 
         /*Creating Data Point*/
         Object.keys(props.individuals).forEach((key, index) => {
+
+            let tooltipId = `point-${dataset[key].study.replace(/[^a-zA-Z]/g, "")}`;
+            
             let datapoint = svg.append('g')
                 .attr('id', "datapoint-" +index)
+                .style('cursor', 'arrow')
                 .on('click', () => console.log(index))
                 .on('mouseover', () => {
-                    renderToolTip(key);
+                    renderToolTip(key, tooltipId, dataset[key]);
                 })
                 .on('mouseout', () => {
-                    removeToolTip(key);
+                    removeToolTip(`#${tooltipId}`);
                 });
             
-            datapoint.append('text')
+            datapoint.append('a')
                 .attr('id', "tag-"+index)
-                .attr('x', 0)
-                .attr('y', yScale(index) + 2)
-                .attr('font-size', initial.fontSize)
-                .attr('fill', "#0C3544")
-                .text(`${dataset[key].study}(${dataset[key].primary_tissue}, ${dataset[key].sequencing})`);
+                .attr('class', 'pointLink')
+                .attr('xlink:href', '/')
+                .append('text')
+                    .attr('x', 0)
+                    .attr('y', yScale(index) + 2)
+                    .attr('font-size', initial.fontSize)
+                    .attr('fill', "#0C3544")
+                    .text(`${dataset[key].study}(${dataset[key].primary_tissue}, ${dataset[key].sequencing})`);
             
             let line = datapoint.append('line')
                 .attr('id', "interval-" + index)
@@ -237,7 +257,13 @@ const ForestPlot = (props) => {
 
         /*Creating Diamond*/
         let pooledEffect = svg.append('g')
-                .attr('id', 'pooled-effect');
+                .attr('id', 'pooled-effect')
+                .on('mouseover', () => {
+                    renderToolTip(dataset.length, 'polygon-tooltip', overall);
+                })
+                .on('mouseout', () => {
+                    removeToolTip('#polygon-tooltip');
+                });
 
         pooledEffect.append('text')
             .attr('id', "tag-pooled-effect")
