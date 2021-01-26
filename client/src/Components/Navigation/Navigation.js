@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import uuid from 'react-uuid';
 import {StyledNavigation, NavigationContent, LogoContainer, StyledLinks} from '../../styles/NavigationStyles';
 
 /**
