@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import * as d3 from 'd3';
 import {withSize} from 'react-sizeme';
 import styled from 'styled-components';
+import colors from '../../styles/colors';
 
 /**
  * A responsive version of forest plot.
@@ -29,6 +30,7 @@ const ForestPlot = (props) => {
 
     useEffect(() => {
         console.log(props.size.width);
+        console.log(props.meta);
         draw();
     }, [props.size.width]);
 
@@ -99,12 +101,12 @@ const ForestPlot = (props) => {
             return (
                 xScale(Number(overall._95ci_low)) + ", "+ yScale(dataset.length) +" "+
                 xScale(Number(overall.effect_size)) + ", "+ (yScale(dataset.length) - (initial.edgeSize/2)) +" "+
-                xScale(Number(overall._95ci_high)) +", "+ yScale(dataset.length ) +" "+
+                xScale(Number(overall._95ci_high)) +", "+ yScale(dataset.length) +" "+
                 xScale(Number(overall.effect_size) ) +", "+ (yScale(dataset.length) + (initial.edgeSize/2)) +" "
             )
         }
         
-        const xAxeTag = [min_low(), overall.effect_size, 1 , max_high()];
+        const xAxeTag = [min_low(), Math.round(overall.effect_size * 100) / 100, 0 , max_high()];
 
         /***
         * Mouseover data point group (text+interval+rect)
@@ -119,7 +121,7 @@ const ForestPlot = (props) => {
                 .html(
                     dataset[key].study + " (" + dataset[key].primary_tissue + "; " + dataset[key].sequencing + ")" +  
                     "<br />N=" + dataset[key].n + 
-                    "<br />coef=" + dataset[key].effect_size + 
+                    "<br />hazard ratio=" + dataset[key].effect_size + 
                     "<br />P-value=" + Number(dataset[key].pval).toFixed(4));
        }
 
@@ -144,8 +146,8 @@ const ForestPlot = (props) => {
 
         canvas.append('line')
             .attr('id', 'yAxe')
-            .attr('x1', xScale(1))
-            .attr('x2', xScale(1))
+            .attr('x1', xScale(0))
+            .attr('x2', xScale(0))
             .attr('y1', yScale(-2))
             .attr('y2', yScale(dataset.length + 1))
             .style('stroke', "#0C3544")
@@ -183,6 +185,15 @@ const ForestPlot = (props) => {
                 .style('stroke', "#0C3544")
                 .style('stroke-width', '2');
         });
+
+        canvas.append('text')
+            .attr('x', xScale(0))
+            .attr('y', yScale(dataset.length + 2.7))
+            .attr('font-size', initial.fontSize)
+            .attr('font-weight', 'bold')
+            .attr('fill', "#0C3544")
+            .attr('text-anchor', 'middle')
+            .text('Hazard Ratio')
 
         /*Creating Data Point*/
         Object.keys(props.individuals).forEach((key, index) => {
@@ -225,12 +236,21 @@ const ForestPlot = (props) => {
         });
 
         /*Creating Diamond*/
-        let polygon = svg.append('polygon')
+        let pooledEffect = svg.append('g')
+                .attr('id', 'pooled-effect');
+
+        pooledEffect.append('text')
+            .attr('id', "tag-pooled-effect")
+            .attr('x', 0)
+            .attr('y', yScale(dataset.length))
+            .attr('font-size', initial.fontSize)
+            .attr('fill', "#0C3544")
+            .text(`Pooled Effect Sizes`);
+
+        pooledEffect.append('polygon')
             .attr('id', 'diamond')
             .attr('points', polygonPoints())
-            .style('fill', "#F2950B")
-        polygon.append('title')
-            .text(`${overall.study} : ${overall.effect_size} <br />interval: ${overall._95ci_low} to ${overall._95ci_high}`);
+            .style('fill', colors.orange_highlight);
     }
 
     /***

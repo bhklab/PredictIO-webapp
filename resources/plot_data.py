@@ -35,8 +35,13 @@ class VolcanoPlot(Resource):
         meta = Meta.query.filter(
             Meta.outcome == query['outcome'],
             Meta.model == query['model'],
-            Meta.n > 3).all()
-        result = Meta.serialize_list(meta)
+            Meta.n > 3
+        )
+
+        if query['subgroup'] != 'AllThree':
+            meta = meta.filter(Meta.subgroup == query['subgroup'])
+        
+        result = Meta.serialize_list(meta.all())
         for item in result:
             item['logPval'] = -math.log10(item['pval'])
 
