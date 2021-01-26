@@ -22,12 +22,35 @@ const StyledPlotArea = styled.div`
 `;
 
 const PlotParameters = styled.div`
+    width: 100%;
     display: flex;
-    margin-bottom: 20px;
+    align-items: center;
+    margin-bottom: 10px;
     .parameterLine {
-        margin-right: 10px;
+        margin-right: 20px;
+    }
+    .value {
+        font-weight: bold;
     }
 `;
+
+const EffectSizeValues = styled.div`
+    width: 100%;
+    margin-bottom: 15px;
+    .title {
+        font-weight: bold;
+    }
+    .effectSizeValues {
+        display: flex;
+        margin-left: 10px;
+    }
+    .valueLine {
+        margin-right: 20px;
+    }
+    .value {
+        font-weight: bold;
+    }
+`
 
 const Explore = (props) => {
 
@@ -71,8 +94,9 @@ const Explore = (props) => {
                     <div>
                         <h3>Volcano Plot</h3>
                         <PlotParameters>
-                            <div className='parameterLine'>Outcome: {parameters.outcome}</div>
-                            <div className='parameterLine'>Model: {parameters.model}</div>
+                            <div className='parameterLine'>Outcome: <span className='value'>{parameters.outcome}</span></div>
+                            <div className='parameterLine'>Model: <span className='value'>{parameters.model}</span></div>
+                            <div className='parameterLine'>Subgroup: <span className='value'>{parameters.subgroup}</span></div>
                         </PlotParameters>
                         <VolcanoPlot 
                             plotId='volcano-plot' 
@@ -89,10 +113,17 @@ const Explore = (props) => {
                     <div>
                         <h3>Forest Plot</h3>
                         <PlotParameters>
-                            <div className='parameterLine'>Outcome: {parameters.outcome}</div>
-                            <div className='parameterLine'>Model: {parameters.model}</div>
-                            <div className='parameterLine'>Signature: {parameters.signature}</div>
+                            <div className='parameterLine'>Signature: <span className='value'>{parameters.signature}</span></div>
                         </PlotParameters>
+                        <EffectSizeValues>
+                            <div className='title'>Pooled Effect Sizes: </div>
+                            <div className='effectSizeValues'>
+                                <div className='valueLine'>P-value: <span className='value'>{Math.round(forestPlotData.data.meta[0].pval * 100) / 100}</span></div>
+                                <div className='valueLine'>Coef: <span className='value'>{Math.round(forestPlotData.data.meta[0].se * 100) / 100}</span></div>
+                                <div className='valueLine'>95CI Low: <span className='value'>{Math.round(forestPlotData.data.meta[0]._95ci_low * 100) / 100}</span></div>
+                                <div className='valueLine'>95CI High: <span className='value'>{Math.round(forestPlotData.data.meta[0]._95ci_high * 100) / 100}</span></div>
+                            </div>    
+                        </EffectSizeValues>
                         <ForestPlot id='forestplot' individuals={forestPlotData.data.individuals} meta={forestPlotData.data.meta} />
                     </div>
                     :
