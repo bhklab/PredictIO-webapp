@@ -1,15 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import Select from 'react-select';
+import CustomSelect from '../UtilComponents/CustomSelect';
 import { FaSortAmountDown, FaSortAmountUpAlt } from "react-icons/fa";
 import ForestPlot from '../Diagram/ForestPlot3';
+
+const Container = styled.div`
+    width: 100%;
+`;
 
 const PlotHeader = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     margin-bottom: 20px;
+    font-size: 12px;
 
     .title {
         font-weight: bold;
@@ -33,7 +37,7 @@ const PlotHeader = styled.div`
             flex: 30%;
         }
         .sortIconBtn {
-            font-size: 18px;
+            font-size: 14px;
             margin-left: 10px;
             background: none;
             border: none;
@@ -45,7 +49,6 @@ const PlotHeader = styled.div`
 
     .effectSizeValues {
         display: flex;
-        justify-content: space-between;
         .valueLine {
             margin-left: 15px;
             .value {
@@ -136,7 +139,7 @@ const ForestPlotContainer = (props) => {
         <div>
             {
                 plotData.ready &&
-                <React.Fragment>
+                <Container>
                     <h3>Forest Plot</h3>
                     <PlotHeader>
                         <div className='parameterLine'>
@@ -144,7 +147,7 @@ const ForestPlotContainer = (props) => {
                         </div>
                         <div className='filter'>
                             <span className='label'>Sort By:</span>
-                            <Select 
+                            <CustomSelect 
                                 className='dropdown' 
                                 value={sortOptions.find(option => option.value === sort.value)}
                                 options={sortOptions}
@@ -161,7 +164,7 @@ const ForestPlotContainer = (props) => {
                         <div className='title'>Filter By: </div>
                         <div className='filter'>
                             <span className='label'>Tissue Type:</span>
-                            <Select 
+                            <CustomSelect 
                                 className='dropdown' 
                                 value={tissueOptions.find(option => option.value === tissueValue)}
                                 options={tissueOptions}
@@ -170,7 +173,7 @@ const ForestPlotContainer = (props) => {
                         </div>
                         <div className='filter'>
                             <span className='label'>Sequencing Type:</span>
-                            <Select 
+                            <CustomSelect 
                                 className='dropdown' 
                                 value={sequenceOptions.find(option => option.value === sequenceValue)}
                                 options={sequenceOptions}
@@ -188,7 +191,7 @@ const ForestPlotContainer = (props) => {
                         </div>    
                     </PlotHeader>
                     <ForestPlot id='forestplot' individuals={plotData.individuals} meta={plotData.meta} />
-                </React.Fragment>
+                </Container>
             }
         </div>
     );

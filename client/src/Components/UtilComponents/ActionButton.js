@@ -8,8 +8,8 @@ const StyledButton = styled.button`
     justify-content: center;
     border-radius: 5px;
     border: none;
-    font-weight: bold;
-    letter-spacing: 2px;
+    font-weight: normal;
+    letter-spacing: 1.5px;
     width: ${props => props.style.width ? props.style.width : '45%'};
     height: ${props => props.style.height ? props.style.height : '80px'};
     background-color: ${props => props.disabled ? colors.light_gray : props.color.background};

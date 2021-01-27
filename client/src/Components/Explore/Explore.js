@@ -16,11 +16,17 @@ const PlotContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
+    .volcano {
+        width: 35%;
+    }
+    .forest {
+        width: 65%;
+    }
 `;
 
 const StyledPlotArea = styled.div`
-    width: 48%;
-    min-width: 540px;
+    width: ${props => props.width};
+    // min-width: 400px;
     padding 10px;
 `;
 
@@ -58,7 +64,7 @@ const Explore = (props) => {
 
     return(
         <ExploreContainer>
-            <h2>Explore pre-computed signature data</h2>
+            <h3>Explore pre-computed signature data</h3>
             <VolcanoPlotInput 
                 parameters={parameters} 
                 setParameters={setParameters} 
@@ -67,7 +73,7 @@ const Explore = (props) => {
                 resetButton={true} 
                 onReset={() => {window.location.reload()}} />
             <PlotContainer>
-                <StyledPlotArea className='volcano'>
+                <StyledPlotArea width='40%'>
                 {
                     volcanoPlotData.ready ?
                     <VolcanoPlotContainer 
@@ -82,7 +88,7 @@ const Explore = (props) => {
                     </LoaderContainer>
                 }
                 </StyledPlotArea>
-                <StyledPlotArea className='forest'>
+                <StyledPlotArea width='60%'>
                 {
                     forestPlotData.ready ?
                     <ForestPlotContainer parameters={parameters} forestPlotData={forestPlotData} />

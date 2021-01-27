@@ -18,7 +18,7 @@ const Container = styled.div`
     align-items: center;
     .tooltip {
         position: absolute;
-        font-size: 12px; 
+        font-size: 11px; 
         background-color: rgba(242,255,223,0.8); 
         padding: 2px 10px; 
         color: rgb(7,28,44);
@@ -43,12 +43,12 @@ const ForestPlot = (props) => {
         }
 
         const initial = {
-            edgeSize: 10,
+            edgeSize: 8,
             fontSize: 11,
             xAxeMargin: 30,
             topMargin: 20,
             leftMargin: 200,
-            rightMargin: 100
+            rightMargin: 10
         }
 
         /***
@@ -155,7 +155,7 @@ const ForestPlot = (props) => {
             .attr('y1', yScale(dataset.length+1))
             .attr('y2', yScale(dataset.length+1))
             .style('stroke', "#0C3544")
-            .style('stroke-width', '2');
+            .style('stroke-width', '1');
 
         canvas.append('line')
             .attr('id', 'yAxe')
@@ -164,7 +164,7 @@ const ForestPlot = (props) => {
             .attr('y1', yScale(-2))
             .attr('y2', yScale(dataset.length + 1))
             .style('stroke', "#0C3544")
-            .style('stroke-width', '2');
+            .style('stroke-width', '0.5');
 
         canvas.append('line')
             .attr('id', 'yAxe-dash')
@@ -174,7 +174,7 @@ const ForestPlot = (props) => {
             .attr('y2', yScale(dataset.length + 1))
             .attr('stroke-dasharray', '3,4')
             .style('stroke', "#EF8020")
-            .style('stroke-width', '1');
+            .style('stroke-width', '0.5');
 
         Object.keys(xAxeTag).forEach((key, index) => {
             canvas.append('text')
@@ -182,7 +182,7 @@ const ForestPlot = (props) => {
                 .attr('x', xScale(xAxeTag[index]))
                 .attr('y', yScale(dataset.length + 2))
                 .attr('font-size', initial.fontSize)
-                .attr('font-weight', 'bold')
+                .attr('font-weight', 'regular')
                 .attr('fill', "#0C3544")
                 .attr('text-anchor', 'middle')
                 .text(xAxeTag[index])
@@ -196,14 +196,14 @@ const ForestPlot = (props) => {
                 .attr('y1', yScale(dataset.length+1) - 5)
                 .attr('y2', yScale(dataset.length+1) + 5)
                 .style('stroke', "#0C3544")
-                .style('stroke-width', '2');
+                .style('stroke-width', '0.5');
         });
 
         canvas.append('text')
             .attr('x', xScale(0))
             .attr('y', yScale(dataset.length + 2.7))
             .attr('font-size', initial.fontSize)
-            .attr('font-weight', 'bold')
+            .attr('font-weight', 'regular')
             .attr('fill', "#0C3544")
             .attr('text-anchor', 'middle')
             .text('Hazard Ratio')
@@ -230,7 +230,7 @@ const ForestPlot = (props) => {
                 .attr('xlink:href', '/')
                 .append('text')
                     .attr('x', 0)
-                    .attr('y', yScale(index) + 2)
+                    .attr('y', yScale(index))
                     .attr('font-size', initial.fontSize)
                     .attr('fill', "#0C3544")
                     .text(`${dataset[key].study}(${dataset[key].primary_tissue}, ${dataset[key].sequencing})`);
