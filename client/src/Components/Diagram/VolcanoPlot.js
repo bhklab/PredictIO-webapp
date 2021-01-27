@@ -170,6 +170,7 @@ const VolcanoPlot = (props) => {
                 ]}
                 layout={{
                     width: props.size.width,
+                    height: props.size.width * 0.8,
                     autosize: true,
                     paper_bgcolor: 'white',
                     plot_bgcolor: 'white',
@@ -178,8 +179,8 @@ const VolcanoPlot = (props) => {
                     xaxis: { title: 'Hazard Ratio', zeroline: false },
                     hovermode: 'closest',
                     font: {
-                        size: 14,
-                        family: 'Arial',
+                        size: 11,
+                        family: 'Noto Sans',
                     },
                     margin: {
                         l: 45,

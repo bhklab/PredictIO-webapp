@@ -2,6 +2,7 @@ import React from 'react';
 import Select from 'react-select';
 import styled from 'styled-components';
 import ActionButton from '../UtilComponents/ActionButton';
+import CustomSelect from '../UtilComponents/CustomSelect';
 
 const StyledForm = styled.div`
     width: ${props => props.flexDirection === 'column' ? '100%' : '80%'};
@@ -10,16 +11,18 @@ const StyledForm = styled.div`
     flex-direction: ${props => props.flexDirection};
     align-items: center;
     justify-content: space-between;
+    font-size: 12px;
 
     .formField {
         width: ${props => props.flexDirection === 'column' ? '100%' : '30%'};
         display: flex;
         align-items: center;
         justify-content: ${props => props.flexDirection === 'column' ? 'space-between' : 'center'};
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         margin-right: ${props => props.flexDirection === 'column' ? '0px' : '20px'};
         .label {
             margin-right: 10px;
+            font-size: 14px;
         }
         .select {
             width: 70%;
@@ -127,37 +130,42 @@ const VolcanoPlotInput = (props) => {
         <StyledForm flexDirection={props.flexDirection}>
             <div className='formField'>
                 <div className='label'>Outcome: </div>
-                <Select 
+                <CustomSelect 
                     className='select'
                     value={outcomeOptions.filter(option => option.value === parameters.outcome)}
                     options={outcomeOptions} 
-                    onChange={(e) => {onOutcomeSelect(e)}} />
+                    onChange={(e) => {onOutcomeSelect(e)}} 
+                />
             </div>
             <div className='formField'>
                 <div className='label'>Model: </div> 
-                <Select 
+                <CustomSelect 
                     className='select'
                     value={modelOptions.filter(option => option.value === parameters.model)}
                     options={modelOptions} 
-                    onChange={(e) => {setParameters({...parameters, model: e.value})}} />
+                    onChange={(e) => {setParameters({...parameters, model: e.value})}} 
+                />
             </div>
             <div className='formField'>
                 <div className='label'>Subgroup: </div> 
-                <Select 
+                <CustomSelect 
                     className='select'
                     value={subgroupOptions.filter(option => option.value === parameters.subgroup)}
                     options={subgroupOptions} 
-                    onChange={(e) => {setParameters({...parameters, subgroup: e.value})}} />
+                    onChange={(e) => {setParameters({...parameters, subgroup: e.value})}} 
+                />
             </div>
             <div className='formField buttonField'>
-                <ActionButton onClick={(e) => {onSubmit()}} text='Submit' disabled={readyToSubmit()} style={{width: '100px', height: '40px', fontSize: '14px'}} />
+                <ActionButton 
+                    onClick={(e) => {onSubmit()}} text='Submit' disabled={readyToSubmit()} 
+                    style={{width: '90px', height: '34px', fontSize: '14px'}} />
                 {
                     resetButton &&
                     <ActionButton 
                         onClick={(e) => {onReset()}} 
                         text='Reset'
                         type='reset' 
-                        style={{width: '100px', height: '40px', fontSize: '14px', marginLeft: '10px'}} />
+                        style={{width: '90px', height: '34px', fontSize: '14px', marginLeft: '10px'}} />
                 }
             </div>
         </StyledForm>

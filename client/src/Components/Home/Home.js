@@ -14,7 +14,7 @@ const HomeContainer = styled.div`
 `;
 
 const HomeLogo = styled.div`
-    height: 155px;
+    height: 100px;
     img {
         height: 100%;
     }

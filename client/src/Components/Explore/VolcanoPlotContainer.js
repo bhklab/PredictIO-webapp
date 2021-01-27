@@ -2,11 +2,17 @@ import React from 'react';
 import VolcanoPlot from '../Diagram/VolcanoPlot';
 import styled from 'styled-components';
 
+const Container = styled.div`
+    width: 100%;
+    margin-bottom: 30px;
+`
+
 const PlotParameters = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    font-size: 12px;
     .parameterLine {
         margin-right: 20px;
     }
@@ -20,7 +26,7 @@ const VolcanoPlotContainer = (props) => {
     const { parameters, setParameters, volcanoPlotData, getForestPlotData } = props;
 
     return(
-        <div>
+        <Container>
             <h3>Volcano Plot</h3>
             <PlotParameters>
                 <div className='parameterLine'>Outcome: <span className='value'>{parameters.outcome}</span></div>
@@ -33,7 +39,7 @@ const VolcanoPlotContainer = (props) => {
                 setParameters={setParameters} 
                 data={volcanoPlotData.data} 
                 getForestPlotData={getForestPlotData}/>
-        </div>
+        </Container>
     );
 }
 
