@@ -1,5 +1,4 @@
 import React from 'react';
-import Select from 'react-select';
 import styled from 'styled-components';
 import ActionButton from '../UtilComponents/ActionButton';
 import CustomSelect from '../UtilComponents/CustomSelect';
@@ -48,10 +47,9 @@ const modelOptions = [
 ];
 
 const subgroupOptions = [
+    { value: 'ALL', label: 'All', isDisabled: false },
     { value: 'Sequencing', label: 'Sequencing', isDisabled: false },
-    { value: 'Tumor', label: 'Tumor', isDisabled: false },
-    { value: 'ALL', label: 'Both', isDisabled: false },
-    { value: 'AllThree', label: 'All Three', isDisabled: false }
+    { value: 'Tumor', label: 'Tumor', isDisabled: false }
 ];
 
 // const signatureOptions = [

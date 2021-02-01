@@ -64,8 +64,8 @@ const ForestPlotContainer = (props) => {
     const {parameters, forestPlotData} = props;
     const [plotData, setPlotdata] = useState({ready: false, individuals: [], meta: []});
     const [sort, setSort] = useState({value: 'effect_size', asc: true});
-    const [tissueValue, setTissueValue] = useState('all');
-    const [sequenceValue, setSequenceValue] = useState('all');
+    const [tissueValue, setTissueValue] = useState('ALL');
+    const [sequenceValue, setSequenceValue] = useState('ALL');
 
     const [tissueOptions, setTissueOptions] = useState([]);
     const [sequenceOptions, setSequenceOptions] = useState([]);
@@ -75,51 +75,42 @@ const ForestPlotContainer = (props) => {
     ];
 
     useEffect(() => {
-        console.log(forestPlotData.data.individuals);
 
-        let tmp = forestPlotData.data.individuals.map(item => item.primary_tissue);
-        tmp = [...new Set(tmp)];
-        tmp = tmp.map(item => ({value: item, label: item, isDisabled: false})).sort((a, b) => (a.label.localeCompare(b.label)));
-        tmp.unshift({value: 'all', label: 'All'});
+        let tmp = forestPlotData.data.meta.filter(item => item.subgroup === 'Tumor' && item.n >= 3);
+        tmp = tmp.map(item => ({value: item.tissue_type, label: item.tissue_type})).sort((a, b) => (a.label.localeCompare(b.label)));
+        tmp.unshift({value: 'ALL', label: 'All'});
+
         setTissueOptions(tmp);
         
-        tmp = forestPlotData.data.individuals.map(item => item.sequencing);
-        tmp = [...new Set(tmp)];
-        tmp = tmp.map(item => ({value: item, label: item, isDisabled: false})).sort((a, b) => (a.label.localeCompare(b.label)));
-        tmp.unshift({value: 'all', label: 'All'});
+        tmp = forestPlotData.data.meta.filter(item => item.subgroup === 'Sequencing' && item.n >= 3);
+        tmp = tmp.map(item => ({value: item.tissue_type, label: item.tissue_type})).sort((a, b) => (a.label.localeCompare(b.label)));
+        tmp.unshift({value: 'ALL', label: 'All'});
+
         setSequenceOptions(tmp);
 
         setPlotdata({
             individuals: [...forestPlotData.data.individuals].sort((a, b) => a[sort.value] - b[sort.value]),
-            meta: forestPlotData.data.meta,
+            meta: forestPlotData.data.meta.filter(item => item.tissue_type === 'ALL'),
             ready: true
         });
         
     }, []);
 
     useEffect(() => {
+        let filterVal = 'ALL';
         let individuals = [...forestPlotData.data.individuals];
-        if(tissueValue !== 'all'){
+        let meta = [...forestPlotData.data.meta];
+
+        if(tissueValue !== 'ALL'){
             individuals = individuals.filter(item => item.primary_tissue === tissueValue);
-            let availableSeq = [...new Set(individuals.map(item => item.sequencing))];
-            sequenceOptions.forEach(item => {
-                item.isDisabled = !availableSeq.includes(item.value) && item.value !== 'all';
-            });
-        }else{
-            sequenceOptions.forEach(item => {
-                item.isDisabled = false;
-            });
+            filterVal = tissueValue;
+            setSequenceValue('ALL');
         }
-        if(sequenceValue !== 'all'){
+
+        if(sequenceValue !== 'ALL'){
             individuals = individuals.filter(item => item.sequencing === sequenceValue);
-            let availableTissue = [...new Set(individuals.map(item => item.primary_tissue))];
-            tissueOptions.forEach(item => {
-                item.isDisabled = !availableTissue.includes(item.value) && item.value != 'all';
-            });
-        }else{
-            tissueOptions.forEach(item => {
-                item.isDisabled = false;
-            });
+            filterVal = sequenceValue;
+            setTissueValue('ALL');
         }
 
         if(sort.value === 'effect_size'){
@@ -132,7 +123,11 @@ const ForestPlotContainer = (props) => {
         }
 
         individuals.sort((a, b) => (sort.asc ? a[sort.value] - b[sort.value] : b[sort.value] - a[sort.value]));
-        setPlotdata(prev => ({...prev, individuals: individuals}));
+        setPlotdata(prev => ({
+            ...prev, 
+            individuals: individuals,
+            meta: meta.filter(item => item.tissue_type === filterVal)
+        }));
     }, [sort, tissueValue, sequenceValue]);
 
     return(
@@ -169,6 +164,7 @@ const ForestPlotContainer = (props) => {
                                 value={tissueOptions.find(option => option.value === tissueValue)}
                                 options={tissueOptions}
                                 onChange={(e) => {setTissueValue(e.value)}}
+                                isDisabled={sequenceValue !== 'ALL'}
                             />
                         </div>
                         <div className='filter'>
@@ -178,6 +174,7 @@ const ForestPlotContainer = (props) => {
                                 value={sequenceOptions.find(option => option.value === sequenceValue)}
                                 options={sequenceOptions}
                                 onChange={(e) => {setSequenceValue(e.value)}}
+                                isDisabled={tissueValue !== 'ALL'}
                             />
                         </div>
                     </PlotHeader>

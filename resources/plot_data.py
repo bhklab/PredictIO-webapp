@@ -86,9 +86,7 @@ class ForestPlot(Resource):
         meta = Meta.query.filter_by(
             signature=query['signature'],
             outcome=query['outcome'],
-            model=query['model'],
-            subgroup='ALL',
-            tissue_type='ALL').all()
+            model=query['model']).all()
         result['meta'] = Meta.serialize_list(meta)
 
         # parse and return the output data
