@@ -53,7 +53,7 @@ const Home = () => {
         signature: '',
         outcome: '',
         model: '',
-        subgroup: ''
+        subgroup: 'ALL'
     });
 
     const onSubmit = async () => {

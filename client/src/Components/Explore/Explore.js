@@ -55,6 +55,7 @@ const Explore = (props) => {
     const getForestPlotData = async (params) => {
         setForestPlotData({data: {}, loading: true, ready: false}); // reset the data object so that the plot is redrawn.
         const res = await axios.post('/api/explore/forest_plot', params);
+        console.log(res.data);
         setForestPlotData({data: res.data, loading: false, ready: true});
     };
 

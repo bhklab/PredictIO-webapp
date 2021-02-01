@@ -23,7 +23,7 @@ const customSelectStyles = {
 };
 
 const CustomSelect = (props) => {
-    const {className, value, options, onChange} = props;
+    const {className, value, options, onChange, isDisabled} = props;
     return(
         <Select 
             className={className}
@@ -31,6 +31,7 @@ const CustomSelect = (props) => {
             options={options} 
             onChange={onChange} 
             styles={customSelectStyles}
+            isDisabled={isDisabled}
         />
     );
 }
