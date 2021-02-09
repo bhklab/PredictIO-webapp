@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import colors from '../../styles/colors';
 
 const StyledMultiSelect = styled(MultiSelect)`
+    .p-multiselect-header .p-checkbox {
+        display: none;
+    }
     .p-multiselect-trigger .pi {
         color: ${colors.gray_text};
         font-size: 0.7rem;
