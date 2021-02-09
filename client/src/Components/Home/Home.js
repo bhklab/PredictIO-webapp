@@ -50,7 +50,7 @@ const Home = () => {
     const [displayHome, setDisplayHome] = useState(true);
 
     const [parameters, setParameters] = useState({
-        signature: '',
+        signatures: ['ALL'],
         outcome: '',
         model: '',
         subgroup: 'ALL'

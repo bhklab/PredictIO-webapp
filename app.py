@@ -12,6 +12,7 @@ from models.db import db
 # modules used for routes in 'resources' directory
 from resources.test import Test
 from resources.plot_data import VolcanoPlot, ForestPlot
+from resources.signatures_list import SignaturesList
 from resources.io_predict import IOPredict
 
 app = Flask(__name__,
@@ -32,6 +33,7 @@ api = Api(app)
 
 # routes
 api.add_resource(Test, '/api/test')
+api.add_resource(SignaturesList, '/api/signatures_list')
 api.add_resource(ForestPlot, '/api/explore/forest_plot')
 api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
 api.add_resource(IOPredict, '/api/iopredict')
