@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import CustomSelect from '../UtilComponents/CustomSelect';
+import CustomDropdown from '../UtilComponents/CustomDropdown';
 import { FaSortAmountDown, FaSortAmountUpAlt } from "react-icons/fa";
 import ForestPlot from '../Diagram/ForestPlot3';
 
@@ -142,11 +142,12 @@ const ForestPlotContainer = (props) => {
                         </div>
                         <div className='filter'>
                             <span className='label'>Sort By:</span>
-                            <CustomSelect 
+                            <CustomDropdown 
                                 className='dropdown' 
-                                value={sortOptions.find(option => option.value === sort.value)}
+                                value={sort.value}
                                 options={sortOptions}
                                 onChange={(e) => {setSort(prev => ({...prev, value: e.value}))}}
+                                placeholder='Select...'
                             />
                             <button className='sortIconBtn' onClick={(e) => {setSort(prev => ({...prev, asc: !prev.asc}))}}>
                                 {
@@ -159,22 +160,24 @@ const ForestPlotContainer = (props) => {
                         <div className='title'>Filter By: </div>
                         <div className='filter'>
                             <span className='label'>Tissue Type:</span>
-                            <CustomSelect 
+                            <CustomDropdown 
                                 className='dropdown' 
-                                value={tissueOptions.find(option => option.value === tissueValue)}
+                                value={tissueValue}
                                 options={tissueOptions}
                                 onChange={(e) => {setTissueValue(e.value)}}
-                                isDisabled={sequenceValue !== 'ALL'}
+                                disabled={sequenceValue !== 'ALL'}
+                                placeholder='Select...'
                             />
                         </div>
                         <div className='filter'>
                             <span className='label'>Sequencing Type:</span>
-                            <CustomSelect 
+                            <CustomDropdown 
                                 className='dropdown' 
-                                value={sequenceOptions.find(option => option.value === sequenceValue)}
+                                value={sequenceValue}
                                 options={sequenceOptions}
                                 onChange={(e) => {setSequenceValue(e.value)}}
-                                isDisabled={tissueValue !== 'ALL'}
+                                disabled={tissueValue !== 'ALL'}
+                                placeholder='Select...'
                             />
                         </div>
                     </PlotHeader>

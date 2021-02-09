@@ -30,16 +30,19 @@ class VolcanoPlot(Resource):
         # parse request
         query = request.get_json()
 
+        print(query['signatures'])
+
         # fetch data from the database
         result = []
         meta = Meta.query.filter(
             Meta.outcome == query['outcome'],
             Meta.model == query['model'],
+            Meta.subgroup == 'ALL',
             Meta.n > 3
         )
 
-        if query['subgroup'] != 'AllThree':
-            meta = meta.filter(Meta.subgroup == query['subgroup'])
+        if len(query['signatures']) > 0 and 'ALL' not in query['signatures']:
+            meta = meta.filter(Meta.signature.in_(query['signatures']))
         
         result = Meta.serialize_list(meta.all())
         for item in result:
