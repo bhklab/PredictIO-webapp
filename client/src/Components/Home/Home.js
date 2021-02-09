@@ -52,8 +52,7 @@ const Home = () => {
     const [parameters, setParameters] = useState({
         signatures: ['ALL'],
         outcome: '',
-        model: '',
-        subgroup: 'ALL'
+        model: ''
     });
 
     const onSubmit = async () => {

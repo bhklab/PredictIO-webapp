@@ -2,10 +2,8 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import ActionButton from '../UtilComponents/ActionButton';
-import CustomSelect from '../UtilComponents/CustomSelect';
-import { Dropdown } from 'primereact/dropdown';
-import { MultiSelect } from 'primereact/multiselect';
-import colors from '../../styles/colors';
+import CustomDropdown from '../UtilComponents/CustomDropdown';
+import CustomMultiSelect from '../UtilComponents/CustomMultiSelect';
 
 const StyledForm = styled.div`
     width: ${props => props.flexDirection === 'column' ? '100%' : '80%'};
@@ -38,42 +36,6 @@ const StyledForm = styled.div`
     }
 `;
 
-const StyledDropdown = styled(Dropdown)`
-    .pi {
-        color: ${colors.gray_text};
-        font-size: 0.7rem;
-    }
-    .p-dropdown-items .p-dropdown-item {
-        color: ${colors.gray_text};
-    }
-    .p-dropdown-label, .p-dropdown-item {
-        font-family: 'Noto Sans', sans-serif;
-        font-size: 12px;
-    }
-`;
-
-const StyledMultiSelect = styled(MultiSelect)`
-    .p-multiselect-trigger .pi {
-        color: ${colors.gray_text};
-        font-size: 0.7rem;
-    }
-    .p-multiselect-items .p-multiselect-item {
-        color: ${colors.gray_text};
-        font-family: 'Noto Sans', sans-serif;
-        font-size: 12px;
-    }
-    .p-multiselect-label-container {
-        font-family: 'Noto Sans', sans-serif;
-        font-size: 12px;
-    }
-    .p-multiselect-filter-container input {
-        font-size: 12px;
-    }
-    .selected-item {
-        margin-right: 5px;
-    }
-`;
-
 const VolcanoPlotInput = (props) => {
     
     const {parameters, setParameters, onSubmit, onReset, resetButton} = props;
@@ -91,7 +53,6 @@ const VolcanoPlotInput = (props) => {
     };
 
     const onOutcomeSelect = (selected) => {
-        console.log(selected);
         let modelValue = '';
         let modelOptionsCopy = JSON.parse(JSON.stringify(modelOptions));
 
@@ -143,16 +104,9 @@ const VolcanoPlotInput = (props) => {
             signatures: selections.value});
     }
 
-    const selectedTemplate = (option) => {
-        if (option) {
-            return (<span className='selected-item'>{option}</span>);
-        }
-        return "Select...";
-    }
-
     useEffect(() => {
         const setSelectOptions = async () => {
-            const res = await axios.get('/api/signatures_list');
+            const res = await axios.get('/api/dropdown_option');
             console.log(res.data);
             let signatures = res.data.signatures.map(item => ({value: item, label: item, disabled: true}));
             signatures.unshift({value: 'ALL', label: 'ALL', disabled: false});
@@ -167,7 +121,7 @@ const VolcanoPlotInput = (props) => {
         <StyledForm flexDirection={props.flexDirection}>
             <div className='formField'>
                 <div className='label'>Outcome: </div>
-                <StyledDropdown 
+                <CustomDropdown 
                     className='select'
                     value={parameters.outcome}
                     options={outcomeOptions} 
@@ -177,7 +131,7 @@ const VolcanoPlotInput = (props) => {
             </div>
             <div className='formField'>
                 <div className='label'>Model: </div> 
-                <StyledDropdown 
+                <CustomDropdown 
                     className='select'
                     value={parameters.model}
                     options={modelOptions} 
@@ -187,19 +141,20 @@ const VolcanoPlotInput = (props) => {
             </div>
             <div className='formField'>
                 <div className='label'>Signatures: </div> 
-                <StyledMultiSelect 
+                <CustomMultiSelect 
                     className='select'
                     value={parameters.signatures}
                     options={signatureOptions} 
                     onChange={(selections) => {onSignatureSelect(selections)}} 
-                    selectedItemTemplate={selectedTemplate}
                     filter={true}
                     placeholder='Select...'
                 />
             </div>
             <div className='formField buttonField'>
                 <ActionButton 
-                    onClick={(e) => {onSubmit()}} text='Submit' disabled={readyToSubmit()} 
+                    onClick={(e) => {onSubmit()}} 
+                    text='Submit' 
+                    disabled={readyToSubmit()} 
                     style={{width: '90px', height: '34px', fontSize: '14px'}} />
                 {
                     resetButton &&
