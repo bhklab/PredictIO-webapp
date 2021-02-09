@@ -121,9 +121,7 @@ const VolcanoPlotInput = (props) => {
     }
 
     const onSignatureSelect = (selections) => {
-        console.log(selections.value);
         let signatureOptionsCopy = JSON.parse(JSON.stringify(signatureOptions));
-
         if(selections.value.includes('ALL')){
             signatureOptionsCopy.forEach(item => {
                 if(item.value === 'ALL'){
