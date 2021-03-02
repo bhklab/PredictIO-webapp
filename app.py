@@ -14,6 +14,7 @@ from resources.test import Test
 from resources.plot_data import VolcanoPlot, ForestPlot
 from resources.dropdown_option import DropdownOption
 from resources.io_predict import IOPredict
+from resources.itnt_visualization import ITNTVisualization
 
 app = Flask(__name__,
             static_url_path='',
@@ -37,6 +38,7 @@ api.add_resource(DropdownOption, '/api/dropdown_option')
 api.add_resource(ForestPlot, '/api/explore/forest_plot')
 api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
 api.add_resource(IOPredict, '/api/iopredict')
+api.add_resource(ITNTVisualization, '/api/explore/itnt_data')
 
 # Setup that enables react routing when serving static files
 @app.route('/', defaults={'path': ''})
