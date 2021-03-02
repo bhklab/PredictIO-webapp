@@ -39,6 +39,8 @@ api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
 api.add_resource(IOPredict, '/api/iopredict')
 
 # Setup that enables react routing when serving static files
+
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
