@@ -1,9 +1,9 @@
 library(jsonlite)
 
-test1 <- function(input){
+run_sync <- function(input){
 
     x = FALSE
-    if(as.numeric(input[3]) == 1){
+    if(as.logical(input[3])){
         x = TRUE
     }
 
@@ -15,12 +15,34 @@ test1 <- function(input){
     json <- jsonlite::toJSON(df)
 
     return(json)
-    # return(base::simpleError("Something went wrong!"))
+}
+
+run_async <- function(input){
+    x = FALSE
+    
+    if(as.logical(input[3])){
+        x = TRUE
+    }
+
+    Sys.sleep(5)
+
+    n = c(2, 3, 5) 
+    s = c(input[1], input[2], 'cc')
+    b = c(TRUE, FALSE, x) 
+    df = data.frame(n, s, b)
+
+    json <- jsonlite::toJSON(df)
+
+    return(json)
 }
 
 tryCatch({
     args <- commandArgs(trailingOnly = TRUE)
-    test1(args)
+    if(as.logical(args[4])){
+        run_async(args)
+    }else{
+        run_sync(args)
+    }
 }, error=function(c){
     errorOut <- list(
         "error"=TRUE,

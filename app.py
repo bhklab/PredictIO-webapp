@@ -15,12 +15,14 @@ from resources.plot_data import VolcanoPlot, ForestPlot
 from resources.dropdown_option import DropdownOption
 from resources.io_predict import IOPredict
 from resources.itnt_visualization import ITNTVisualization
+from resources.async_process import AsyncProcess
 
 app = Flask(__name__,
             static_url_path='',
             static_folder='client/build')
 
 # initialize flask_sqlalchemy
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = config('CONN_STR')
 app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     "pool_pre_ping": True,
@@ -39,6 +41,7 @@ api.add_resource(ForestPlot, '/api/explore/forest_plot')
 api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
 api.add_resource(IOPredict, '/api/iopredict')
 api.add_resource(ITNTVisualization, '/api/explore/itnt_data')
+api.add_resource(AsyncProcess, '/api/explore/itnt_data/async')
 
 # Setup that enables react routing when serving static files
 @app.route('/', defaults={'path': ''})

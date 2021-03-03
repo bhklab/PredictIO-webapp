@@ -17,7 +17,7 @@ class ITNTVisualization(Resource):
         try:
             cwd = os.path.abspath(os.getcwd())
             r_path = os.path.join(cwd, 'r-scripts', 'test1.R')
-            p = subprocess.Popen(['Rscript', r_path, 'hello', 'test', '1'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(['Rscript', r_path, 'hello', 'test', 'TRUE', 'FALSE'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             (output, err) = p.communicate()
 
             error = err.decode("utf-8")
