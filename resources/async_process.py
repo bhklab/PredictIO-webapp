@@ -19,14 +19,23 @@ class AsyncProcess(Resource):
         
         try:
             cwd = os.path.abspath(os.getcwd())
-            r_path = os.path.join(cwd, 'r-scripts', 'test1.R')
-            cmd = ['Rscript', r_path, 'hello', 'test', 'TRUE', 'TRUE']
+            # r_path = os.path.join(cwd, 'r-scripts', 'test1.R')
+            r_path = os.path.join(cwd, 'r-scripts', 'itnt', 'iTNT-all.R')
+            cmd = ['Rscript', r_path]
 
             def run_in_thread():
                 p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                (output, err) = p.communicate()
 
-                self.callback(output, err)
+                while True:
+                    line = p.stdout.readline()
+
+                    if not line:
+                        break
+
+                    print(line.rstrip().decode("utf-8"))
+                
+                # (output, err) = p.communicate()
+                # self.callback(output, err)
 
             thread = threading.Thread(target=run_in_thread)
             thread.start()

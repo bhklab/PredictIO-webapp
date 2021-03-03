@@ -1,7 +1,13 @@
 library(jsonlite)
 
 run_sync <- function(input){
+    wd <- paste0(getwd(), '/r-scripts/itnt')
 
+    setwd(wd)
+
+    print(getwd())
+
+    print('beginning')
     x = FALSE
     if(as.logical(input[3])){
         x = TRUE

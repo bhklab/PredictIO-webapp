@@ -10,3 +10,10 @@ package-lock.json
 # python
 venv/
 __pycache__/
+
+# data files and directories
+*.csv
+*.gmt
+*.gml
+Results
+r-scripts/data
