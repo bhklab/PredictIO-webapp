@@ -2,7 +2,7 @@
 CURRENTLY UNUSED
 '''
 
-import pandas as pd 
+import pandas as pd
 import pymysql
 from decouple import config
 import os
@@ -11,15 +11,15 @@ os.chdir('/Users/minorunakano/Documents/GitHub/IOdb/db')
 
 # Read CSV
 gene = pd.read_csv('seedfiles/csv/gene.csv')
-df = pd.DataFrame(gene, columns= ["gene_id"])
+df = pd.DataFrame(gene, columns=["gene_id"])
 
 # Connect to MySQL server
 db = pymysql.connect(
-                      config('DB_HOST'),
-                      config('DB_USER'),
-                      config('DB_PASS'),
-                      config('DB_NAME')
-                    )
+    config('DB_HOST'),
+    config('DB_USER'),
+    config('DB_PASS'),
+    config('DB_NAME')
+)
 cursor = db.cursor()
 
 # # # # Insert DataFrame to Table
