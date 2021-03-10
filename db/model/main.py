@@ -7,6 +7,9 @@ from decouple import config
 import base
 
 import clinical_info
+import dataset
+import gene
+import dataset_gene
 
 engine = create_engine(config("CONN_STR"))
 base.Base.metadata.create_all(engine, checkfirst=True)

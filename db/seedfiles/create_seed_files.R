@@ -133,6 +133,7 @@ gene$gene_id <- unique_genes
 rownames(gene) <- gene$gene_id
 
 ##### write dataframes to csv files
+dir.create(file.path('./', 'csv'), showWarnings = FALSE)
 write.csv(dataset, 'csv/dataset.csv', row.names=F)
 write.csv(gene, file='csv/gene.csv', row.names=F)
 write.csv(dataset_gene, 'csv/dataset_gene.csv', row.names=F)
