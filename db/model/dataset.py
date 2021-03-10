@@ -7,5 +7,5 @@ class Dataset(Base):
     __tablename__ = "dataset"
     dataset_id = Column(Integer, primary_key=True)
     dataset_name = Column(String(32))
-    clinical_infos = relationship("ClinicalInfo", backref="dataset")
+    clinical_infos = relationship("Patient", backref="dataset")
     dataset_genes = relationship("DatasetGene", backref="dataset")
