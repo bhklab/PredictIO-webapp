@@ -2,9 +2,9 @@ from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, 
 from base import Base
 
 
-class ClinicalInfo(Base):
-    __tablename__ = "clinical_info"
-    id = Column(Integer, primary_key=True)
+class Patient(Base):
+    __tablename__ = "patient"
+    patient_id = Column(Integer, primary_key=True)
     dataset_id = Column(Integer, ForeignKey("dataset.dataset_id"))
     age = Column(Integer)
     patient = Column(String(32))

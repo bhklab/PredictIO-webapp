@@ -13,8 +13,8 @@ lapply(dirs, function(dir){
   dest <- paste0('results/', str_remove(dir, 'raw_data/'))
   print(dest)
   dir.create(dest)
-  files <- list.files(paste0(dir, '/result'), recursive=FALSE)
-  file.copy(file.path(paste0(dir, '/result'), files), dest)
+  files <- list.files(paste0(dir, '/'), recursive=FALSE)
+  file.copy(file.path(paste0(dir, '/'), files), dest)
 })
 
 ##### create dataset seed file

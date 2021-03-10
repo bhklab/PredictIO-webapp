@@ -6,7 +6,7 @@ from decouple import config
 
 import base
 
-import clinical_info
+import patient
 import dataset
 import gene
 import dataset_gene
