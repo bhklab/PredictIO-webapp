@@ -11,7 +11,7 @@ dataset_gene_dict = {}
 dataset_list = next(os.walk('./raw_data'))[1]
 for index, dataset in enumerate(dataset_list):
     dataset_index = index + 1
-    print(dataset_index, dataset)
+    print(dataset, f'({dataset_index}/{len(dataset_list)})')
     datasets.append(dataset)
     # merges cased_sequenced and clin files together to create dataset data for the patient table
     data_availability = pd.read_csv(
@@ -23,19 +23,30 @@ for index, dataset in enumerate(dataset_list):
     clinical_df.insert(0, 'dataset_id', dataset_index)
     # adds merged dataset dataframe to the list of other datasets
     patient_dfs.append(clinical_df)
-    if dataset == 'Liu':
-        # initalizes dataset list in the dictionary
-        dataset_gene_dict[dataset_index] = []
-        # attempts to read cna, snv and expression files to collect gene data
-        cna_file = Path(f'./raw_data/{dataset}/CNA_gene.csv.gz')
-        snv_file = Path(f'./raw_data/{dataset}/SNV.csv.gz')
-        expr_file = Path(f'./raw_data/{dataset}/EXPR.csv.gz')
-        if cna_file.is_file():
-            cna_df = pd.read_csv(
-                f'./raw_data/{dataset}/CNA_gene.csv.gz',  compression='gzip', sep=';')
-            cna_genes = cna_df.index.tolist()
-            dataset_gene_dict[dataset_index].extend(cna_genes)
-            all_genes.extend(cna_genes)
+    # initalizes dataset list in the dictionary
+    dataset_gene_dict[dataset_index] = []
+    # attempts to read cna, snv and expression files to collect gene data
+    cna_file = Path(f'./raw_data/{dataset}/CNA_gene.csv.gz')
+    snv_file = Path(f'./raw_data/{dataset}/SNV.csv.gz')
+    expr_file = Path(f'./raw_data/{dataset}/EXPR.csv.gz')
+    if cna_file.is_file():
+        cna_df = pd.read_csv(cna_file, compression='gzip', sep=';')
+        cna_genes = cna_df.index.tolist()
+        dataset_gene_dict[dataset_index].extend(cna_genes)
+        all_genes.extend(cna_genes)
+    if snv_file.is_file():
+        snv_df = pd.read_csv(snv_file, compression='gzip', sep=';')
+        snv_genes = snv_df['Gene'].tolist()
+        dataset_gene_dict[dataset_index].extend(snv_genes)
+        all_genes.extend(snv_genes)
+    if expr_file.is_file():
+        expr_df = pd.read_csv(expr_file, compression='gzip', sep=';')
+        expr_genes = expr_df.index.tolist()
+        dataset_gene_dict[dataset_index].extend(expr_genes)
+        all_genes.extend(expr_genes)
+    # removes duplicated gene entries from dataset list
+    dataset_gene_dict[dataset_index] = list(
+        set(dataset_gene_dict[dataset_index]))
 
 # removes duplicated gene entries and creates gene dictionary
 gene_list = list(set(all_genes))
