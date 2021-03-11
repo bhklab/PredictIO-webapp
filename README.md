@@ -1,4 +1,5 @@
 # IOdb
+
 IO.db is an web application that allows users to explore gene signatures in 19 immunotherapy studies of ICB-treated patients, and to obtain gene signature predictions using molecular data of their own studies of ICB-treated patients.
 
 ## Setup Instructions
@@ -26,6 +27,15 @@ cd IOdb
 
 - Eslint
 
+## Generate Seed Files
+
+- Download raw_data directory from [https://codeocean.com/capsule/6711882/tree](https://codeocean.com/capsule/6711882/tree) capsule
+- Run data generation script
+
+```bash
+python scripts/generate_seed_files.py
+```
+
 ## Build Instructions
 
 ### `cd client && npm build`
@@ -34,4 +44,5 @@ Builds the app for production to the `build` folder.
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 ## Server
+
 - To be determined.

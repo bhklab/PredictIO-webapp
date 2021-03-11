@@ -10,3 +10,6 @@ package-lock.json
 # python
 venv/
 __pycache__/
+
+#misc
+raw_data
