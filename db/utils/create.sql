@@ -21,7 +21,8 @@ CREATE TABLE signature_meta (
     pval double,
     i2 double,
     pval_i2 double,
-    PRIMARY KEY (signature, outcome, model, subgroup, tissue_type)
+    PRIMARY KEY
+(signature, outcome, model, subgroup, tissue_type)
 );
 
 CREATE TABLE signature_individual (
@@ -37,5 +38,6 @@ CREATE TABLE signature_individual (
 	_95ci_low double,
     _95ci_high double,
     pval double,
-    PRIMARY KEY (signature, outcome, model, study, primary_tissue)
+    PRIMARY KEY
+(signature, outcome, model, study, primary_tissue)
 );
