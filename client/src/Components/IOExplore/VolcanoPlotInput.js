@@ -1,40 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import styled from 'styled-components';
+import StyledForm from '../UtilComponents/StyledForm';
 import ActionButton from '../UtilComponents/ActionButton';
 import CustomDropdown from '../UtilComponents/CustomDropdown';
 import CustomMultiSelect from '../UtilComponents/CustomMultiSelect';
-
-const StyledForm = styled.div`
-    width: ${props => props.flexDirection === 'column' ? '100%' : '80%'};
-    margin-top: 30px;
-    display: flex;
-    flex-direction: ${props => props.flexDirection};
-    align-items: center;
-    justify-content: space-between;
-    font-size: 12px;
-
-    .formField {
-        width: ${props => props.flexDirection === 'column' ? '100%' : '30%'};
-        display: flex;
-        align-items: center;
-        justify-content: ${props => props.flexDirection === 'column' ? 'space-between' : 'center'};
-        margin-bottom: 10px;
-        margin-right: ${props => props.flexDirection === 'column' ? '0px' : '20px'};
-        .label {
-            margin-right: 10px;
-            font-size: 14px;
-        }
-        .select {
-            width: 70%;
-        }
-    }
-
-    .buttonField {
-        display: flex;
-        justify-content: ${props => props.flexDirection === 'column' ? 'flex-end' : 'flex-start'};
-    }
-`;
 
 const VolcanoPlotInput = (props) => {
     
@@ -155,14 +124,16 @@ const VolcanoPlotInput = (props) => {
                     onClick={(e) => {onSubmit()}} 
                     text='Submit' 
                     disabled={readyToSubmit()} 
-                    style={{width: '90px', height: '34px', fontSize: '14px'}} />
+                    style={{width: '90px', height: '34px', fontSize: '14px'}} 
+                />
                 {
                     resetButton &&
                     <ActionButton 
                         onClick={(e) => {onReset()}} 
                         text='Reset'
                         type='reset' 
-                        style={{width: '90px', height: '34px', fontSize: '14px', marginLeft: '10px'}} />
+                        style={{width: '90px', height: '34px', fontSize: '14px', marginLeft: '10px'}} 
+                    />
                 }
             </div>
         </StyledForm>
