@@ -3,26 +3,21 @@ library(jsonlite)
 
 run <- function(input) {
 
-	arg = read.csv( "../data/io_meta/Data_INPUT.txt" , sep= "\t" , stringsAsFactors= FALSE , header= FALSE )
-	id = arg[ , 1 ]
-	arg = as.data.frame( t( arg[ , -1 ] ) )
-	colnames( arg ) = id
+	study = as.character( sapply( as.character( input[3] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
 
-	study = as.character( sapply( as.character( arg$study ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
-
-	sex = as.character( sapply( as.character( arg$sex ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
+	sex = as.character( sapply( as.character( input[4] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
 
 	if( sum( sex == c( "M" , "F" ) ) %in% 2 ) { sex = c( "M" , "F" , NA ) }
 
-	primary = as.character( sapply( as.character( arg$primary ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
-	drug_type = as.character( sapply( as.character( arg$drug_type ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
-	data_type = as.character( arg$data_type )
-	sequencing_type = as.character( sapply( as.character( arg$sequencing_type ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
+	primary = as.character( sapply( as.character( input[5] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
+	drug_type = as.character( sapply( as.character( input[6] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
+	data_type = as.character( input[7] )
+	sequencing_type = as.character( sapply( as.character( input[8] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
 
-	if( length( grep( ',' , as.character( arg$gene ) ) ) ){
-		gene = as.character( sapply( as.character( arg$gene ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
+	if( length( grep( ',' , as.character( input[9] ) ) ) ){
+		gene = as.character( sapply( as.character( input[9] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
 	} else{
-		gene = as.character( arg$gene )
+		gene = as.character( input[9] )
 	}
 
 	output = NULL
@@ -74,16 +69,7 @@ run <- function(input) {
 			)
 
 		}
-		# if( data_type %in% "CNA" ){
-		# 	output = Get_Outcome_CNA_Signature( 
-		# 		sex = sex ,  
-		# 		primary = primary ,  
-		# 		drug_type = drug_type ,  
-		# 		sequencing_type = sequencing_type ,  
-		# 		gene = gene
-		# 	)
 
-		# }
 		if( data_type %in% "EXP" ){
 			
 			output = Get_Outcome_EXP_Signature( 
@@ -98,8 +84,13 @@ run <- function(input) {
 		}
 	}
 
-	output <- jsonlite::toJSON(output)
-	return(output)
+	json <- list(
+		analysis_id=input[2],
+		data=output
+	)
+
+	json <- jsonlite::toJSON(json)
+	return(json)
 }
 
 tryCatch({
