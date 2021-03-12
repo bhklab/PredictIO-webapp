@@ -39,7 +39,7 @@ api.add_resource(Test, '/api/test')
 api.add_resource(DropdownOption, '/api/dropdown_option')
 api.add_resource(ForestPlot, '/api/explore/forest_plot')
 api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
-api.add_resource(IOPredict, '/api/iopredict')
+api.add_resource(IOPredict, '/api/predict')
 api.add_resource(ITNTVisualization, '/api/explore/itnt_data')
 api.add_resource(AsyncProcess, '/api/explore/itnt_data/async')
 

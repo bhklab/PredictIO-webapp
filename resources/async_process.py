@@ -66,63 +66,6 @@ class AsyncProcess(Resource):
         return res, status
 
     def post(self):
-        status = 200
-        res = {
-            "error": 0,
-            "data": []
-        }
 
-        # parse request
-        query = request.get_json()
-        
-        try:
-            cwd = os.path.abspath(os.getcwd())
-
-            r_path = os.path.join(cwd, 'r-scripts', 'io_meta', 'Run_Compute_Result.R')
-            r_wd = os.path.join(cwd, 'r-scripts', 'io_meta')
-
-            cmd = [
-                'Rscript', 
-                r_path, 
-                r_wd, 
-                query['analysisID'], 
-                query['study'], 
-                query['sex'], 
-                query['primary'], 
-                query['drugType'], 
-                query['dataType'], 
-                query['sequencingType'], 
-                query['gene']
-            ]
-
-            def run_in_thread():
-                out = None
-
-                p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                
-                while True:
-
-                    line = p.stdout.readline()
-
-                    if not line:
-                        break
-                    else:
-                        out = line.rstrip().decode("utf-8")
-
-                print(out)
-
-            thread = threading.Thread(target=run_in_thread)
-            thread.start()
-
-            print('thread started')
-
-        except:
-            e = sys.exc_info()[0]
-            print(e)
-
-            res['error'] = 1
-            res['errorMessage'] = e
-            status = 500
-
-        return res, status
+        return "Only get method is allowed", 400
     
