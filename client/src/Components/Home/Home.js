@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import Layout from '../UtilComponents/Layout';
 import VolcanoPlotInput from '../Explore/VolcanoPlotInput';
-import Explore from '../Explore/Explore';
+import Explore from '../IOExplore/Explore';
 import styled from 'styled-components';
 
 const HomeContainer = styled.div`

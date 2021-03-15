@@ -7,21 +7,24 @@ import json
 from flask import Flask, request, jsonify, make_response
 from flask_restful import Resource, reqparse
 
-# Route used to submit request for the "IO Predict" pipeline
+# Test route used to handle async process
 
-class IOPredict(Resource):
+class AsyncProcess(Resource):
     def get(self):
-        return "Only post method is allowed", 400
-    
-    def post(self):
         status = 200
         res = {
             "error": 0,
             "data": []
         }
 
-        # parse request
-        query = request.get_json()
+        analysis_id = '12345678'
+        study = 'Braun,Damotte,Fumet.1,Fumet.2,Hugo,Hwang,Jerby_Arnon,Jung,Liu,Mariathasan,Miao.1,Miao.2,Nathanson,Riaz,Rizvi.15,Rizvi.18,Roh,Samstein,Snyder,Van_Allen'
+        sex = 'M,F'
+        primary	= 'Melanoma,Lung,Kidney'
+        drug_type = 'PD-1/PD-L1,CTLA4'
+        data_type = 'EXP'
+        sequencing_type = 'FPKM,TPM'
+        gene = 'B2M,CD8A,GZMA'
         
         try:
             cwd = os.path.abspath(os.getcwd())
@@ -29,19 +32,7 @@ class IOPredict(Resource):
             r_path = os.path.join(cwd, 'r-scripts', 'io_meta', 'Run_Compute_Result.R')
             r_wd = os.path.join(cwd, 'r-scripts', 'io_meta')
 
-            cmd = [
-                'Rscript', 
-                r_path, 
-                r_wd, 
-                '1234567890', # analysis id 
-                ",".join(query['study']), 
-                ",".join(query['sex']), 
-                ",".join(query['primary']), 
-                ",".join(query['drugType']), 
-                ",".join(query['dataType']), 
-                ",".join(query['sequencingType']), 
-                ",".join(query['gene'])
-            ]
+            cmd = ['Rscript', r_path, r_wd, analysis_id, study, sex, primary, drug_type, data_type, sequencing_type, gene]
 
             def run_in_thread():
                 out = None
@@ -73,3 +64,8 @@ class IOPredict(Resource):
             status = 500
 
         return res, status
+
+    def post(self):
+
+        return "Only get method is allowed", 400
+    

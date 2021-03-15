@@ -17,7 +17,8 @@ const Navigation = () => {
                     <img alt='IO.db' src='./images/logos/IOdb-logo-white.png'/>
                 </LogoContainer>
                 <StyledLinks>
-                    <Link to='/' onClick={(e) => {window.location.reload()}}>Home</Link>
+                    <Link to='/'>Home</Link>
+                    <Link to='/predict'>Predict</Link>
                     <Link to='/'>About</Link>
                     <Link to='/'>Download</Link>
                     <Link to='/'>Contact</Link>

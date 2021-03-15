@@ -9,13 +9,14 @@ from flask_restful import Resource, reqparse
 class Test(Resource):
     def get(self):
         # read example output as a dataframe
-        file_path = os.getcwd() + '/example_output/example_explore.txt'
-        df = pd.read_csv(file_path, sep='\t')
+        # file_path = os.getcwd() + '/example_output/example_explore.txt'
+        # df = pd.read_csv(file_path, sep='\t')
 
-        # convert it to a json object
-        json_obj = df.to_json(orient='records')
+        # # convert it to a json object
+        # json_obj = df.to_json(orient='records')
+        print('test')
 
-        return make_response(json_obj, 200)
+        return "test", 200
 
     def post(self):
         print("Submitting the IO Predict request.")
