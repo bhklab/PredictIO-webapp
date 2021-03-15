@@ -27,17 +27,43 @@ Session = sessionmaker(bind=engine)
 # create a Session
 session = Session()
 
+
+def Add_Records(data, type):
+    print(type)
+    for index, row in enumerate(data):
+        if type == 'dataset':
+            record = dataset.Dataset(**{
+                'dataset_id': row[0],
+                'dataset_name': row[1],
+            })
+            print('Adding Dataset record ', index)
+        elif type == 'dataset_gene':
+            record = dataset_gene.DatasetGene(**{
+                'id': row[0],
+                'dataset_id': row[1],
+                'gene_id': row[2],
+            })
+            print('Adding DatasetGene record', index)
+        elif type == 'gene':
+            record = dataset_gene.DatasetGene(**{
+                'gene_id': row[0],
+                'gene_name': row[1]
+            })
+            print('Adding Gene record', index)
+        session.add(record)
+
+
 try:
     dir_path = os.path.dirname(os.path.realpath(__file__))
     dataset_file = os.path.join(dir_path, "../seedfiles/dataset.csv")
     dataset_data = Load_Data(dataset_file, [int, '>U12'])
-    for i in dataset_data:
-        record = dataset_data.Dataset(**{
-            'dataset_id': i[0],
-            'dataset_name': i[1],
-        })
-        session.add(record)  # Add all the records
-        print('Adding Dataset record')
+    Add_Records(dataset_data, 'dataset')
+    gene_file = os.path.join(dir_path, "../seedfiles/gene.csv")
+    gene_data = Load_Data(gene_file, [int, '>U100'])
+    Add_Records(gene_data, 'gene')
+    dataset_gene_file = os.path.join(dir_path, "../seedfiles/dataset_gene.csv")
+    dataset_gene_data = Load_Data(dataset_gene_file, [int, int, int])
+    Add_Records(dataset_gene_data, 'dataset_gene')
     session.commit()  # Attempt to commit all the records
 except:
     session.rollback()  # Rollback the changes on error
