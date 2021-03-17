@@ -18,6 +18,6 @@ class Patient(Base):
     drug_type = Column(String(32))
     dna = Column(String(32))
     rna = Column(String(32))
-    expr = Column(Integer)
+    expression = Column(Integer)
     cna = Column(Integer)
     snv = Column(Integer)
