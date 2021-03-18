@@ -1,6 +1,7 @@
 aniso8601==8.0.0
 astroid==2.4.2
 autopep8==1.5.3
+bidict==0.21.2
 certifi==2020.12.5
 cffi==1.14.5
 chardet==4.0.0
@@ -20,10 +21,8 @@ joblib==0.16.0
 kiwisolver==1.3.1
 lazy-object-proxy==1.4.3
 MarkupSafe==1.1.1
-matplotlib==3.3.3
 mccabe==0.6.1
 mysql-connector-python==8.0.23
-numpy==1.19.1
 pandas==1.0.5
 paramz==0.9.5
 patsy==0.5.1
@@ -33,15 +32,14 @@ protobuf==3.14.0
 pycodestyle==2.6.0
 pycparser==2.20
 pylint==2.5.3
-PyMySQL==1.0.2
 pyparsing==2.4.7
 python-dateutil==2.8.1
 python-decouple==3.4
 python-dotenv==0.14.0
+python-engineio==4.0.0
+python-socketio==5.0.4
 pytz==2020.1
 requests==2.25.1
-rpy2==3.4.2
-scipy==1.5.2
 seaborn==0.10.1
 simplejson==3.17.2
 six==1.15.0

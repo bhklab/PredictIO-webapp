@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Layout from '../UtilComponents/Layout';
-import VolcanoPlotInput from '../Explore/VolcanoPlotInput';
+import VolcanoPlotInput from '../IOExplore/VolcanoPlotInput';
 import Explore from '../IOExplore/Explore';
 import styled from 'styled-components';
 
