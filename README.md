@@ -27,7 +27,7 @@ cd IOdb
 
 - Eslint
 
-## Database generation
+## Database Generation
 
 - Download raw_data directory from [https://codeocean.com/capsule/6711882/tree](https://codeocean.com/capsule/6711882/tree) capsule
 - Run data generation script which would create CSV files for the database tables
