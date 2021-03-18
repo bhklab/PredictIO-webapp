@@ -27,13 +27,19 @@ cd IOdb
 
 - Eslint
 
-## Generate Seed Files
+## Database generation
 
 - Download raw_data directory from [https://codeocean.com/capsule/6711882/tree](https://codeocean.com/capsule/6711882/tree) capsule
-- Run data generation script
+- Run data generation script which would create CSV files for the database tables
 
 ```bash
 python scripts/generate_seed_files.py
+```
+
+- To create tables and seed the database, run the following command:
+
+```bash
+python db/seed_database.py
 ```
 
 ## Build Instructions

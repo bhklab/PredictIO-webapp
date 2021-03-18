@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, ForeignKey
-from base import Base
+from .base import Base
 
 
 class DatasetGene(Base):

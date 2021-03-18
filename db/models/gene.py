@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String
 from sqlalchemy.orm import relationship
-from base import Base
+from .base import Base
 
 
 class Gene(Base):
