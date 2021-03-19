@@ -85,6 +85,7 @@ run <- function(input) {
 	}
 
 	json <- list(
+		error=FALSE,
 		analysis_id=input[2],
 		data=output
 	)

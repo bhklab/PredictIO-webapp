@@ -1,10 +1,11 @@
-# model used for signature_individual table
-from .db import db
+"""
+model used for signature_individual table
+"""
 from utils.serializer import Serializer
+from .db import db
 
 class Individual(db.Model, Serializer):
     __tablename__ = 'signature_individual'
-    
     signature = db.Column(db.String, primary_key=True)
     outcome = db.Column(db.String, primary_key=True)
     model = db.Column(db.String, primary_key=True)

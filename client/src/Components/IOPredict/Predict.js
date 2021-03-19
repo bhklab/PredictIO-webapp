@@ -84,6 +84,7 @@ const Predict = (props) => {
                             options={studyOptions} 
                             onChange={(e) => {setParameters({...parameters, study: e.value})}} 
                             filter={true}
+                            checkbox={true}
                             placeholder='Select...'
                         />
                     </div>
@@ -95,6 +96,7 @@ const Predict = (props) => {
                             options={sexOptions} 
                             onChange={(e) => {setParameters({...parameters, sex: e.value})}} 
                             filter={true}
+                            checkbox={true}
                             placeholder='Select...'
                         />
                     </div>
@@ -106,6 +108,7 @@ const Predict = (props) => {
                             options={primaryOptions} 
                             onChange={(e) => {setParameters({...parameters, primary: e.value})}} 
                             filter={true}
+                            checkbox={true}
                             placeholder='Select...'
                         />
                     </div>
@@ -117,6 +120,7 @@ const Predict = (props) => {
                             options={drugOptions} 
                             onChange={(e) => {setParameters({...parameters, drugType: e.value})}} 
                             filter={true}
+                            checkbox={true}
                             placeholder='Select...'
                         />
                     </div>
@@ -128,6 +132,7 @@ const Predict = (props) => {
                             options={dataOptions} 
                             onChange={(e) => {setParameters({...parameters, dataType: e.value})}} 
                             filter={true}
+                            checkbox={true}
                             placeholder='Select...'
                         />
                     </div>
@@ -139,6 +144,7 @@ const Predict = (props) => {
                             options={sequencingOptions} 
                             onChange={(e) => {setParameters({...parameters, sequencingType: e.value})}} 
                             filter={true}
+                            checkbox={true}
                             placeholder='Select...'
                         />
                     </div>
@@ -150,6 +156,7 @@ const Predict = (props) => {
                             options={geneOptions} 
                             onChange={(e) => {setParameters({...parameters, gene: e.value})}} 
                             filter={true}
+                            checkbox={true}
                             placeholder='Select...'
                         />
                     </div>
