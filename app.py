@@ -1,3 +1,6 @@
+"""
+Main configuration an setup for the web app.
+"""
 import os
 from flask import Flask, send_from_directory
 from flask_restful import Api
@@ -8,6 +11,9 @@ from decouple import config
 
 # db object
 from models.db import db
+
+# mail object
+from utils.mail import mail
 
 # modules used for routes in 'resources' directory
 from resources.test import Test
@@ -31,6 +37,14 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
 db.init_app(app)
 
 CORS(app)
+
+# initialize mail object 
+app.config['MAIL_SERVER'] = config('MAIL_SERVER_TEST')
+app.config['MAIL_PORT'] = config('MAIL_PORT_TEST')
+app.config['MAIL_USERNAME'] = config('MAIL_USERNAME_TEST')
+app.config['MAIL_PASSWORD'] = config('MAIL_PASSWORD_TEST')
+mail.init_app(app)
+app.extensions['mail'].debug = 0
 
 api = Api(app)
 

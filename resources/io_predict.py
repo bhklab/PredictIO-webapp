@@ -1,14 +1,16 @@
+"""
+Module for the IO Predict feature
+"""
 import sys
-import os
-import subprocess
 import threading
-# import pandas as pd
-import json
-from flask import Flask, request, jsonify, make_response
-from flask_restful import Resource, reqparse
+from flask import request
+from flask import copy_current_request_context
+from flask_restful import Resource
+from utils.r_script_exec import execute_script
 
-# Route used to submit request for the "IO Predict" pipeline
-
+"""
+IO Predict Route class.
+"""
 class IOPredict(Resource):
     def get(self):
         return "Only post method is allowed", 400
@@ -19,52 +21,25 @@ class IOPredict(Resource):
             "error": 0,
             "data": []
         }
-
-        # parse request
-        query = request.get_json()
         
         try:
-            cwd = os.path.abspath(os.getcwd())
+            # parse request
+            query = request.get_json()
 
-            r_path = os.path.join(cwd, 'r-scripts', 'io_meta', 'Run_Compute_Result.R')
-            r_wd = os.path.join(cwd, 'r-scripts', 'io_meta')
+            """
+            Function to be executed in a separate thread.
+            Add @copy_current_request_context decorator so that Flask_Mail module can access the app's request context.
+            """
+            @copy_current_request_context
+            def run_async(query):
+                execute_script(query)
 
-            cmd = [
-                'Rscript', 
-                r_path, 
-                r_wd, 
-                '1234567890', # analysis id 
-                ",".join(query['study']), 
-                ",".join(query['sex']), 
-                ",".join(query['primary']), 
-                ",".join(query['drugType']), 
-                ",".join(query['dataType']), 
-                ",".join(query['sequencingType']), 
-                ",".join(query['gene'])
-            ]
-
-            def run_in_thread():
-                out = None
-
-                p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                
-                while True:
-
-                    line = p.stdout.readline()
-
-                    if not line:
-                        break
-                    else:
-                        out = line.rstrip().decode("utf-8")
-
-                print(out)
-
-            thread = threading.Thread(target=run_in_thread)
+            thread = threading.Thread(target=run_async, args=(query,))
             thread.start()
-
             print('thread started')
 
         except:
+            print('error')
             e = sys.exc_info()[0]
             print(e)
 

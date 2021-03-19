@@ -6,12 +6,15 @@ sudo apt-get update
 # upgrade all upgradable packages
 sudo apt upgrade
 
-# 1. Install Python (reference: https://realpython.com/intro-to-pyenv/)
-
-# install build dependencies
+# install build dependencies for python pakcages
 sudo apt-get install -y make build-essential libssl-dev zlib1g-dev \
 libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
+libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl 
+
+# install build dependencies for R pakcages
+sudo apt-get install -y libcurl4-openssl-dev libxml2-dev
+
+# 1. Install Python (reference: https://realpython.com/intro-to-pyenv/)
 
 # install pyenv
 curl https://pyenv.run | bash
@@ -44,8 +47,21 @@ sudo apt install r-base r-base-core
 sudo apt install git
 
 # 4. Clone the IO.db repository
+git clone https://github.com/bhklab/IOdb.git 
+# after this, use SCP to transfer untracked files (.env and RData files) 
+scp -i <path to the key> <path to file or dir> <username>@<hostname>:/<path>
 
+# 5. Install Python dependencies
+pip install -r requirements.txt
 
+# 6. Install R dependencies
+sudo Rscript requirements.R
+
+# 7. Install apache2
+
+# 8. Install mod_wsgi
+
+# 9. Configure apache2
 
 
 
