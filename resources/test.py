@@ -14,7 +14,7 @@ class Test(Resource):
 
         # # convert it to a json object
         # json_obj = df.to_json(orient='records')
-        print('testing')
+        print('test')
 
         return "test", 200
 
