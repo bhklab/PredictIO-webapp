@@ -22,7 +22,7 @@ const Container = styled.div`
         background-color: rgba(242,255,223,0.8); 
         padding: 2px 10px; 
         color: rgb(7,28,44);
-        border-radius: 3;
+        border-radius: 3px;
     }
     .pointLink:hover {
         text-decoration: underline;
@@ -52,15 +52,11 @@ const ForestPlot = (props) => {
         }
 
         /***
-         * Get the dataset (studies + overall value)
          * keep the studies in data and the overall
          **/
-        const dataset = props.individuals.concat(props.meta);
+        const dataset = props.individuals;
         const overall = props.meta[0]
 
-        const data = () =>{
-            return props.individuals;
-        }
 
         /***
          * Find the min and max value of all studies for adjusting the scales and axes
@@ -89,7 +85,7 @@ const ForestPlot = (props) => {
         const yScale= (d) => {
             const scale = d3
                 .scaleLinear()
-                .domain([0, dataset.length + 1])
+                .domain([-2, dataset.length + 1])
                 .range([20, 460])
             return scale(d)
         }
@@ -100,13 +96,13 @@ const ForestPlot = (props) => {
 
         const polygonPoints = () =>{
             return (
-                xScale(Number(overall._95ci_low)) + ", "+ yScale(dataset.length) +" "+
-                xScale(Number(overall.effect_size)) + ", "+ (yScale(dataset.length) - (initial.edgeSize/2)) +" "+
-                xScale(Number(overall._95ci_high)) +", "+ yScale(dataset.length) +" "+
-                xScale(Number(overall.effect_size) ) +", "+ (yScale(dataset.length) + (initial.edgeSize/2)) +" "
+                xScale(Number(overall._95ci_low)) + ", "+ yScale(-1) +" "+
+                xScale(Number(overall.effect_size)) + ", "+ (yScale(-1) - (initial.edgeSize/2)) +" "+
+                xScale(Number(overall._95ci_high)) +", "+ yScale(-1) +" "+
+                xScale(Number(overall.effect_size) ) +", "+ (yScale(-1) + (initial.edgeSize/2)) +" "
             )
         }
-        
+
         const xAxeTag = [min_low(), Math.round(overall.effect_size * 100) / 100, 0 , max_high()];
 
         /***
@@ -152,8 +148,8 @@ const ForestPlot = (props) => {
             .attr('id', 'xAxe')
             .attr('x1', xScale(min_low())-initial.leftMargin/2)
             .attr('x2', xScale(max_high())+initial.xAxeMargin)
-            .attr('y1', yScale(dataset.length+1))
-            .attr('y2', yScale(dataset.length+1))
+            .attr('y1', yScale(dataset.length))
+            .attr('y2', yScale(dataset.length))
             .style('stroke', "#0C3544")
             .style('stroke-width', '1');
 
@@ -162,7 +158,7 @@ const ForestPlot = (props) => {
             .attr('x1', xScale(0))
             .attr('x2', xScale(0))
             .attr('y1', yScale(-2))
-            .attr('y2', yScale(dataset.length + 1))
+            .attr('y2', yScale(dataset.length))
             .style('stroke', "#0C3544")
             .style('stroke-width', '0.5');
 
@@ -171,7 +167,7 @@ const ForestPlot = (props) => {
             .attr('x1', xScale(overall.effect_size))
             .attr('x2', xScale(overall.effect_size))
             .attr('y1', yScale(-2))
-            .attr('y2', yScale(dataset.length + 1))
+            .attr('y2', yScale(dataset.length))
             .attr('stroke-dasharray', '3,4')
             .style('stroke', "#EF8020")
             .style('stroke-width', '0.5');
@@ -180,7 +176,7 @@ const ForestPlot = (props) => {
             canvas.append('text')
                 .attr('id', "xTag-"+ index)
                 .attr('x', xScale(xAxeTag[index]))
-                .attr('y', yScale(dataset.length + 2))
+                .attr('y', yScale(dataset.length + 1))
                 .attr('font-size', initial.fontSize)
                 .attr('font-weight', 'regular')
                 .attr('fill', "#0C3544")
@@ -193,8 +189,8 @@ const ForestPlot = (props) => {
                 .attr('id', "xAxeDash"+ index)
                 .attr('x1', xScale(xAxeTag[index]))
                 .attr('x2', xScale(xAxeTag[index]))
-                .attr('y1', yScale(dataset.length+1) - 5)
-                .attr('y2', yScale(dataset.length+1) + 5)
+                .attr('y1', yScale(dataset.length) - 5)
+                .attr('y2', yScale(dataset.length) + 5)
                 .style('stroke', "#0C3544")
                 .style('stroke-width', '0.5');
         });
@@ -244,7 +240,7 @@ const ForestPlot = (props) => {
                 .style('stroke', "#73848E")
                 .style('stroke-width', '2');
             line.append('title')
-                .text(`95CI:(${data()[key]["_95ci_low"]}, ${data()[key]["_95ci_high"]})`);
+                .text(`95CI:(${dataset[key]["_95ci_low"]}, ${dataset[key]["_95ci_high"]})`);
             
             datapoint.append('rect')
                 .attr('id', "datPoint-" +index)
@@ -259,7 +255,7 @@ const ForestPlot = (props) => {
         let pooledEffect = svg.append('g')
                 .attr('id', 'pooled-effect')
                 .on('mouseover', () => {
-                    renderToolTip(dataset.length, 'polygon-tooltip', overall);
+                    renderToolTip(-1, 'polygon-tooltip', overall);
                 })
                 .on('mouseout', () => {
                     removeToolTip('#polygon-tooltip');
@@ -268,7 +264,7 @@ const ForestPlot = (props) => {
         pooledEffect.append('text')
             .attr('id', "tag-pooled-effect")
             .attr('x', 0)
-            .attr('y', yScale(dataset.length))
+            .attr('y', yScale(-1))
             .attr('font-size', initial.fontSize)
             .attr('fill', "#0C3544")
             .text(`Pooled Effect Sizes`);
