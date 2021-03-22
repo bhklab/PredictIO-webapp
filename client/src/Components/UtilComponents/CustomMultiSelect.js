@@ -5,7 +5,7 @@ import colors from '../../styles/colors';
 
 const StyledMultiSelect = styled(MultiSelect)`
     .p-multiselect-header .p-checkbox {
-        display: none;
+        display: ${props => props.checkbox ? 'block' : 'none'};
     }
     .p-multiselect-trigger .pi {
         color: ${colors.gray_text};
@@ -36,7 +36,7 @@ const selectedTemplate = (option) => {
 }
 
 const CustomMultiSelect = (props) => {
-    const {className, value, options, onChange, placeholder, disabled} = props;
+    const {className, value, options, onChange, placeholder, disabled, checkbox} = props;
 
     return(
         <StyledMultiSelect 
@@ -48,6 +48,7 @@ const CustomMultiSelect = (props) => {
             filter={true}
             placeholder={placeholder}
             disabled={disabled}
+            checkbox={checkbox}
         />
     );
 }
