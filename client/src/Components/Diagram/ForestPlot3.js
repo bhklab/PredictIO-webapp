@@ -11,9 +11,6 @@ import colors from '../../styles/colors';
  */
 
 const Container = styled.div`
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
   width: 100%;
   height: 80%;
   display: flex;
@@ -30,24 +27,6 @@ const Container = styled.div`
   .pointLink:hover {
     text-decoration: underline;
   }
-=======
->>>>>>> Stashed changes
-    width: 100%;
-    height: 80%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .tooltip {
-        position: absolute;
-        font-size: 11px; 
-        background-color: rgba(242,255,223,0.8); 
-        padding: 2px 10px; 
-        color: rgb(7,28,44);
-        border-radius: 3px;
-    }
-    .pointLink:hover {
-        text-decoration: underline;
-    }
 `
 
 const ForestPlot = (props) => {
