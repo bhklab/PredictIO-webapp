@@ -6,7 +6,7 @@ import colors from '../../styles/colors';
 
 /**
  * A responsive version of forest plot.
- * The plot rendering process is in 'draw()' function 
+ * The plot rendering process is in 'draw()' function
  * which is called every time a window size changes.
  */
 
@@ -36,7 +36,7 @@ const ForestPlot = (props) => {
     }, [props.size.width, props.individuals]);
 
     const draw = () => {
-        
+
         const dim = {
             width: props.size.width,
             height: props.size.width
@@ -52,15 +52,11 @@ const ForestPlot = (props) => {
         }
 
         /***
-         * Get the dataset (studies + overall value)
          * keep the studies in data and the overall
          **/
-        const dataset = props.individuals.concat(props.meta);
+        const dataset = props.individuals;
         const overall = props.meta[0]
 
-        const data = () =>{
-            return props.individuals;
-        }
 
         /***
          * Find the min and max value of all studies for adjusting the scales and axes
@@ -69,15 +65,15 @@ const ForestPlot = (props) => {
         const min_low = () => {
             return Math.min(...dataset.map(function (d){ return Number(d["_95ci_low"])}))
         }
-        
+
         const max_high = () => {
             return Math.max(...dataset.map(function (d){ return Number(d["_95ci_high"])}))
         }
-        
+
         /***
          * Functions for scaling X and Y
          ***/
-        
+
         const xScale= (d) => {
             const scale = d3
                 .scaleLinear()
@@ -85,51 +81,51 @@ const ForestPlot = (props) => {
                 .range([initial.leftMargin, dim.width - initial.rightMargin])
             return scale(d)
         }
-        
+
         const yScale= (d) => {
             const scale = d3
                 .scaleLinear()
-                .domain([0, dataset.length + 1])
+                .domain([-2, dataset.length + 1])
                 .range([20, 460])
             return scale(d)
         }
-        
+
         /***
          * Find the overall rhombus points on svg
          ***/
 
         const polygonPoints = () =>{
             return (
-                xScale(Number(overall._95ci_low)) + ", "+ yScale(dataset.length) +" "+
-                xScale(Number(overall.effect_size)) + ", "+ (yScale(dataset.length) - (initial.edgeSize/2)) +" "+
-                xScale(Number(overall._95ci_high)) +", "+ yScale(dataset.length) +" "+
-                xScale(Number(overall.effect_size) ) +", "+ (yScale(dataset.length) + (initial.edgeSize/2)) +" "
+                xScale(Number(overall._95ci_low)) + ", "+ yScale(-1) +" "+
+                xScale(Number(overall.effect_size)) + ", "+ (yScale(-1) - (initial.edgeSize/2)) +" "+
+                xScale(Number(overall._95ci_high)) +", "+ yScale(-1) +" "+
+                xScale(Number(overall.effect_size) ) +", "+ (yScale(-1) + (initial.edgeSize/2)) +" "
             )
         }
-        
+
         const xAxeTag = [min_low(), Math.round(overall.effect_size * 100) / 100, 0 , max_high()];
 
         /***
-        * Mouseover data point group (text+interval+rect)
-        */
+         * Mouseover data point group (text+interval+rect)
+         */
         const renderToolTip = (key, id, point) => {
             let tooltip = d3.select(`#${props.id}PlotContainer`)
-                    .append('div')
-                    .attr('id', id)
-                    .attr('class', 'tooltip')
-                    .style('left', `${xScale(1) + 10}px`)
-                    .style('top', `${yScale(key) - 30}px`);
+                .append('div')
+                .attr('id', id)
+                .attr('class', 'tooltip')
+                .style('left', `${xScale(1) + 10}px`)
+                .style('top', `${yScale(key) - 30}px`);
             if(point.study){
                 tooltip.html(
-                    point.study + " (" + point.primary_tissue + "; " + point.sequencing + ")" +  
-                    "<br />N=" + point.n + 
-                    "<br />hazard ratio=" + Number(point.effect_size).toFixed(4) + 
+                    point.study + " (" + point.primary_tissue + "; " + point.sequencing + ")" +
+                    "<br />N=" + point.n +
+                    "<br />hazard ratio=" + Number(point.effect_size).toFixed(4) +
                     "<br />P-value=" + Number(point.pval).toFixed(4));
             }else{
                 tooltip.html(
-                    "Pooled Effect Size" +  
-                    "<br />N=" + point.n + 
-                    "<br />hazard ratio=" + Number(point.effect_size).toFixed(4) + 
+                    "Pooled Effect Size" +
+                    "<br />N=" + point.n +
+                    "<br />hazard ratio=" + Number(point.effect_size).toFixed(4) +
                     "<br />P-value=" + Number(point.pval).toFixed(4));
             }
         }
@@ -146,14 +142,14 @@ const ForestPlot = (props) => {
         svg.selectAll("*").remove(); // redraw every time the width changes
         svg.attr('width', dim.width).attr('height', dim.height);
         let canvas = svg.append('g');
-        
+
         /*Creating axes*/
         canvas.append('line')
             .attr('id', 'xAxe')
             .attr('x1', xScale(min_low())-initial.leftMargin/2)
             .attr('x2', xScale(max_high())+initial.xAxeMargin)
-            .attr('y1', yScale(dataset.length+1))
-            .attr('y2', yScale(dataset.length+1))
+            .attr('y1', yScale(dataset.length))
+            .attr('y2', yScale(dataset.length))
             .style('stroke', "#0C3544")
             .style('stroke-width', '1');
 
@@ -162,7 +158,7 @@ const ForestPlot = (props) => {
             .attr('x1', xScale(0))
             .attr('x2', xScale(0))
             .attr('y1', yScale(-2))
-            .attr('y2', yScale(dataset.length + 1))
+            .attr('y2', yScale(dataset.length))
             .style('stroke', "#0C3544")
             .style('stroke-width', '0.5');
 
@@ -171,7 +167,7 @@ const ForestPlot = (props) => {
             .attr('x1', xScale(overall.effect_size))
             .attr('x2', xScale(overall.effect_size))
             .attr('y1', yScale(-2))
-            .attr('y2', yScale(dataset.length + 1))
+            .attr('y2', yScale(dataset.length))
             .attr('stroke-dasharray', '3,4')
             .style('stroke', "#EF8020")
             .style('stroke-width', '0.5');
@@ -180,7 +176,7 @@ const ForestPlot = (props) => {
             canvas.append('text')
                 .attr('id', "xTag-"+ index)
                 .attr('x', xScale(xAxeTag[index]))
-                .attr('y', yScale(dataset.length + 2))
+                .attr('y', yScale(dataset.length + 1))
                 .attr('font-size', initial.fontSize)
                 .attr('font-weight', 'regular')
                 .attr('fill', "#0C3544")
@@ -193,8 +189,8 @@ const ForestPlot = (props) => {
                 .attr('id', "xAxeDash"+ index)
                 .attr('x1', xScale(xAxeTag[index]))
                 .attr('x2', xScale(xAxeTag[index]))
-                .attr('y1', yScale(dataset.length+1) - 5)
-                .attr('y2', yScale(dataset.length+1) + 5)
+                .attr('y1', yScale(dataset.length) - 5)
+                .attr('y2', yScale(dataset.length) + 5)
                 .style('stroke', "#0C3544")
                 .style('stroke-width', '0.5');
         });
@@ -212,7 +208,7 @@ const ForestPlot = (props) => {
         Object.keys(props.individuals).forEach((key, index) => {
 
             let tooltipId = `point-${dataset[key].study.replace(/[^a-zA-Z]/g, "")}`;
-            
+
             let datapoint = svg.append('g')
                 .attr('id', "datapoint-" +index)
                 .style('cursor', 'arrow')
@@ -223,18 +219,18 @@ const ForestPlot = (props) => {
                 .on('mouseout', () => {
                     removeToolTip(`#${tooltipId}`);
                 });
-            
+
             datapoint.append('a')
                 .attr('id', "tag-"+index)
                 .attr('class', 'pointLink')
                 .attr('xlink:href', '/')
                 .append('text')
-                    .attr('x', 0)
-                    .attr('y', yScale(index))
-                    .attr('font-size', initial.fontSize)
-                    .attr('fill', "#0C3544")
-                    .text(`${dataset[key].study}(${dataset[key].primary_tissue}, ${dataset[key].sequencing})`);
-            
+                .attr('x', 0)
+                .attr('y', yScale(index))
+                .attr('font-size', initial.fontSize)
+                .attr('fill', "#0C3544")
+                .text(`${dataset[key].study}(${dataset[key].primary_tissue}, ${dataset[key].sequencing})`);
+
             let line = datapoint.append('line')
                 .attr('id', "interval-" + index)
                 .attr('x1', xScale(Number(dataset[key]["_95ci_low"])))
@@ -265,11 +261,10 @@ const ForestPlot = (props) => {
                 removeToolTip('#polygon-tooltip');
             });
 
-
         pooledEffect.append('text')
             .attr('id', "tag-pooled-effect")
             .attr('x', 0)
-            .attr('y', yScale(dataset.length))
+            .attr('y', yScale(-1))
             .attr('font-size', initial.fontSize)
             .attr('fill', "#0C3544")
             .text(`Pooled Effect Sizes`);
