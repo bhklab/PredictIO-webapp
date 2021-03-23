@@ -40,13 +40,23 @@ const VolcanoPlotInput = (props) => {
                 });
             modelValue = parameters.model !== 'Log_regression' && '';
         }
-        modelValue = selected.value === 'Response' ? 'Log_regression' : 'COX';
+        modelValue = selected.value === 'Response' ? 'Log_regression' : parameters.model === 'DI'?'DI':'COX';
         setModelOptions(modelOptionsCopy);
 
         setParameters(prev => ({
             ...prev,
             model: modelValue,
             outcome: selected.value
+        }));
+    }
+
+    const onModelSelect = (selected) => {
+        let outcomeValue = selected.value === 'Log_regression' ? 'Response' : parameters.outcome === 'PFS'?'PFS' : 'OS';
+
+        setParameters(prev => ({
+            ...prev,
+            model: selected.value,
+            outcome: outcomeValue
         }));
     }
 
@@ -104,7 +114,7 @@ const VolcanoPlotInput = (props) => {
                     className='select'
                     value={parameters.model}
                     options={modelOptions.filter(item => item.isDisabled !== true)}
-                    onChange={(e) => {setParameters({...parameters, model: e.value})}}
+                    onChange={(e) => {onModelSelect(e)}}
                     placeholder="Select..."
                 />
             </div>
