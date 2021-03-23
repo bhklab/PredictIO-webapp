@@ -6,7 +6,7 @@ import CustomDropdown from '../UtilComponents/CustomDropdown';
 import CustomMultiSelect from '../UtilComponents/CustomMultiSelect';
 
 const VolcanoPlotInput = (props) => {
-    
+
     const {parameters, setParameters, onSubmit, onReset, resetButton} = props;
 
     const [signatureOptions, setSignatureOptions] = useState([]);
@@ -15,8 +15,8 @@ const VolcanoPlotInput = (props) => {
 
     const readyToSubmit = () => {
         return(
-            parameters.model === '' || 
-            parameters.outcome === '' || 
+            parameters.model === '' ||
+            parameters.outcome === '' ||
             parameters.subgroup === ''
         );
     };
@@ -40,11 +40,11 @@ const VolcanoPlotInput = (props) => {
                 });
             modelValue = parameters.model !== 'Log_regression' && '';
         }
-
+        modelValue = selected.value === 'Response' ? 'Log_regression' : 'COX';
         setModelOptions(modelOptionsCopy);
 
         setParameters(prev => ({
-            ...prev, 
+            ...prev,
             model: modelValue,
             outcome: selected.value
         }));
@@ -69,7 +69,7 @@ const VolcanoPlotInput = (props) => {
 
         setSignatureOptions(signatureOptionsCopy);
         setParameters({
-            ...parameters, 
+            ...parameters,
             signatures: selections.value});
     }
 
@@ -90,49 +90,49 @@ const VolcanoPlotInput = (props) => {
         <StyledForm flexDirection={props.flexDirection}>
             <div className='formField'>
                 <div className='label'>Outcome: </div>
-                <CustomDropdown 
+                <CustomDropdown
                     className='select'
                     value={parameters.outcome}
-                    options={outcomeOptions} 
-                    onChange={(e) => {onOutcomeSelect(e)}} 
+                    options={outcomeOptions}
+                    onChange={(e) => {onOutcomeSelect(e)}}
                     placeholder="Select..."
                 />
             </div>
             <div className='formField'>
-                <div className='label'>Model: </div> 
-                <CustomDropdown 
+                <div className='label'>Model: </div>
+                <CustomDropdown
                     className='select'
                     value={parameters.model}
-                    options={modelOptions} 
-                    onChange={(e) => {setParameters({...parameters, model: e.value})}} 
+                    options={modelOptions.filter(item => item.isDisabled !== true)}
+                    onChange={(e) => {setParameters({...parameters, model: e.value})}}
                     placeholder="Select..."
                 />
             </div>
             <div className='formField'>
-                <div className='label'>Signatures: </div> 
-                <CustomMultiSelect 
+                <div className='label'>Signatures: </div>
+                <CustomMultiSelect
                     className='select'
                     value={parameters.signatures}
-                    options={signatureOptions} 
-                    onChange={(selections) => {onSignatureSelect(selections)}} 
+                    options={signatureOptions}
+                    onChange={(selections) => {onSignatureSelect(selections)}}
                     filter={true}
                     placeholder='Select...'
                 />
             </div>
             <div className='formField buttonField'>
-                <ActionButton 
-                    onClick={(e) => {onSubmit()}} 
-                    text='Submit' 
-                    disabled={readyToSubmit()} 
-                    style={{width: '90px', height: '34px', fontSize: '14px'}} 
+                <ActionButton
+                    onClick={(e) => {onSubmit()}}
+                    text='Submit'
+                    disabled={readyToSubmit()}
+                    style={{width: '90px', height: '34px', fontSize: '14px'}}
                 />
                 {
                     resetButton &&
-                    <ActionButton 
-                        onClick={(e) => {onReset()}} 
+                    <ActionButton
+                        onClick={(e) => {onReset()}}
                         text='Reset'
-                        type='reset' 
-                        style={{width: '90px', height: '34px', fontSize: '14px', marginLeft: '10px'}} 
+                        type='reset'
+                        style={{width: '90px', height: '34px', fontSize: '14px', marginLeft: '10px'}}
                     />
                 }
             </div>
