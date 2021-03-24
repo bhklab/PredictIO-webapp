@@ -150,8 +150,8 @@ const ForestPlot = (props) => {
             .attr('x2', xScale(max_high())+initial.xAxeMargin)
             .attr('y1', yScale(dataset.length))
             .attr('y2', yScale(dataset.length))
-            .style('stroke', "#0C3544")
-            .style('stroke-width', '1');
+            .style('stroke', "#949494")
+            .style('stroke-width', '1.5');
 
         canvas.append('line')
             .attr('id', 'yAxe')
@@ -159,8 +159,8 @@ const ForestPlot = (props) => {
             .attr('x2', xScale(0))
             .attr('y1', yScale(-2))
             .attr('y2', yScale(dataset.length))
-            .style('stroke', "#0C3544")
-            .style('stroke-width', '0.5');
+            .style('stroke', "#949494")
+            .style('stroke-width', '1.5');
 
         canvas.append('line')
             .attr('id', 'yAxe-dash')
@@ -169,17 +169,17 @@ const ForestPlot = (props) => {
             .attr('y1', yScale(-2))
             .attr('y2', yScale(dataset.length))
             .attr('stroke-dasharray', '3,4')
-            .style('stroke', "#EF8020")
-            .style('stroke-width', '0.5');
+            .style('stroke', colors.orange_highlight)
+            .style('stroke-width', '1');
 
         Object.keys(xAxeTag).forEach((key, index) => {
             canvas.append('text')
                 .attr('id', "xTag-"+ index)
                 .attr('x', xScale(xAxeTag[index]))
-                .attr('y', yScale(dataset.length + 1))
+                .attr('y', yScale(dataset.length + 0.5))
                 .attr('font-size', initial.fontSize)
                 .attr('font-weight', 'regular')
-                .attr('fill', "#0C3544")
+                .attr('fill', "#444444")
                 .attr('text-anchor', 'middle')
                 .text(xAxeTag[index])
         });
@@ -191,16 +191,16 @@ const ForestPlot = (props) => {
                 .attr('x2', xScale(xAxeTag[index]))
                 .attr('y1', yScale(dataset.length) - 5)
                 .attr('y2', yScale(dataset.length) + 5)
-                .style('stroke', "#0C3544")
-                .style('stroke-width', '0.5');
+                .style('stroke', "#949494")
+                .style('stroke-width', '1');
         });
 
         canvas.append('text')
             .attr('x', xScale(0))
-            .attr('y', yScale(dataset.length + 2.7))
-            .attr('font-size', initial.fontSize)
+            .attr('y', yScale(dataset.length + 1.5))
+            .attr('font-size', initial.fontSize + 2)
             .attr('font-weight', 'regular')
-            .attr('fill', "#0C3544")
+            .attr('fill', "#444444")
             .attr('text-anchor', 'middle')
             .text('Hazard Ratio')
 
@@ -228,7 +228,7 @@ const ForestPlot = (props) => {
                 .attr('x', 0)
                 .attr('y', yScale(index))
                 .attr('font-size', initial.fontSize)
-                .attr('fill', "#0C3544")
+                .attr('fill', "#444444")
                 .text(`${dataset[key].study}(${dataset[key].primary_tissue}, ${dataset[key].sequencing})`);
 
             let line = datapoint.append('line')
@@ -237,7 +237,7 @@ const ForestPlot = (props) => {
                 .attr('x2', xScale(Number(dataset[key]["_95ci_high"])))
                 .attr('y1', yScale(index))
                 .attr('y2', yScale(index))
-                .style('stroke', "#73848E")
+                .style('stroke', "#8b9eae")
                 .style('stroke-width', '2');
             line.append('title')
                 .text(`95CI:(${dataset[key]["_95ci_low"]}, ${dataset[key]["_95ci_high"]})`);
@@ -248,7 +248,7 @@ const ForestPlot = (props) => {
                 .attr('y', yScale(index) - initial.edgeSize / 2)
                 .style('width', initial.edgeSize)
                 .style('height', initial.edgeSize)
-                .style('fill', "#236e96");
+                .style('fill', "#37799d");
         });
 
         /*Creating Diamond*/
@@ -266,7 +266,7 @@ const ForestPlot = (props) => {
             .attr('x', 0)
             .attr('y', yScale(-1))
             .attr('font-size', initial.fontSize)
-            .attr('fill', "#0C3544")
+            .attr('fill', "#444444")
             .text(`Pooled Effect Sizes`);
 
         pooledEffect.append('polygon')
