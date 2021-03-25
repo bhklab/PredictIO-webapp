@@ -72,12 +72,13 @@ for index, dataset in enumerate(dataset_list):
         expr_genes = expr_df.index.tolist()
         dataset_gene_dict[dataset_index].extend(expr_genes)
         all_genes.extend(expr_genes)
-    # removes duplicated gene entries from dataset list
-    dataset_gene_dict[dataset_index] = list(
-        set(dataset_gene_dict[dataset_index]))
+    # removes duplicated and empty gene entries from dataset list
+    unique_genes = filter(lambda x: str(x) != 'nan', list(
+        set(dataset_gene_dict[dataset_index])))
+    dataset_gene_dict[dataset_index] = unique_genes
 
-# removes duplicated gene entries and creates gene dictionary
-gene_list = list(set(all_genes))
+# removes duplicated and empty gene entries and creates gene dictionary
+gene_list = list(filter(lambda x: str(x) != 'nan', list(set(all_genes))))
 gene_dict = {k: v + 1 for v, k in enumerate(gene_list)}
 # creates dataframes that represent final versions of the tables
 patient_table = pd.concat(patient_dfs, ignore_index=True)
