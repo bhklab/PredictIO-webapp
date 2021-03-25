@@ -28,6 +28,10 @@ def Add_Records(df, table):
             record = dataset.Dataset(**{
                 'dataset_id': int(row['dataset_id']),
                 'dataset_name': row['dataset_name'],
+                'pmid': row['pmid'] if str(row['pmid']) != 'nan' else '',
+                'title': row['title'] if str(row['title']) != 'nan' else '',
+                'summary': row['summary'] if str(row['summary']) != 'nan' else '',
+                'authors': row['authors'] if str(row['authors']) != 'nan' else ''
             })
             print('Adding Dataset record ', index)
         elif table == 'dataset_gene':
