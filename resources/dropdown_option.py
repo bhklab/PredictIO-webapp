@@ -3,9 +3,9 @@ import math
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.orm import load_only
-from models.signature_meta import Meta
+from db.models.signature_meta import Meta
 
-class DropdownOption(Resource):
+class ExploreDropdownOption(Resource):
     def get(self):
 
         # fetch data from the database
@@ -30,6 +30,17 @@ class DropdownOption(Resource):
         result['model'].sort()
 
         return result, 200
+    
+    def post(self):
+        return  "Only get method is allowed", 400
+
+class GeneDropdownOption(Resource):
+    def get(self):
+
+        # fetch data from the database
+        
+
+        return 'ok', 200
     
     def post(self):
         return  "Only get method is allowed", 400

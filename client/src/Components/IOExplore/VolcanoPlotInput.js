@@ -85,7 +85,7 @@ const VolcanoPlotInput = (props) => {
 
     useEffect(() => {
         const setSelectOptions = async () => {
-            const res = await axios.get('/api/dropdown_option');
+            const res = await axios.get('/api/dropdown_option/explore');
             console.log(res.data);
             let signatures = res.data.signatures.map(item => ({value: item, label: item, disabled: true}));
             signatures.unshift({value: 'ALL', label: 'ALL', disabled: false});
