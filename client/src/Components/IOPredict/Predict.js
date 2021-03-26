@@ -77,12 +77,24 @@ const Predict = (props) => {
                 <h4>IOPredict</h4>
                 <StyledForm flexDirection='column'>
                     <div className='formField'>
-                        <div className='label'>Studies: </div> 
+                        <div className='label'>Gene: </div> 
                         <CustomMultiSelect 
                             className='select'
-                            value={parameters.study}
-                            options={studyOptions} 
-                            onChange={(e) => {setParameters({...parameters, study: e.value})}} 
+                            value={parameters.gene}
+                            options={geneOptions} 
+                            onChange={(e) => {setParameters({...parameters, gene: e.value})}} 
+                            filter={true}
+                            checkbox={true}
+                            placeholder='Select...'
+                        />
+                    </div>
+                    <div className='formField'>
+                        <div className='label'>Data Type: </div> 
+                        <CustomMultiSelect 
+                            className='select'
+                            value={parameters.dataType}
+                            options={dataOptions} 
+                            onChange={(e) => {setParameters({...parameters, dataType: e.value})}} 
                             filter={true}
                             checkbox={true}
                             placeholder='Select...'
@@ -125,18 +137,6 @@ const Predict = (props) => {
                         />
                     </div>
                     <div className='formField'>
-                        <div className='label'>Data Type: </div> 
-                        <CustomMultiSelect 
-                            className='select'
-                            value={parameters.dataType}
-                            options={dataOptions} 
-                            onChange={(e) => {setParameters({...parameters, dataType: e.value})}} 
-                            filter={true}
-                            checkbox={true}
-                            placeholder='Select...'
-                        />
-                    </div>
-                    <div className='formField'>
                         <div className='label'>Sequencing Type: </div> 
                         <CustomMultiSelect 
                             className='select'
@@ -149,12 +149,12 @@ const Predict = (props) => {
                         />
                     </div>
                     <div className='formField'>
-                        <div className='label'>Gene: </div> 
+                        <div className='label'>Studies: </div> 
                         <CustomMultiSelect 
                             className='select'
-                            value={parameters.gene}
-                            options={geneOptions} 
-                            onChange={(e) => {setParameters({...parameters, gene: e.value})}} 
+                            value={parameters.study}
+                            options={studyOptions} 
+                            onChange={(e) => {setParameters({...parameters, study: e.value})}} 
                             filter={true}
                             checkbox={true}
                             placeholder='Select...'

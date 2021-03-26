@@ -10,7 +10,8 @@ from flask_cors import CORS
 from decouple import config
 
 # db object
-from models.db import db
+from db.db import db
+from db.seed_database import seed
 
 # mail object
 from utils.mail import mail
@@ -18,10 +19,10 @@ from utils.mail import mail
 # modules used for routes in 'resources' directory
 from resources.test import Test
 from resources.plot_data import VolcanoPlot, ForestPlot
-from resources.dropdown_option import DropdownOption
+from resources.dropdown_option import ExploreDropdownOption
+from resources.dropdown_option import GeneDropdownOption
 from resources.io_predict import IOPredict
 from resources.itnt_visualization import ITNTVisualization
-from resources.async_process import AsyncProcess
 
 app = Flask(__name__,
             static_url_path='',
@@ -39,23 +40,26 @@ db.init_app(app)
 CORS(app)
 
 # initialize mail object 
-# app.config['MAIL_SERVER'] = config('MAIL_SERVER_TEST')
-# app.config['MAIL_PORT'] = config('MAIL_PORT_TEST')
-# app.config['MAIL_USERNAME'] = config('MAIL_USERNAME_TEST')
-# app.config['MAIL_PASSWORD'] = config('MAIL_PASSWORD_TEST')
-# mail.init_app(app)
-# app.extensions['mail'].debug = 0
+app.config['MAIL_SERVER'] = config('MAIL_SERVER_TEST')
+app.config['MAIL_PORT'] = config('MAIL_PORT_TEST')
+app.config['MAIL_USERNAME'] = config('MAIL_USERNAME_TEST')
+app.config['MAIL_PASSWORD'] = config('MAIL_PASSWORD_TEST')
+mail.init_app(app)
+app.extensions['mail'].debug = 0
 
 api = Api(app)
 
 # routes
 api.add_resource(Test, '/api/test')
-api.add_resource(DropdownOption, '/api/dropdown_option')
+
+api.add_resource(ExploreDropdownOption, '/api/dropdown_option/explore')
+api.add_resource(GeneDropdownOption, '/api/dropdown_option/gene')
+
 api.add_resource(ForestPlot, '/api/explore/forest_plot')
 api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
 api.add_resource(IOPredict, '/api/predict')
 api.add_resource(ITNTVisualization, '/api/explore/itnt_data')
-api.add_resource(AsyncProcess, '/api/explore/itnt_data/async')
+
 
 # Setup that enables react routing when serving static files
 
@@ -68,3 +72,10 @@ def serve(path):
         return send_from_directory(os.path.join(path_dir), path)
     else:
         return send_from_directory(os.path.join(path_dir), 'index.html')
+
+'''
+flask cli command to seed database
+'''
+@app.cli.command("seed-database")
+def seed_database():
+    seed()

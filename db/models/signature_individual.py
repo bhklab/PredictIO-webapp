@@ -2,16 +2,16 @@
 model used for signature_individual table
 """
 from utils.serializer import Serializer
-from .db import db
+from ..db import db
 
 class Individual(db.Model, Serializer):
     __tablename__ = 'signature_individual'
-    signature = db.Column(db.String, primary_key=True)
-    outcome = db.Column(db.String, primary_key=True)
-    model = db.Column(db.String, primary_key=True)
-    study = db.Column(db.String, primary_key=True)
-    primary_tissue = db.Column(db.String, primary_key=True)
-    sequencing = db.Column(db.String)
+    signature = db.Column(db.String(32), primary_key=True)
+    outcome = db.Column(db.String(32), primary_key=True)
+    model = db.Column(db.String(32), primary_key=True)
+    study = db.Column(db.String(32), primary_key=True)
+    primary_tissue = db.Column(db.String(32), primary_key=True)
+    sequencing = db.Column(db.String(32))
     n = db.Column(db.Integer)
     effect_size = db.Column(db.Float)
     se = db.Column(db.Float)
