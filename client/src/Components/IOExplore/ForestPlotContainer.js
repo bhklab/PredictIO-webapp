@@ -186,17 +186,17 @@ const ForestPlotContainer = (props) => {
                         <div className='effectSizeValues'>
                             <div className='valueLine'>
                                 Coef:
-                                <span className='value'>{Number(plotData.meta[0].effect_size).toFixed(3)} </span>
+                                <span className='value'>{Number(plotData.meta[0].effect_size).toFixed(2)} </span>
                                 [95CI%:
-                                <span className='value'>{Number(plotData.meta[0]._95ci_low).toFixed(3)} </span>
+                                <span className='value'>{Number(plotData.meta[0]._95ci_low).toFixed(2)} </span>
                                 -
-                                <span className='value'>{Number(plotData.meta[0]._95ci_high).toFixed(3)}</span>
+                                <span className='value'>{Number(plotData.meta[0]._95ci_high).toFixed(2)}</span>
                                 ]
                             </div>
                             <div className='valueLine'>P-value: <span className='value'>{Number(plotData.meta[0].pval).toFixed(3)}</span></div>
                             <div className='valueLine'>Het. I2: <span className='value'>{Number(plotData.meta[0].i2).toFixed(3)}</span></div>
                             <div className='valueLine'>I2 Pval: <span className='value'>{Number(plotData.meta[0].pval_i2).toFixed(3)}</span></div>
-                        </div>    
+                        </div>
                     </PlotHeader>
                     <ForestPlot id='forestplot' individuals={plotData.individuals} meta={plotData.meta} />
                 </Container>
