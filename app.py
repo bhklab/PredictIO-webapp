@@ -40,12 +40,13 @@ db.init_app(app)
 CORS(app)
 
 # initialize mail object 
-app.config['MAIL_SERVER'] = config('MAIL_SERVER_TEST')
-app.config['MAIL_PORT'] = config('MAIL_PORT_TEST')
-app.config['MAIL_USERNAME'] = config('MAIL_USERNAME_TEST')
-app.config['MAIL_PASSWORD'] = config('MAIL_PASSWORD_TEST')
-mail.init_app(app)
-app.extensions['mail'].debug = 0
+# comment this code out for Azure deployment
+# app.config['MAIL_SERVER'] = config('MAIL_SERVER_TEST')
+# app.config['MAIL_PORT'] = config('MAIL_PORT_TEST')
+# app.config['MAIL_USERNAME'] = config('MAIL_USERNAME_TEST')
+# app.config['MAIL_PASSWORD'] = config('MAIL_PASSWORD_TEST')
+# mail.init_app(app)
+# app.extensions['mail'].debug = 0
 
 api = Api(app)
 
