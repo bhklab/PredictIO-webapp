@@ -1,5 +1,4 @@
 '''Routes used to get a list of available signatures, outcomes and models for dropdown options.'''
-import math
 from flask import request
 from flask_restful import Resource
 from sqlalchemy.orm import load_only
@@ -30,17 +29,6 @@ class ExploreDropdownOption(Resource):
         result['model'].sort()
 
         return result, 200
-    
-    def post(self):
-        return  "Only get method is allowed", 400
-
-class GeneDropdownOption(Resource):
-    def get(self):
-
-        # fetch data from the database
-        
-
-        return 'ok', 200
     
     def post(self):
         return  "Only get method is allowed", 400
