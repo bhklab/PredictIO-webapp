@@ -8,5 +8,8 @@ class Gene(db.Model, Serializer):
     dataset_genes = db.relationship("DatasetGene", backref="gene")
 
     def serialize(self):
-        serialized = Serializer.serialize(self)
+        serialized = {
+            'gene_id': self.gene_id,
+            'gene_name': self.gene_name
+        }
         return serialized

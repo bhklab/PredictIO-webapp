@@ -19,8 +19,9 @@ from utils.mail import mail
 # modules used for routes in 'resources' directory
 from resources.test import Test
 from resources.plot_data import VolcanoPlot, ForestPlot
-from resources.dropdown_option import ExploreDropdownOption
-from resources.dropdown_option import GeneDropdownOption
+from resources.dropdown_explore import ExploreDropdownOption
+from resources.search_gene import SearchGene
+from resources.dropdown_patient import PatientDataType
 from resources.io_predict import IOPredict
 from resources.itnt_visualization import ITNTVisualization
 
@@ -53,7 +54,8 @@ api = Api(app)
 api.add_resource(Test, '/api/test')
 
 api.add_resource(ExploreDropdownOption, '/api/dropdown_option/explore')
-api.add_resource(GeneDropdownOption, '/api/dropdown_option/gene')
+api.add_resource(PatientDataType, '/api/dropdown_option/predict/datatype')
+api.add_resource(SearchGene, '/api/search_gene')
 
 api.add_resource(ForestPlot, '/api/explore/forest_plot')
 api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
