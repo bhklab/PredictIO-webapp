@@ -1,0 +1,154 @@
+[
+  {
+    "study": "Braun",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/32472114/",
+    "title": "Interplay of somatic alterations and immune infiltration modulates response to PD-1 blockade in advanced clear cell renal cell carcinoma",
+    "summary": "Whole-exome, rna sequencing and immunofluorescence analysis of 592 tumors from patients with advanced renal cell cancer treatment with anti-pd-1 immune checkpoint blockade. numerous chromosomal alterations were identified and correlated with response or resistance to pd-1 blockade.",
+    "dataAvail": "Data are available from the authors and/or are included with the manuscript. wes data from patients who consented to deposition have been submitted to the european genome-phenome archive (accession numbers egas00001004290, egas00001004291, egas00001004292).",
+    "authors": "Braun, d.a., et al., interplay of somatic alterations and immune infiltration modulates response to pd-1 blockade in advanced clear cell renal cell carcinoma. nat med, 2020. 26(6): p. 909-918."
+  },
+  {
+    "study": "Fumet.1",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/30318514/",
+    "title": "Prognostic and predictive role of CD8 and PD-L1 determination in lung tumor tissue of patients under anti-PD-1 therapy",
+    "summary": "Rna sequencing and/or immunohistochemistry staining was investigated in 1166 advanced or unresectable nsclc patients. this study found that high cd8a expression was associated with longer os and high cd274 mrna was associated with poor prognosis. in patients treated with anti-pd-1 high cd8 expression and cd8a mrna were associated with more prolonged progression-free survival. in nsclc patients treated with immune checkpoint blockade, cd8a and cd274 was highly predictive of outcome.",
+    "dataAvail": "The data sets generated and/or analyzed, as well as the computer code used to perform statistical analysis, are available from https://github.com/crichard21/cd8pdl1_nivolumab",
+    "authors": "Fumet, j.d., et al., prognostic and predictive role of cd8 and pd-l1 determination in lung tumor tissue of patients under anti-pd-1 therapy. br j cancer, 2018. 119(8): p. 950-960."
+  },
+  {
+    "study": "Fumet.2",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/30318514/",
+    "title": "Prognostic and predictive role of CD8 and PD-L1 determination in lung tumor tissue of patients under anti-PD-1 therapy",
+    "summary": "Rna sequencing and/or immunohistochemistry staining was investigated in 1166 advanced or unresectable nsclc patients. this study found that high cd8a expression was associated with longer os and high cd274 mrna was associated with poor prognosis. in patients treated with anti-pd-1 high cd8 expression and cd8a mrna were associated with more prolonged progression-free survival. in nsclc patients treated with immune checkpoint blockade, cd8a and cd274 was highly predictive of outcome.",
+    "dataAvail": "The data sets generated and/or analyzed, as well as the computer code used to perform statistical analysis, are available from https://github.com/crichard21/cd8pdl1_nivolumab",
+    "authors": "Fumet, j.d., et al., prognostic and predictive role of cd8 and pd-l1 determination in lung tumor tissue of patients under anti-pd-1 therapy. br j cancer, 2018. 119(8): p. 950-960."
+  },
+  {
+    "study": "Hugo",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/26997480/",
+    "title": "Genomic and Transcriptomic Features of Response to Anti-PD-1 Therapy in Metastatic Melanoma",
+    "summary": "This study analyzed the somatic mutanomes and transcriptomes of pretreatment melanoma biopsies and found that high mutational loads and tumors enriched for mutations in the dna repair gene brca2 associate with improved survival and tumors from responding patients are enriched for mutations in the dna repair gene brca2. they proposed a transcriptional signature (ipres, or innate anti-pd-1 resistance) that associated with resistance to anti-pd1 therapy.",
+    "dataAvail": "The datasets can be accessed at the sequence read archive (https://www.ncbi.nlm.nih. gov/sra) under the accession numbers sra: srp067938 (ucla samples) and sra: srp090294 (ucla and vanderbilt samples).",
+    "authors": "Hugo, w., et al., genomic and transcriptomic features of response to anti-pd-1 therapy in metastatic melanoma. cell, 2016. 165(1): p. 35-44."
+  },
+  {
+    "study": "Hwang",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31959763",
+    "title": "Immune gene signatures for predicting durable clinical benefit of anti-PD-1 immunotherapy in patients with non-small cell lung cancer",
+    "summary": "Analysis of 21 patients with nsclc treated anti-pd1 antibody identified 2 gene signatures m1(cblb, ccr7, cd27, cd48, foxo1, fyb, hla-b, hla-g, ifih1, ikzf4, lamp3, nfkbia, samhd1) and a peripheral t cell signature (hla-doa, gpr18, stat1) that are predictive of improved responses to anti-pd1.",
+    "dataAvail": "All expression data available at geo database (https://www.ncbi.nlm.nih.gov/geo/) with accession number gse136961",
+    "authors": "Hwang, s., et al., immune gene signatures for predicting durable clinical benefit of anti-pd-1 immunotherapy in patients with non-small cell lung cancer. sci rep, 2020. 10(1): p. 643."
+  },
+  {
+    "study": "Jerby_Arnon",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/30388455/",
+    "title": "A Cancer Cell Program Promotes T Cell Exclusion and Resistance to Checkpoint Blockade ",
+    "summary": "A transcriptional program associated with t-cell exclusion and immunotherapy failure was derived from single cell rna-seq profiles of cancer cells in 33 human melanoma tumors (15 of the tumors in the single-cell cohort are post-ici-resistant tumors",
+    "dataAvail": "Processed scrna-seq data generated for this study, and the overall expression of the different signatures that were used in the analysis of the two clinical validation cohorts, are provided through the single cell portal along with interactive plots at the following url: https://portals.broadinstitute.org/single_cell/study/melanoma-immunotherapy-resistance. the expression of the immune resistance program genes in validation cohort 2 is provided in table s6b. the processed scrna-seq data is provided via the gene expression omnibus (geo), accession number geo: gse115978. the raw scrna-seq data is being deposited in dbgap. code availability: all the relevant code, with instructions is provided via github https://github.com/livnatje/immuneresistance. the code enables one to repeat the analyses that were performed, reproduce the results, figures, and tables, and apply the computational approaches to other datasets.",
+    "authors": "Jerby-arnon, l., et al., a cancer cell program promotes t cell exclusion and resistance to checkpoint blockade. cell, 2018. 175(4): p. 984-997.e24."
+  },
+  {
+    "study": "Jung",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31537801/",
+    "title": "DNA methylation loss promotes immune evasion of tumors with high mutation and copy number load",
+    "summary": "Methylome analysis of 121 lung cancer patients and 40 melanoma patients found that genomic methylation alterations are associated with increased resistance to immune checkpoint blockade.",
+    "dataAvail": "The methylation chip and rna-seq data for the samples of our lung cancer cohort are available at gene expression omnibus under gse119144 and gse135222, respectively. the raw data for the exome sequencing of our smc cohort samples have been submitted to the european genome-phenome archive under accession number egas00001003731",
+    "authors": "Jung, h., et al., dna methylation loss promotes immune evasion of tumours with high mutation and copy number load. nat commun, 2019. 10(1): p. 4278."
+  },
+  {
+    "study": "Liu",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31792460/",
+    "title": "Integrative molecular and clinical modeling of clinical outcomes to PD1 blockade in patients with metastatic melanoma",
+    "summary": "Whole-exome and whole-transcriptome sequencing of 144 melanoma patients with treated with anti-pd1 was undertaken. this study identified that genomic and transcriptomic features, including features associated with mhc-i and mhc-ii antigen presentation, were predicted of response to immunotherapy.",
+    "dataAvail": "All analyzed sequencing data are in supplementary tables or data available online. raw sequencing data are available in dbgap (accession number phs000452.v3. p1).",
+    "authors": "Liu, d., et al., integrative molecular and clinical modeling of clinical outcomes to pd1 blockade in patients with metastatic melanoma. nat med, 2019. 25(12): p. 1916-1927."
+  },
+  {
+    "study": "Mariathasan",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/29443960/",
+    "title": "TGFβ attenuates tumour response to PD-L1 blockade by contributing to exclusion of T cells",
+    "summary": "Analysis of patients with metastatic urothelial cancer who were treated with an anti-pdl1 agent. the presence of a cd8+ t-effector cell phenotype and high neoantigen or tumor mutation burden was associated with response to anti-pdl1. the presence of a signature of transforming growth factor β (tgfβ) signaling in fibroblasts was associated with lack of response to anti-pdl1.",
+    "dataAvail": "The source code and processed data used for all analyses presented here have been made available in imvigor210corebiologies. this package can be downloaded from http://research-pub.gene.com/imvigor210corebiologies. all raw sequencing data required for rna-seq analyses have been deposited to the european genome-phenome archive under accession number egas00001002556.",
+    "authors": "Mariathasan, s., et al., tgfβ attenuates tumour response to pd-l1 blockade by contributing to exclusion of t cells. nature, 2018. 554(7693): p. 544-548."
+  },
+  {
+    "study": "Miao.1",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/29301960/",
+    "title": "Genomic correlates of response to immune checkpoint therapies in clear cell renal cell carcinoma",
+    "summary": "Whole-exome sequencing of 98 patients with metastatic renal cell cancer found that loss-of-function mutations in the pbrm1 gene were associated with increased clinical benefit from immune checkpoint therapy.",
+    "dataAvail": "The sequencing data are deposited in dbgap (accession number phs001493.v1. p1). the cell line transcriptome data are deposited in geo (accession number prjna371283).",
+    "authors": "Miao, d., et al., genomic correlates of response to immune checkpoint therapies in clear cell renal cell carcinoma. science, 2018. 359(6377): p. 801-806."
+  },
+  {
+    "study": "Miao.2",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/30150660/",
+    "title": "Genomic correlates of response to immune checkpoint blockade in microsatellite-stable solid tumors",
+    "summary": "Whole-exome sequencing of 249 tumors and matched normal tissue from patients treated with immune checkpoint blockade identified genomic correlates of response. tumour mutation burden was associated with response to immune checkpoint blockade. clonal driver alterations in pik3ca and kras were associated with responsiveness to immune checkpoint blockade.   mutations in egfr were associated with resistance to immune checkpoint blockade. differential copy number alterations were associated with response or resistance to immune checkpoint therapy pten loss was associated with resistance to immunotherapy.",
+    "dataAvail": "Raw bam files from previously published cohorts are available at the database of genotypes and phenotypes (dbgap) under the following accession numbers: phs000694.v3.p2, phs000980.v1.p1, phs001041.v1.p1, phs000452.v2.p1, and phs001075.v1.p1. newly sequenced samples are available at dbgap under accession number phs001565.v1. p1.",
+    "authors": "Miao, d., et al., genomic correlates of response to immune checkpoint blockade in microsatellite-stable solid tumors. nat genet, 2018. 50(9): p. 1271-1281."
+  },
+  {
+    "study": "Nathanson",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/27956380",
+    "title": "Somatic Mutations and Neoepitope Homology in Melanomas Treated with CTLA-4 Blockade",
+    "summary": "This study analyzed cancer exome data from 64 melanoma patients treated with ctla-4 blockade and rna-seq data from 24 of these patients. somatic mutation burden on pretreatment samples was associated with response to immune checkpoint blockade.",
+    "dataAvail": "The data analyzed in this study are available as an online data file in the published manuscript.",
+    "authors": "Nathanson, t., et al., somatic mutations and neoepitope homology in melanomas treated with ctla-4 blockade. cancer immunol res, 2017. 5(1): p. 84-91."
+  },
+  {
+    "study": "Riaz",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/29033130/",
+    "title": "Tumor and Microenvironment Evolution during Immunotherapy with Nivolumab",
+    "summary": "Whole-exome, transcriptome, and/or t cell receptor (tcr) sequencing 68 patients that received anti-pd1. a decrease in detectable mutations and expansion of t-cell clones was associated with response to ant-pd1. pre-therapy expression analysis identified pre-existing immune programs in responders and expression footprints of “hot” versus “cold” tumors based on prior immunotherapy exposure.",
+    "dataAvail": "Sequencing data may be accessed, on approval, by individual investigators upon request (https://fasttrack.bms.com and moc.smb@karoh.enitsirhc).",
+    "authors": "Riaz, n., et al., tumor and microenvironment evolution during immunotherapy with nivolumab. cell, 2017. 171(4): p. 934-949.e16."
+  },
+  {
+    "study": "Rizvi.15",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/25765070",
+    "title": "Cancer immunology. Mutational landscape determines sensitivity to PD-1 blockade in non-small cell lung cancer",
+    "summary": "Whole-exome sequencing of non-small cell lung cancers treated with anti-pd-1 found that higher nonsynonymous mutation burden in tumors was associated with an improved objective response, durable clinical benefit, and progression-free survival. responsiveness to immune checkpoint blockade was also associated with the molecular smoking signature, higher neoantigen burden, and dna repair pathway mutation.",
+    "dataAvail": "Data are publicly available at the cancer genome atlas (tcga) cbio portal and database (www.cbioportal.org; study id: rizvi lung cancer). all genotype and phenotype data are deposited at dpgap under accession no. phs000980.v1. p1. t.a.c. is the inventor on a patent (provisional application number 62/083,088).",
+    "authors": "Rizvi, n.a., et al., cancer immunology. mutational landscape determines sensitivity to pd-1 blockade in non-small cell lung cancer. science, 2015. 348(6230): p. 124-8."
+  },
+  {
+    "study": "Rizvi.18",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/29337640/",
+    "title": "Molecular Determinants of Response to Anti-Programmed Cell Death (PD)-1 and Anti-Programmed Death-Ligand 1 (PD-L1) Blockade in Patients with Non-Small-Cell Lung Cancer Profiled with Targeted Next-Generation Sequencing",
+    "summary": "Tumor mutation burden, the fraction of copy number-altered genome, and gene alterations were investigated in advanced nsclc cancer treated with anti-pd1 and anti pdl1. increased tumor mutation burden was associated with improved responsiveness to immune checkpoint blockade and longer pfs. variants in egfr and stk11 associated with a lack of benefit. tmb and pd-l1 expression were independent variables, and a composite of tmb plus pd-l1 further enriched for a benefit to immune checkpoint blockade.",
+    "dataAvail": "Cbioportal for cancer genomics: non-small-cell lung cancer (msk, jco 2018). http://www.cbioportal.org/study?id=nsclc_pd1_msk_2018. [ref list]",
+    "authors": "Rizvi, h., et al., molecular determinants of response to anti-programmed cell death (pd)-1 and anti-programmed death-ligand 1 (pd-l1) blockade in patients with non-small-cell lung cancer profiled with targeted next-generation sequencing. j clin oncol, 2018. 36(7): p. 633-641."
+  },
+  {
+    "study": "Roh",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/28251903",
+    "title": "Integrated molecular analysis of tumor biopsies on sequential CTLA-4 and PD-1 blockade reveals markers of response and resistance",
+    "summary": "Molecular profiling including t cell receptor sequencing and whole-exome sequencing was performed on melanoma patients treated with sequential anti-ctla-4 followed by anti-pd1. this study found that a more clonal t cell repertoire was predictive of response to pd-1 and that a higher burden of copy number loss was seen in nonresponders to immune checkpoint blockade.",
+    "dataAvail": "Wes data (bam files) from melanoma patients from this study are available at dbgap (bioproject id prjna369259). wes data (sam files) and rna-seq data (fastq files) from melanoma patients from the van allen cohort are available at dbgap (accession number phs000452.v2. p1)",
+    "authors": "Roh, w., et al., integrated molecular analysis of tumor biopsies on sequential ctla-4 and pd-1 blockade reveals markers of response and resistance. sci transl med, 2017. 9(379)."
+  },
+  {
+    "study": "Samstein",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/30643254/",
+    "title": "Tumor mutational load predicts survival after immunotherapy across multiple cancer types",
+    "summary": "This study analyzed the clinical and genomic data of 1,662 advanced cancer patients treated with ici, and 5,371 non-ici-treated patients, whose tumors underwent targeted next-generation sequencing (msk-impact). higher somatic tmb (highest 20% in each histology) was associated with better overall survival among all patients. for most cancer histologies, an association between higher tmb and improved survival was observed. the tmb cutpoints associated with improved survival varied markedly between cancer types. these data indicate that tmb is associated with improved survival in patients receiving ici across a wide variety of cancer types but that there may not be one universal definition of high tmb.",
+    "dataAvail": "http://www.cbioportal.org/study/summary?id=tmb_mskcc_2018",
+    "authors": "Samstein, r.m., et al., tumor mutational load predicts survival after immunotherapy across multiple cancer types. nat genet, 2019. 51(2): p. 202-206."
+  },
+  {
+    "study": "Snyder",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/28552987",
+    "title": "Contribution of systemic and somatic factors to clinical response and resistance to PD-L1 blockade in urothelial cancer: An exploratory multi-omic analysis",
+    "summary": "Whole-exome sequencing rna sequencing and t cell receptor sequencing of pretreatment urothelial tumor and blood samples were studied. the presence of a higher proportion of tumor-infiltrating t lymphocytes was associated with improved responsiveness to anti-pdl1.  pretreatment peripheral blood tcr clonality below the median was associated with improved pfs to anti-pdl1, and substantial expansion of tumor-associated tcr clones in the peripheral blood 3 weeks after starting anti-pdl1 treatment was associated with improved responses also. the combination of high pretreatment peripheral blood tcr clonality with elevated pd-l1 ic staining in tumor tissue was associated with poor clinical outcomes to anti-pdl1.",
+    "dataAvail": "http://doi.org/10.5281/zenodo.546110.",
+    "authors": "Snyder, a., et al., contribution of systemic and somatic factors to clinical response and resistance to pd-l1 blockade in urothelial cancer: an exploratory multi-omic analysis. plos med, 2017. 14(5): p. e1002309."
+  },
+  {
+    "study": "Van_Allen",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/26359337",
+    "title": "Genomic correlates of response to CTLA-4 blockade in metastatic melanoma",
+    "summary": "Analyzed whole exomes from pretreatment melanoma tumor biopsies and matching germline tissue samples from 110 patients. for 40 of these patients, we also obtained and analyzed transcriptome data from the pretreatment tumor samples. overall mutational load, neoantigen load, and expression of cytolytic markers in the immune microenvironment were significantly associated with clinical benefit",
+    "dataAvail": "Online in published manuscript and supplementary materials",
+    "authors": "Van allen, e.m., et al., genomic correlates of response to ctla-4 blockade in metastatic melanoma. science, 2015. 350(6257): p. 207-211."
+  }
+]
