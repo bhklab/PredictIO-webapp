@@ -255,7 +255,6 @@ const ForestPlot = (props) => {
                 .style('stroke-width', '2');
             line.append('title')
                 .text(`95CI:(${dataset[key]["_95ci_low"]}, ${dataset[key]["_95ci_high"]})`);
-
             datapoint.append('rect')
                 .attr('id', "datPoint-" +index)
                 .attr('x', xScale(Number(dataset[key]["effect_size"])) - initial.edgeSize / 2)
