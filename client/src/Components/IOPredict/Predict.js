@@ -19,13 +19,13 @@ const StyledPredict = styled.div`
 const Predict = (props) => {
 
     const [parameters, setParameters] = useState({
-        study: [],
+        gene: [],
+        dataType: '',
         sex: [],
         primary: [],
         drugType: [],
-        dataType: [],
         sequencingType: [],
-        gene: [],
+        study: [],
         email: ''
     });
 
@@ -37,6 +37,7 @@ const Predict = (props) => {
     const [studyOptions, setStudyOptions] = useState({options: [], disabled: true});
 
     const disableSubmit = () => {
+        const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
         return(
             parameters.study.length === 0 || 
             parameters.sex.length === 0 ||
@@ -44,21 +45,35 @@ const Predict = (props) => {
             parameters.drugType.length === 0 ||
             parameters.dataType.length === 0 ||
             parameters.sequencingType.length === 0 ||
-            parameters.email.length === 0
+            parameters.email.length === 0 ||
+            !regex.test(parameters.email)
         )
     }
 
     const submitRequest = async () => {
-        const res = await axios.post('/api/predict', parameters);
+        console.log(parameters);
+        let dataType = '';
+        switch(parameters.dataType){
+            case 'expression':
+                dataType = 'EXP';
+                break;
+            case 'snp':
+                dataType = 'SNP';
+                break;
+            case 'cna':
+                dataType = 'CNA';
+                break;
+        }
+        const res = await axios.post('/api/predict', {
+            ...parameters, 
+            gene: parameters.gene.map(g => g.name),
+            dataType: dataType 
+        });
         console.log(res.data);
     }
 
-    const getDropdownOptions = async (dropdownName, paramName, selected) => {
-        let paramStr = '';
-        selected.forEach((item, i) => {
-            paramStr = paramStr.concat(`${paramName}=${item.value}${i < selected.length - 1 ? '&' : ''}`);
-        })
-        let uri = `/api/dropdown_option/predict/${dropdownName}?${paramStr}`;
+    const getDropdownOptions = async (dropdownName, paramStr) => {
+        let uri = `/api/dropdown_option/clinical_data/${dropdownName}?${paramStr}`;
         console.log(uri);
         const res = await axios.get(uri);
         console.log(res.data);
@@ -68,35 +83,136 @@ const Predict = (props) => {
                 setDataTypeOptions({options: res.data, disabled: false});
                 break;
             case 'sex':
+                setSexOptions({options: res.data, disabled: false});
                 break;
             case 'primary':
+                setPrimaryOptions({options: res.data, disabled: false});
                 break;
             case 'drugtype':
+                setDrugTypeOptions({options: res.data, disabled: false});
                 break;
             case 'sequencing':
+                setSequencingOptions({options: res.data, disabled: false});
                 break;
             case 'study':
-                break
+                setStudyOptions({options: res.data, disabled: false});
+                setParameters({...parameters, study: res.data.map(item => item.value)});
+                break;
             default:
                 break;
         }
     }
 
+    const buildQueryStr = (paramList, paramName) => {
+        let str = ''
+        paramList.forEach((item, i) => {
+            console.log(item);
+            str = str.concat(`${paramName}=${item}${i < paramList.length - 1 ? '&' : ''}`);
+        });
+        return str;
+    }
+
     useEffect(() => {
+        // reset parameters and disable dropdowns
+        setParameters({...parameters, dataType: [], sex: [], primary: [], drugType: [], sequencingType: [], study: []});
+        setDataTypeOptions({options: [], disabled: true});
+        setSexOptions({options: [], disabled: true});
+        setPrimaryOptions({options: [], disabled: true});
+        setDrugTypeOptions({options: [], disabled: true});
+        setSequencingOptions({options: [], disabled: true});
+        setStudyOptions({options: [], disabled: true});
         if(parameters.gene.length > 0){
-            console.log(parameters.gene);
+            // build query parameter string
+            let paramStr = buildQueryStr(parameters.gene.map(g => g.value), 'gene');
             // get available data type options and enable the dropdown
-            getDropdownOptions('datatype', 'gene', parameters.gene);
-        }else{
-            // reset all parameters and disable dropdowns
-            setDataTypeOptions({options: [], disabled: true});
-            setSexOptions({options: [], disabled: true});
-            setPrimaryOptions({options: [], disabled: true});
-            setDrugTypeOptions({options: [], disabled: true});
-            setSequencingOptions({options: [], disabled: true});
-            setStudyOptions({options: [], disabled: true});
+            getDropdownOptions('datatype', paramStr);
         }
     }, [parameters.gene]);
+
+    useEffect(() => {
+        // reset parameters and disable dropdowns
+        setParameters({...parameters, sex: [], primary: [], drugType: [], sequencingType: [], study: []});
+        setSexOptions({options: [], disabled: true});
+        setPrimaryOptions({options: [], disabled: true});
+        setDrugTypeOptions({options: [], disabled: true});
+        setSequencingOptions({options: [], disabled: true});
+        setStudyOptions({options: [], disabled: true});
+        if(parameters.dataType.length > 0){
+            // build query parameter string
+            let paramStr = buildQueryStr(parameters.gene.map(g => g.value), 'gene');
+            paramStr = paramStr.concat(`&datatype=${parameters.dataType}`);
+            // get available data type options and enable the dropdown
+            getDropdownOptions('sex', paramStr);
+        }
+    }, [parameters.dataType]);
+
+    useEffect(() => {
+        // reset parameters and disable dropdowns
+        setParameters({...parameters, primary: [], drugType: [], sequencingType: [], study: []});
+        setPrimaryOptions({options: [], disabled: true});
+        setDrugTypeOptions({options: [], disabled: true});
+        setSequencingOptions({options: [], disabled: true});
+        setStudyOptions({options: [], disabled: true});
+        if(parameters.sex.length > 0){
+            // build query parameter string
+            let paramStr = buildQueryStr(parameters.gene.map(g => g.value), 'gene');
+            paramStr = paramStr.concat(`&datatype=${parameters.dataType}`);
+            paramStr = paramStr.concat(`&${buildQueryStr(parameters.sex, 'sex')}`);
+            // get available data type options and enable the dropdown
+            getDropdownOptions('primary', paramStr);
+        }
+    }, [parameters.sex]);
+
+    useEffect(() => {
+        // reset parameters and disable dropdowns
+        setParameters({...parameters, drugType: [], sequencingType: [], study: []});
+        setDrugTypeOptions({options: [], disabled: true});
+        setSequencingOptions({options: [], disabled: true});
+        setStudyOptions({options: [], disabled: true});
+        if(parameters.primary.length > 0){
+            // build query parameter string
+            let paramStr = buildQueryStr(parameters.gene.map(g => g.value), 'gene');
+            paramStr = paramStr.concat(`&datatype=${parameters.dataType}`);
+            paramStr = paramStr.concat(`&${buildQueryStr(parameters.sex, 'sex')}`);
+            paramStr = paramStr.concat(`&${buildQueryStr(parameters.primary, 'primary')}`);
+            // get available data type options and enable the dropdown
+            getDropdownOptions('drugtype', paramStr);
+        }
+    }, [parameters.primary]);
+
+    useEffect(() => {
+        if(parameters.drugType.length > 0){
+            // reset parameters and disable dropdowns
+            setParameters({...parameters, sequencingType: [], study: []});
+            setSequencingOptions({options: [], disabled: true});
+            setStudyOptions({options: [], disabled: true});
+            // build query parameter string
+            let paramStr = buildQueryStr(parameters.gene.map(g => g.value), 'gene');
+            paramStr = paramStr.concat(`&datatype=${parameters.dataType}`);
+            paramStr = paramStr.concat(`&${buildQueryStr(parameters.sex, 'sex')}`);
+            paramStr = paramStr.concat(`&${buildQueryStr(parameters.primary, 'primary')}`);
+            paramStr = paramStr.concat(`&${buildQueryStr(parameters.drugType, 'drugtype')}`);
+            // get available data type options and enable the dropdown
+            getDropdownOptions('sequencing', paramStr);
+        }
+    }, [parameters.drugType]);
+
+    useEffect(() => {
+        // reset parameters and disable dropdowns
+        setParameters({...parameters, study: []});
+        setStudyOptions({options: [], disabled: true});
+        if(parameters.sequencingType.length > 0){
+            // build query parameter string
+            let paramStr = buildQueryStr(parameters.gene.map(g => g.value), 'gene');
+            paramStr = paramStr.concat(`&datatype=${parameters.dataType}`);
+            paramStr = paramStr.concat(`&${buildQueryStr(parameters.sex, 'sex')}`);
+            paramStr = paramStr.concat(`&${buildQueryStr(parameters.primary, 'primary')}`);
+            paramStr = paramStr.concat(`&${buildQueryStr(parameters.drugType, 'drugtype')}`);
+            paramStr = paramStr.concat(`&${buildQueryStr(parameters.sequencingType, 'sequencing')}`);
+            // get available data type options and enable the dropdown
+            getDropdownOptions('study', paramStr);
+        }
+    }, [parameters.sequencingType]);
 
     return(
         <Layout>
