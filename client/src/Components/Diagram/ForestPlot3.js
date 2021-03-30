@@ -3,6 +3,8 @@ import * as d3 from 'd3';
 import {withSize} from 'react-sizeme';
 import styled from 'styled-components';
 import colors from '../../styles/colors';
+import descriptions from "../../example_studyDescription/studyDescriptions";
+import Modal from "../Modal/DescriptionModal";
 
 /**
  * A responsive version of forest plot.
@@ -30,6 +32,8 @@ const Container = styled.div`
 `
 
 const ForestPlot = (props) => {
+
+    const getModalData = props.getModalData;
 
     useEffect(() => {
         draw();
@@ -104,6 +108,15 @@ const ForestPlot = (props) => {
         }
 
         const xAxeTag = [min_low(), Math.round(overall.effect_size * 100) / 100, 0 , max_high()];
+
+
+        /***
+         * Click on Study rect
+         */
+        const onClick = (data) => {
+            let description = descriptions.filter(item => item.study.toLowerCase() === dataset[data].study.toLowerCase())[0];
+            getModalData(description);
+        }
 
         /***
          * Mouseover data point group (text+interval+rect)
@@ -212,7 +225,9 @@ const ForestPlot = (props) => {
             let datapoint = svg.append('g')
                 .attr('id', "datapoint-" +index)
                 .style('cursor', 'arrow')
-                .on('click', () => console.log(index))
+                .on('click', () => {
+                    onClick (key,descriptions[key]);
+                })
                 .on('mouseover', () => {
                     renderToolTip(key, tooltipId, dataset[key]);
                 })
@@ -223,7 +238,6 @@ const ForestPlot = (props) => {
             datapoint.append('a')
                 .attr('id', "tag-"+index)
                 .attr('class', 'pointLink')
-                .attr('xlink:href', '/')
                 .append('text')
                 .attr('x', 0)
                 .attr('y', yScale(index))
