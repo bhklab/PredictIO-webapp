@@ -20,8 +20,8 @@ from utils.mail import mail
 from resources.test import Test
 from resources.plot_data import VolcanoPlot, ForestPlot
 from resources.dropdown_explore import ExploreDropdownOption
+from resources.dropdown_clinical_data import ClinicalDataDropdown
 from resources.search_gene import SearchGene
-from resources.dropdown_patient import PatientDataType
 from resources.io_predict import IOPredict
 from resources.itnt_visualization import ITNTVisualization
 
@@ -54,7 +54,7 @@ api = Api(app)
 api.add_resource(Test, '/api/test')
 
 api.add_resource(ExploreDropdownOption, '/api/dropdown_option/explore')
-api.add_resource(PatientDataType, '/api/dropdown_option/predict/datatype')
+api.add_resource(ClinicalDataDropdown, '/api/dropdown_option/clinical_data/<dropdown_type>')
 api.add_resource(SearchGene, '/api/search_gene')
 
 api.add_resource(ForestPlot, '/api/explore/forest_plot')
