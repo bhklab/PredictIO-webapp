@@ -20,7 +20,7 @@ const StyledForm = styled.div`
             margin-right: 10px;
             font-size: 14px;
         }
-        .select {
+        .input {
             width: 70%;
         }
     }
