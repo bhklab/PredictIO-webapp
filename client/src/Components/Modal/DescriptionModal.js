@@ -26,7 +26,6 @@ const StyledModal = styled.div`
   width: 80%;
   height: auto;
   overflow-y: scroll;
-  background: white;
   align-items: center;
   top: -25%;
   left: 0%;
@@ -36,22 +35,25 @@ const StyledModal = styled.div`
   justify-content: center;
   border-radius: 10px;
   z-index: 9;
-  background: rgba(255, 255, 255, 1);
+  //background: rgb(255, 255, 255);
+  background: rgba(88, 88, 88, 0.95);
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.3);
   position: absolute;
   align-content: center;
-  color: ${colors.gray_text};
+  font-family: ${"Noto Sans"};
+    //color: ${colors.light_gray};
+  color: whitesmoke;
 `;
 
 
-const H4 = styled.h4`
+const Heading = styled.h4`
   display: inline;
   margin-top:40px;
 `;
 
 
 export const Modal = (props) => {
-    const {study, title, authors, summary, pmid} = props.modalData.data;
+    const {dataset_name, title, authors, summary, pmid} = props.modalData.data;
     const removeModalData = props.removeModalData
 
     const closeModal = () => {
@@ -61,10 +63,10 @@ export const Modal = (props) => {
     return (
         <StyledModal>
             <div>
-                <h4>{study}</h4>
+                <h4>{dataset_name}</h4>
                 <div><h4>{title}</h4></div>
-                <div><H4 >Authors: </H4> {authors}</div><br/>
-                <div><H4>Summary: </H4> {summary}</div><br/>
+                <div><Heading>Authors: </Heading> {authors}</div><br/>
+                <div><Heading>Summary: </Heading> {summary}</div><br/>
             </div>
             <br />
             <div style={{ display: 'flex', float: 'center', position:"absolute", right:"20px", bottom:"10px"}}>

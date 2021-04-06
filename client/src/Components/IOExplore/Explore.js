@@ -65,12 +65,11 @@ const Explore = (props) => {
         setForestPlotData({data: res.data, loading: false, ready: true});
     };
 
-    const getModalData = (props) => {
+    const getModalData = async (params) => {
         setModalData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
-        //const res = await axios.post('/api/explore/forest_plot', params);
-        const res = props;
-        console.log(res)
-        setModalData({data: res, ready: true});
+        const res = await axios.post('/api/explore/description_modal', params);
+        console.log(res.data[0])
+        setModalData({data: res.data[0], ready: true});
     };
 
     const removeModalData = () => {
