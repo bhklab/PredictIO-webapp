@@ -3,8 +3,6 @@ import * as d3 from 'd3';
 import {withSize} from 'react-sizeme';
 import styled from 'styled-components';
 import colors from '../../styles/colors';
-import descriptions from "../../example_studyDescription/studyDescriptions";
-import Modal from "../Modal/DescriptionModal";
 
 /**
  * A responsive version of forest plot.
@@ -65,7 +63,6 @@ const ForestPlot = (props) => {
         /***
          * Find the min and max value of all studies for adjusting the scales and axes
          ***/
-
         const min_low = () => {
             return Math.min(...dataset.map(function (d){ return Number(d["_95ci_low"])}))
         }
@@ -77,7 +74,6 @@ const ForestPlot = (props) => {
         /***
          * Functions for scaling X and Y
          ***/
-
         const xScale= (d) => {
             const scale = d3
                 .scaleLinear()
@@ -97,7 +93,6 @@ const ForestPlot = (props) => {
         /***
          * Find the overall rhombus points on svg
          ***/
-
         const polygonPoints = () =>{
             return (
                 xScale(Number(overall._95ci_low)) + ", "+ yScale(-1) +" "+
@@ -114,8 +109,10 @@ const ForestPlot = (props) => {
          * Click on Study rect
          */
         const onClick = (data) => {
-            let description = descriptions.filter(item => item.study.toLowerCase() === dataset[data].study.toLowerCase())[0];
-            getModalData(description);
+            let selectedPoint = dataset[data].study;
+            getModalData({
+                dataset_name: selectedPoint
+            });
         }
 
         /***
@@ -150,7 +147,6 @@ const ForestPlot = (props) => {
         /**
          *  start drawing plot
          */
-
         let svg = d3.select(`#${props.id}`);
         svg.selectAll("*").remove(); // redraw every time the width changes
         svg.attr('width', dim.width).attr('height', dim.height);
@@ -226,7 +222,7 @@ const ForestPlot = (props) => {
                 .attr('id', "datapoint-" +index)
                 .style('cursor', 'arrow')
                 .on('click', () => {
-                    onClick (key,descriptions[key]);
+                    onClick (key);
                 })
                 .on('mouseover', () => {
                     renderToolTip(key, tooltipId, dataset[key]);
