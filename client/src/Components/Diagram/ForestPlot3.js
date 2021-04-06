@@ -27,6 +27,9 @@ const Container = styled.div`
   .pointLink:hover {
     text-decoration: underline;
   }
+  .datapoint:hover {
+    cursor: hand;
+  }
 `
 
 const ForestPlot = (props) => {
@@ -220,7 +223,8 @@ const ForestPlot = (props) => {
 
             let datapoint = svg.append('g')
                 .attr('id', "datapoint-" +index)
-                .style('cursor', 'arrow')
+                .attr('class', 'datapoint')
+                .style('cursor', 'hand')
                 .on('click', () => {
                     onClick (key);
                 })
