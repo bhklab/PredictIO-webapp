@@ -17,14 +17,14 @@ def execute_script(parameters):
         'Rscript', 
         r_path, 
         r_wd, 
-        '1234567890', # analysis id 
-        ",".join(parameters['study']), 
-        ",".join(parameters['sex']), 
-        ",".join(parameters['primary']), 
-        ",".join(parameters['drugType']), 
+        parameters['analysis_id'], # analysis id 
+        parameters['study'], 
+        parameters['sex'], 
+        parameters['primary'], 
+        parameters['drugType'], 
         parameters['dataType'],
-        ",".join(parameters['sequencingType']), 
-        ",".join(parameters['gene'])
+        parameters['sequencingType'], 
+        parameters['gene']
     ]
 
     print(cmd)
@@ -47,6 +47,11 @@ def execute_script(parameters):
     
     # converts output to json (dictionary)
     output = json.loads(out)
+    print(output)
+
+    # TO DO: add data to signature_user_requested table
+
+    # TO DO: update analysis request with finished date abd time
 
     # send notification email
     send_mail(output)
