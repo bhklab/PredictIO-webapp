@@ -9,6 +9,8 @@ from .models import dataset
 from .models import patient
 from .models import signature_individual
 from .models import signature_meta
+from .models import signature_user_requested
+from .models import analysis_request
 
 # processes dataframes and creates respective table instances
 
@@ -176,3 +178,14 @@ def seed():
     finally:
         print('Done')
         # session.close()  # Close the connection
+
+# used to create a single table
+def create_table():
+    try:
+        analysis_request.AnalysisRequest.__table__.create(db.session.bind)
+        signature_user_requested.UserRequested.__table__.create(db.session.bind)
+    except Exception as e:
+        print('Exception ', e)
+        print(traceback.format_exc())
+    finally:
+        print('Done')    

@@ -12,6 +12,7 @@ from decouple import config
 # db object
 from db.db import db
 from db.seed_database import seed
+from db.seed_database import create_table
 
 # mail object
 from utils.mail import mail
@@ -81,3 +82,7 @@ flask cli command to seed database
 @app.cli.command("seed-database")
 def seed_database():
     seed()
+
+@app.cli.command("create-table")
+def create_single_table():
+    create_table()

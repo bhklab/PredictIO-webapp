@@ -185,7 +185,8 @@ def get_available_sequencing_type(genes, datatype, sex, primary, drug_type):
     
     result = []
     for seq in sequencing:
-        result.append({"label": seq.upper(), "value": seq})
+        if len(seq) > 0:
+            result.append({"label": seq.upper(), "value": seq.upper()})
     
     return result
 
