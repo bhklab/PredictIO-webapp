@@ -8,7 +8,7 @@ mail = Mail()
 def send_mail(output):
     """sends email"""
     header = "Your analysis is ready"
-    content = "<div style='font-size:14px;'>Your requested analysis is ready and available at:<br /><a href={0}{1}>{0}{1}</a></div>".format('http://localhost:3000/analysis/request/', output['analysis_id'][0])
+    content = "<div style='font-size:14px;'>Your requested analysis is ready and available at:<br /><a href={0}{1}>{0}{1}</a></div>".format('http://localhost:3000/explore/signature/result/', output['analysis_id'][0])
     footer = "<div style='font-size:12px;'>Thank you for using IO.db, powered by <a href=https://www.pmgenomics.ca/bhklab/>BHK Lab</a>.</div>"
 
     if(output["error"][0]):

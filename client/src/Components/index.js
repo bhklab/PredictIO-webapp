@@ -1,13 +1,15 @@
 import Home from './Home/Home';
 import Explore from './IOExplore/Explore';
-import Predict from './IOPredict/Predict';
+import GeneSignatureRequest from './GeneSignature/GeneSignatureRequest';
+import GeneSignatureResult from './GeneSignature/GeneSignatureResult';
 import ForestPlot from "./Diagram/ForestPlot";
 import Test from './Test/Test';
 
 export {
   Home,
   Explore,
-  Predict,
+  GeneSignatureRequest,
+  GeneSignatureResult,
   ForestPlot,
   Test
 };

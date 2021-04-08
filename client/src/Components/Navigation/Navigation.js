@@ -18,7 +18,7 @@ const Navigation = () => {
                 </LogoContainer>
                 <StyledLinks>
                     <Link to='/'>Home</Link>
-                    <Link to='/predict'>Predict</Link>
+                    <Link to='/explore/signature/request'>Gene Signature</Link>
                     <Link to='/'>About</Link>
                     <Link to='/'>Download</Link>
                     <Link to='/'>Contact</Link>

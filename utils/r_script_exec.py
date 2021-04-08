@@ -71,13 +71,13 @@ def execute_script(parameters):
                     'subgroup': row['Subgroup'] if meta_analysis == 1 else None,
                     'tissue_type': row['Type'] if meta_analysis == 1 else None,
                     'n': n,
-                    'effect_size': row['Effect_size'] if n > 3 else None,
-                    'se': row['SE'] if n > 3 else None,
-                    '_95ci_low': row['CI95_low'] if n > 3 else None,
-                    '_95ci_high': row['CI95_high'] if n > 3 else None,
-                    'pval': row['Pval'] if n > 3 else None,
-                    'i2': row['I2'] if meta_analysis == 1 and n > 3 else None,
-                    'pval_i2': row['Pval_I2'] if meta_analysis == 1 and n > 3 else None,
+                    'effect_size': row['Effect_size'] if n >= 3 else None,
+                    'se': row['SE'] if n >= 3 else None,
+                    '_95ci_low': row['CI95_low'] if n >= 3 else None,
+                    '_95ci_high': row['CI95_high'] if n >= 3 else None,
+                    'pval': row['Pval'] if n >= 3 else None,
+                    'i2': row['I2'] if meta_analysis == 1 and n >= 3 else None,
+                    'pval_i2': row['Pval_I2'] if meta_analysis == 1 and n >= 3 else None,
                 })
                 db.session.add(result_row)
 
