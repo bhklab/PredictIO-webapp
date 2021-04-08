@@ -174,10 +174,10 @@ def seed():
     except Exception as e:
         print('Exception ', e)
         print(traceback.format_exc())
-        # session.rollback()  # Rollback the changes on error
+        db.session.rollback()  # Rollback the changes on error
     finally:
         print('Done')
-        # session.close()  # Close the connection
+        db.session.close()  # Close the connection
 
 # used to create a single table
 def create_table():

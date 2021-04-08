@@ -4,7 +4,12 @@ Includes functions to execute R script in a separate thread
 import os
 import subprocess
 import json
+import traceback
+from datetime import datetime
 from .mail import send_mail
+from db.db import db
+from db.models.signature_user_requested import UserRequested
+from db.models.analysis_request import AnalysisRequest
 
 def execute_script(parameters):
     """function used to call R script in subprocess"""
@@ -27,8 +32,6 @@ def execute_script(parameters):
         parameters['gene']
     ]
 
-    print(cmd)
-
     # variable to store results
     out = None
 
@@ -47,11 +50,52 @@ def execute_script(parameters):
     
     # converts output to json (dictionary)
     output = json.loads(out)
-    print(output)
 
-    # TO DO: add data to signature_user_requested table
+    try:
+        analysis_id = output['analysis_id'][0]
+        analysis_request = AnalysisRequest.query.filter(AnalysisRequest.analysis_id == analysis_id).first()
 
-    # TO DO: update analysis request with finished date abd time
+        # Add data to signature_user_requested table and update analysis request with finished date and time
+        if not output['error'][0]:
+            for row in output['data']:
+                meta_analysis = int(row['Meta_Analysis'])
+                n = row['N']
+                result_row = UserRequested(**{
+                    'analysis_id': analysis_id,
+                    'study': row['study'] if meta_analysis != 1 else None,
+                    'primary_tissue': row['Primary'] if meta_analysis != 1 else None,
+                    'outcome': row['Outcome'],
+                    'model': row['Model'],
+                    'sequencing': row['Sequencing'] if meta_analysis != 1 else None,
+                    'meta_analysis': meta_analysis,
+                    'subgroup': row['Subgroup'] if meta_analysis == 1 else None,
+                    'tissue_type': row['Type'] if meta_analysis == 1 else None,
+                    'n': n,
+                    'effect_size': row['Effect_size'] if n > 3 else None,
+                    'se': row['SE'] if n > 3 else None,
+                    '_95ci_low': row['CI95_low'] if n > 3 else None,
+                    '_95ci_high': row['CI95_high'] if n > 3 else None,
+                    'pval': row['Pval'] if n > 3 else None,
+                    'i2': row['I2'] if meta_analysis == 1 and n > 3 else None,
+                    'pval_i2': row['Pval_I2'] if meta_analysis == 1 and n > 3 else None,
+                })
+                db.session.add(result_row)
+
+                analysis_request.time_completed = datetime.now()
+        else:
+            print('error occurred')
+            print(output["message"][0])
+            analysis_request.error = True
+            analysis_request.error_message = output["message"][0]
+       
+        db.session.commit()
+        print('data inserted/updated')
+    except Exception as e:
+        print('Exception ', e)
+        print(traceback.format_exc())
+        db.session.rollback()
+    finally:
+        db.session.close()
 
     # send notification email
     send_mail(output)

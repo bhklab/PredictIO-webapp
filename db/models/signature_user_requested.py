@@ -7,7 +7,7 @@ from ..db import db
 class UserRequested(db.Model, Serializer):
     __tablename__ = 'signature_user_requested'
     id = db.Column(db.Integer, primary_key=True, index=True, unique=True)
-    analysis_id = db.Column(db.String(32), db.ForeignKey("analysis_request.analysis_id"))
+    analysis_id = db.Column(db.String(255), db.ForeignKey("analysis_request.analysis_id"))
     study = db.Column(db.String(32))
     primary_tissue = db.Column(db.String(32))
     outcome = db.Column(db.String(32))

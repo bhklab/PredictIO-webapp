@@ -4,10 +4,12 @@ Module for the IO Predict feature
 import sys
 import threading
 import uuid
+import traceback
 from flask import request
 from flask import copy_current_request_context
 from flask_restful import Resource
 from utils.r_script_exec import execute_script
+from db.db import db
 from db.models.analysis_request import AnalysisRequest
 from datetime import datetime
 
@@ -29,7 +31,7 @@ class IOPredict(Resource):
             # parse request
             query = request.get_json()
             parameters = {
-                'analysis_id': uuid.uuid4(),
+                'analysis_id': str(uuid.uuid4()),
                 'study': ",".join(query['study']),
                 'sex': ",".join(query['sex']),
                 'primary': ",".join(query['primary']), 
@@ -38,22 +40,27 @@ class IOPredict(Resource):
                 'sequencingType': ",".join(query['sequencingType']), 
                 'gene': ",".join(query['gene'])
             }
+            print(datetime.now())
 
-            analysis = AnalysisRequest(
-                analysis_id = parameters['analysis_id'],
-                email = query['email'],
-                time_submitted = datetime.now(),
-                time_completed = None,
-                input_genes = parameters['gene'],
-                input_datatype = parameters['dataType'],
-                input_sex = parameters['sex'],
-                input_primary = parameters['primary'],
-                input_drug_type = parameters['drugType'],
-                input_sequencing = parameters['sequencingType'],
-                input_study = parameters['study']
-            )
+            analysis = AnalysisRequest(**{
+                'analysis_id': parameters['analysis_id'],
+                'email': query['email'],
+                'error': False,
+                'error_message': '',
+                'time_submitted': datetime.now(),
+                'time_completed': None,
+                'input_genes': parameters['gene'],
+                'input_datatype': parameters['dataType'],
+                'input_sex': parameters['sex'],
+                'input_primary': parameters['primary'],
+                'input_drug_type': parameters['drugType'],
+                'input_sequencing': parameters['sequencingType'],
+                'input_study': parameters['study']
+            })
 
             # TO DO: insert analysis request into database.
+            db.session.add(analysis)
+            db.session.commit()
 
             """
             Function to be executed in a separate thread.
@@ -66,14 +73,14 @@ class IOPredict(Resource):
             thread = threading.Thread(target=run_async, args=(parameters,))
             thread.start()
             print('thread started')
-
-        except:
-            print('error')
-            e = sys.exc_info()[0]
-            print(e)
+        except Exception as e:
+            print('Exception ', e)
+            print(traceback.format_exc())
+            db.session.rollback()
 
             res['error'] = 1
             res['errorMessage'] = e
             status = 500
-
-        return res, status
+        finally:
+            db.session.close()
+            return res, status
