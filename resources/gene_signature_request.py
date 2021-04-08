@@ -16,7 +16,7 @@ from datetime import datetime
 """
 IO Predict Route class.
 """
-class IOPredict(Resource):
+class GeneSignatureRequest(Resource):
     def get(self):
         return "Only post method is allowed", 400
     

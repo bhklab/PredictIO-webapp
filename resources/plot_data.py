@@ -38,7 +38,7 @@ class VolcanoPlot(Resource):
             Meta.outcome == query['outcome'],
             Meta.model == query['model'],
             Meta.subgroup == 'ALL',
-            Meta.n > 3
+            Meta.n >= 3
         )
 
         if len(query['signatures']) > 0 and 'ALL' not in query['signatures']:

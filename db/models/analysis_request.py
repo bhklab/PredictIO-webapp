@@ -19,5 +19,16 @@ class AnalysisRequest(db.Model, Serializer):
     signature_user_requested = db.relationship("UserRequested", backref="analysis_request")
 
     def serialize(self):
-        serialized = Serializer.serialize(self)
+        serialized = {
+            'analysis_id': self.analysis_id,
+            'time_submitted': self.time_submitted.strftime('%Y-%M-%d, %H:%M:%S'),
+            'time_completed': self.time_completed.strftime('%Y-%M-%d, %H:%M:%S'),
+            'input_genes': self.input_genes.split(','),
+            'input_datatype': self.input_datatype,
+            'input_sex': self.input_sex.split(','),
+            'input_primary': self.input_primary.split(','),
+            'input_drug_type': self.input_drug_type.split(','),
+            'input_sequencing': self.input_sequencing.split(','),
+            'input_study': self.input_study.split(',')
+        }
         return serialized
