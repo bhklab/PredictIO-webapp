@@ -64,7 +64,7 @@ const Predict = (props) => {
                 dataType = 'CNA';
                 break;
         }
-        const res = await axios.post('/api/predict', {
+        const res = await axios.post('/api/explore/signature/request', {
             ...parameters, 
             gene: parameters.gene.map(g => g.name),
             dataType: dataType 

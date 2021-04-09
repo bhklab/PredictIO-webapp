@@ -3,39 +3,14 @@ import styled from 'styled-components';
 import axios from 'axios';
 import Loader from 'react-loader-spinner';
 
-import ForestPlotContainer from './ForestPlotContainer';
 import VolcanoPlotInput from './VolcanoPlotInput';
 import VolcanoPlotContainer from './VolcanoPlotContainer';
+import ForestPlotContainer from './ForestPlotContainer';
+import { PlotContainer, StyledPlotArea, LoaderContainer } from '../../styles/PlotStyles';
 import colors from '../../styles/colors';
 
 const ExploreContainer = styled.div`
     width: 100%;
-`;
-
-const PlotContainer = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    .volcano {
-        width: 35%;
-    }
-    .forest {
-        width: 65%;
-    }
-`;
-
-const StyledPlotArea = styled.div`
-    width: ${props => props.width};
-    // min-width: 400px;
-    padding 10px;
-`;
-
-const LoaderContainer = styled.div`
-    width: 100%;
-    height: 500px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 `;
 
 const Explore = (props) => {
@@ -101,7 +76,9 @@ const Explore = (props) => {
                         :
                         <div>
                             <h3>Forest Plot</h3>
-                            <div>Click on a signature point on the volcano plot to display a corresponding forest plot.</div>
+                            <div className='forestPlotMessage'>
+                                Click on a signature point on the volcano plot to display a corresponding forest plot.
+                            </div>
                         </div>
                 }
                 </StyledPlotArea>

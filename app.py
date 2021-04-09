@@ -12,6 +12,7 @@ from decouple import config
 # db object
 from db.db import db
 from db.seed_database import seed
+from db.seed_database import create_table
 
 # mail object
 from utils.mail import mail
@@ -22,7 +23,8 @@ from resources.plot_data import VolcanoPlot, ForestPlot
 from resources.dropdown_explore import ExploreDropdownOption
 from resources.dropdown_clinical_data import ClinicalDataDropdown
 from resources.search_gene import SearchGene
-from resources.io_predict import IOPredict
+from resources.gene_signature_request import GeneSignatureRequest
+from resources.gene_signature_result import GeneSignatureResult, GeneSignatureVolcanoPlot, GeneSignatureForestPlot
 from resources.itnt_visualization import ITNTVisualization
 
 app = Flask(__name__,
@@ -60,7 +62,11 @@ api.add_resource(SearchGene, '/api/search_gene')
 
 api.add_resource(ForestPlot, '/api/explore/forest_plot')
 api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
-api.add_resource(IOPredict, '/api/predict')
+api.add_resource(GeneSignatureRequest, '/api/explore/signature/request')
+api.add_resource(GeneSignatureResult, '/api/explore/signature/result/<analysis_id>')
+api.add_resource(GeneSignatureVolcanoPlot, '/api/explore/signature/volcano_plot/<analysis_id>')
+api.add_resource(GeneSignatureForestPlot, '/api/explore/signature/forest_plot/<analysis_id>')
+
 api.add_resource(ITNTVisualization, '/api/explore/itnt_data')
 
 
@@ -82,3 +88,7 @@ flask cli command to seed database
 @app.cli.command("seed-database")
 def seed_database():
     seed()
+
+@app.cli.command("create-table")
+def create_single_table():
+    create_table()
