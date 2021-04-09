@@ -19,6 +19,8 @@ from utils.mail import mail
 # modules used for routes in 'resources' directory
 from resources.test import Test
 from resources.plot_data import VolcanoPlot, ForestPlot
+from resources.modal_data import DescriptionModal
+from resources.dropdown_option import DropdownOption
 from resources.dropdown_explore import ExploreDropdownOption
 from resources.dropdown_clinical_data import ClinicalDataDropdown
 from resources.search_gene import SearchGene
@@ -60,6 +62,7 @@ api.add_resource(SearchGene, '/api/search_gene')
 
 api.add_resource(ForestPlot, '/api/explore/forest_plot')
 api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
+api.add_resource(DescriptionModal, '/api/explore/description_modal')
 api.add_resource(IOPredict, '/api/predict')
 api.add_resource(ITNTVisualization, '/api/explore/itnt_data')
 

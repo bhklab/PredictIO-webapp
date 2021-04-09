@@ -27,9 +27,14 @@ const Container = styled.div`
   .pointLink:hover {
     text-decoration: underline;
   }
+  .datapoint:hover {
+    cursor: hand;
+  }
 `
 
 const ForestPlot = (props) => {
+
+    const getModalData = props.getModalData;
 
     useEffect(() => {
         draw();
@@ -61,7 +66,6 @@ const ForestPlot = (props) => {
         /***
          * Find the min and max value of all studies for adjusting the scales and axes
          ***/
-
         const min_low = () => {
             return Math.min(...dataset.map(function (d){ return Number(d["_95ci_low"])}))
         }
@@ -73,7 +77,6 @@ const ForestPlot = (props) => {
         /***
          * Functions for scaling X and Y
          ***/
-
         const xScale= (d) => {
             const scale = d3
                 .scaleLinear()
@@ -93,7 +96,6 @@ const ForestPlot = (props) => {
         /***
          * Find the overall rhombus points on svg
          ***/
-
         const polygonPoints = () =>{
             return (
                 xScale(Number(overall._95ci_low)) + ", "+ yScale(-1) +" "+
@@ -104,6 +106,17 @@ const ForestPlot = (props) => {
         }
 
         const xAxeTag = [min_low(), Math.round(overall.effect_size * 100) / 100, 0 , max_high()];
+
+
+        /***
+         * Click on Study rect
+         */
+        const onClick = (data) => {
+            let selectedPoint = dataset[data].study;
+            getModalData({
+                dataset_name: selectedPoint
+            });
+        }
 
         /***
          * Mouseover data point group (text+interval+rect)
@@ -137,7 +150,6 @@ const ForestPlot = (props) => {
         /**
          *  start drawing plot
          */
-
         let svg = d3.select(`#${props.id}`);
         svg.selectAll("*").remove(); // redraw every time the width changes
         svg.attr('width', dim.width).attr('height', dim.height);
@@ -211,8 +223,11 @@ const ForestPlot = (props) => {
 
             let datapoint = svg.append('g')
                 .attr('id', "datapoint-" +index)
-                .style('cursor', 'arrow')
-                .on('click', () => console.log(index))
+                .attr('class', 'datapoint')
+                .style('cursor', 'hand')
+                .on('click', () => {
+                    onClick (key);
+                })
                 .on('mouseover', () => {
                     renderToolTip(key, tooltipId, dataset[key]);
                 })
@@ -223,7 +238,6 @@ const ForestPlot = (props) => {
             datapoint.append('a')
                 .attr('id', "tag-"+index)
                 .attr('class', 'pointLink')
-                .attr('xlink:href', '/')
                 .append('text')
                 .attr('x', 0)
                 .attr('y', yScale(index))
