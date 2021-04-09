@@ -7,12 +7,6 @@ const GlobalStyles = createGlobalStyle`
         height: 100%;
         margin: 0;
     }
-    // html {
-    //     background-image: url('./images/background.png');
-    //     background-size: cover;
-    //     background-position: center;
-    //     background-repeat: no-repeat;
-    // }
 
     body {
         color: ${colors.gray_text};
@@ -23,16 +17,6 @@ const GlobalStyles = createGlobalStyle`
     #root {
         height: 100%;
         min-height: 100vh;
-    }
-
-    main {
-        min-height: calc(100vh - 105px);
-        width: 85%;
-        max-width: 1500px;
-        margin-left: auto;
-        margin-right: auto;
-        display: flex;
-        flex-direction: column;
     }
 
     a {

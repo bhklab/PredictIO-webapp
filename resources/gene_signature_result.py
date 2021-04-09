@@ -11,8 +11,6 @@ class GeneSignatureResult(Resource):
 
         analysis = AnalysisRequest.query.filter(AnalysisRequest.analysis_id == analysis_id).first()
 
-        model = request.args.get('model')
-        outcome = request.args.get('outcome')
         volcano = UserRequested.query.filter(
             UserRequested.analysis_id == analysis_id,
             UserRequested.meta_analysis == 1,
@@ -34,8 +32,6 @@ class GeneSignatureResult(Resource):
 
 class GeneSignatureVolcanoPlot(Resource):
     def get(self, analysis_id):
-        model = request.args.get('model')
-        outcome = request.args.get('outcome')
         volcano = UserRequested.query.filter(
             UserRequested.analysis_id == analysis_id,
             UserRequested.meta_analysis == 1,
@@ -61,12 +57,14 @@ class GeneSignatureForestPlot(Resource):
         
         total_list = UserRequested.query.filter(
             UserRequested.analysis_id == analysis_id,
+            UserRequested.model == model,
+            UserRequested.outcome == outcome
         ).all()
         total_list = UserRequested.serialize_list(total_list)
         for row in total_list:
             del row['analysis_request']
 
-        result['individual'] = [item for item in total_list if item['meta_analysis'] == 0]
+        result['individuals'] = [item for item in total_list if item['meta_analysis'] == 0]
         result['meta'] = [item for item in total_list if item['meta_analysis'] == 1]
 
         return result, 200
