@@ -48,9 +48,6 @@ const Footer = () => {
                 <FooterItem>
                     BHK Lab &#169; 2020-2021
                 </FooterItem>
-                <FooterItem>
-                    <a href="https://www.vecteezy.com/free-vector/background">Background by Vecteezy</a>
-                </FooterItem>
             </FooterContent>
         </StyledFooter>
     );
