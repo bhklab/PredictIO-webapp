@@ -85,7 +85,7 @@ const VolcanoPlotInput = (props) => {
 
     useEffect(() => {
         const setSelectOptions = async () => {
-            const res = await axios.get('/api/dropdown_option');
+            const res = await axios.get('/api/dropdown_option/explore');
             console.log(res.data);
             let signatures = res.data.signatures.map(item => ({value: item, label: item, disabled: true}));
             signatures.unshift({value: 'ALL', label: 'ALL', disabled: false});
@@ -101,7 +101,7 @@ const VolcanoPlotInput = (props) => {
             <div className='formField'>
                 <div className='label'>Outcome: </div>
                 <CustomDropdown
-                    className='select'
+                    className='input'
                     value={parameters.outcome}
                     options={outcomeOptions}
                     onChange={(e) => {onOutcomeSelect(e)}}
@@ -111,7 +111,7 @@ const VolcanoPlotInput = (props) => {
             <div className='formField'>
                 <div className='label'>Model: </div>
                 <CustomDropdown
-                    className='select'
+                    className='input'
                     value={parameters.model}
                     options={modelOptions.filter(item => item.isDisabled !== true)}
                     onChange={(e) => {onModelSelect(e)}}
@@ -121,7 +121,7 @@ const VolcanoPlotInput = (props) => {
             <div className='formField'>
                 <div className='label'>Signatures: </div>
                 <CustomMultiSelect
-                    className='select'
+                    className='input'
                     value={parameters.signatures}
                     options={signatureOptions}
                     onChange={(selections) => {onSignatureSelect(selections)}}

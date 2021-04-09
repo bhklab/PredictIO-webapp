@@ -1,10 +1,15 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String
-from sqlalchemy.orm import relationship
-from .base import Base
+from utils.serializer import Serializer
+from ..db import db
 
-
-class Gene(Base):
+class Gene(db.Model, Serializer):
     __tablename__ = "gene"
-    gene_id = Column(Integer, primary_key=True, index=True, unique=True)
-    gene_name = Column(String(32))
-    dataset_genes = relationship("DatasetGene", backref="gene")
+    gene_id = db.Column(db.Integer, primary_key=True, index=True, unique=True)
+    gene_name = db.Column(db.String(32))
+    dataset_genes = db.relationship("DatasetGene", backref="gene")
+
+    def serialize(self):
+        serialized = {
+            'gene_id': self.gene_id,
+            'gene_name': self.gene_name
+        }
+        return serialized

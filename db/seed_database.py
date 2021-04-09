@@ -2,25 +2,15 @@ import os
 import pandas as pd
 import numpy as np
 import traceback
-from models import dataset_gene
-from models import gene
-from models import dataset
-from models import patient
-from models import base
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-# used to get values from .env file
-from decouple import config
-
-engine = create_engine(config("CONN_STR"), pool_recycle=21600)
-base.Base.metadata.create_all(engine, checkfirst=True)
-# create a configured "Session" class
-Session = sessionmaker(bind=engine)
-# create a Session
-session = Session()
+from .db import db
+from .models import dataset_gene
+from .models import gene
+from .models import dataset
+from .models import patient
+from .models import signature_individual
+from .models import signature_meta
 
 # processes dataframes and creates respective table instances
-
 
 def Add_Records(df, table):
     for index, row in df.iterrows():
@@ -68,38 +58,121 @@ def Add_Records(df, table):
                 'expression': int(float(row['expr'])) if row['expr'] != '' else 0
             })
             print('Adding Patient', index)
-        session.add(record)
+        elif table == 'signature_individual':
+            record = signature_individual.Individual(**{
+                'signature': row['signature'],
+                'outcome': row['outcome'],
+                'model': row['model'],
+                'study': row['study'],
+                'primary_tissue': row['Primary'],
+                'sequencing': row['Sequencing'],
+                'n': int(row['N']),
+                'effect_size': float(row['Effect_size']),
+                'se': float(row['SE']),
+                '_95ci_low': float(row['95CI_low']),
+                '_95ci_high': float(row['95CI_high']),
+                'pval': float(row['Pval'])
+            })
+            print('Adding Individual Signature', index)
+        elif table == 'signature_meta':
+            record = signature_meta.Meta(**{
+                'signature': row['signature'],
+                'outcome': row['outcome'],
+                'model': row['model'],
+                'subgroup': row['Subgroup'],
+                'tissue_type': row['Type'],
+                'n': int(row['N']),
+                'effect_size': float(row['Effect_size']) if row['Effect_size'] is not None else None,
+                'se': float(row['SE']) if row['SE'] is not None else None,
+                '_95ci_low': float(row['95CI_low']) if row['95CI_low'] is not None else None,
+                '_95ci_high': float(row['95CI_high']) if row['95CI_high'] is not None else None,
+                'pval': float(row['Pval']) if row['Pval'] is not None else None,
+                'i2': float(row['I2']) if row['I2'] is not None else None,
+                'pval_i2': float(row['Pval_I2']) if row['Pval_I2'] is not None else None
+            })
+            print('Adding Meta Signature', index)
 
+        db.session.add(record)
 
-try:
-    # there might be an issue with SQLAlcemy closing the connection in the middle of data seeding
-    # if all tables cannot be uploaded together, try loading tables separately
-    dir_path = os.path.dirname(os.path.realpath(__file__))
-    # populating dataset table
-    dataset_file = os.path.join(dir_path, "seedfiles/dataset.csv")
-    dataset_data = pd.read_csv(
-        dataset_file, quotechar='"', skipinitialspace=True)
-    Add_Records(dataset_data, 'dataset')
-    # populating gene table
-    gene_file = os.path.join(dir_path, "seedfiles/gene.csv")
-    gene_data = pd.read_csv(
-        gene_file, quotechar='"', skipinitialspace=True, keep_default_na=False)
-    Add_Records(gene_data, 'gene')
-    # populating dataset_gene table
-    dataset_gene_file = os.path.join(dir_path, "seedfiles/dataset_gene.csv")
-    dataset_gene_data = pd.read_csv(
-        dataset_gene_file, quotechar='"', skipinitialspace=True)
-    Add_Records(dataset_gene_data, 'dataset_gene')
-    # populating patient table
-    patient_file = os.path.join(dir_path, "seedfiles/patient.csv")
-    patient_data = pd.read_csv(
-        patient_file, quotechar='"', skipinitialspace=True, keep_default_na=False)
-    Add_Records(patient_data, 'patient')
-    session.commit()  # Attempt to commit all the records
-except Exception as e:
-    print('Exception ', e)
-    print(traceback.format_exc())
-    session.rollback()  # Rollback the changes on error
-finally:
-    print("Done")
-    session.close()  # Close the connection
+def seed():
+    try:
+        # create tables
+        db.create_all()
+
+        # there might be an issue with SQLAlcemy closing the connection in the middle of data seeding
+        # if all tables cannot be uploaded together, try loading tables separately
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+
+        # populating signature_individual table
+        sig_ind_file = os.path.join(dir_path, 'seedfiles/Signature_Individual.txt')
+        sig_ind_data = pd.read_csv(sig_ind_file, sep='\t')
+        sig_ind_data = pd.DataFrame(sig_ind_data, columns= [
+            'signature',
+            'outcome',
+            'model',
+            'study',
+            'Primary',
+            'Sequencing',
+            'N',
+            'Effect_size',
+            'SE',
+            '95CI_low',
+            '95CI_high',
+            'Pval'
+        ])
+        sig_ind_data = sig_ind_data.replace({np.nan: None})
+        Add_Records(sig_ind_data, 'signature_individual')
+
+        # populating signature_meta table
+        sig_meta_file = os.path.join(dir_path, 'seedfiles/Signature_Meta_analysis.txt')
+        sig_meta_data = pd.read_csv(sig_meta_file, sep='\t')
+        sig_meta_data = pd.DataFrame(sig_meta_data, columns= [
+            'signature',
+            'outcome',
+            'model',
+            'Subgroup',
+            'Type',
+            'N',
+            'Effect_size',
+            'SE',
+            '95CI_low',
+            '95CI_high',
+            'Pval',
+            'I2',
+            'Pval_I2'
+        ])
+        sig_meta_data = sig_meta_data.replace({np.nan: None})
+        Add_Records(sig_meta_data, 'signature_meta')
+        
+        # populating dataset table
+        dataset_file = os.path.join(dir_path, 'seedfiles/dataset.csv')
+        dataset_data = pd.read_csv(
+            dataset_file, quotechar=''', skipinitialspace=True)
+        Add_Records(dataset_data, 'dataset')
+        
+        # populating gene table
+        gene_file = os.path.join(dir_path, 'seedfiles/gene.csv')
+        gene_data = pd.read_csv(
+            gene_file, quotechar=''', skipinitialspace=True, keep_default_na=False)
+        Add_Records(gene_data, 'gene')
+        
+        # populating dataset_gene table
+        dataset_gene_file = os.path.join(dir_path, 'seedfiles/dataset_gene.csv')
+        dataset_gene_data = pd.read_csv(
+            dataset_gene_file, quotechar=''', skipinitialspace=True)
+        Add_Records(dataset_gene_data, 'dataset_gene')
+        
+        # populating patient table
+        patient_file = os.path.join(dir_path, 'seedfiles/patient.csv')
+        patient_data = pd.read_csv(
+            patient_file, quotechar=''', skipinitialspace=True, keep_default_na=False)
+        Add_Records(patient_data, 'patient')
+
+        db.session.commit()  # Attempt to commit all the records
+    except Exception as e:
+        print('Exception ', e)
+        print(traceback.format_exc())
+        # session.rollback()  # Rollback the changes on error
+    finally:
+        print('Done')
+        # session.close()  # Close the connection
