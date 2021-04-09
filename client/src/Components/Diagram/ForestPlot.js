@@ -106,14 +106,10 @@ const renderTooltip = (d) => (
   < div
 style = {
 {
-  fontSize:'12px', backgroundColor
-:
-  'rgba(242,255,223,0.95)', padding
-:
-  '2px 10px', color
-:
-  'rgb(7,28,44)', borderRadius
-:
+  fontSize:'12px', backgroundColor:
+  'rgba(242,255,223,0.95)', padding:
+  '2px 10px', color:
+  'rgb(7,28,44)', borderRadius:
   3
 }
 }>
@@ -249,9 +245,7 @@ const ForestPlot = () => {
     overlay = {renderTooltip(index)}
     delay = {
     {
-      show: 100, hide
-    :
-      200
+      show: 100, hide: 200
     }
   }
   >
