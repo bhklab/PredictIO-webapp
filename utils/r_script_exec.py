@@ -22,10 +22,12 @@ def execute_script(parameters):
         ",".join(parameters['sex']), 
         ",".join(parameters['primary']), 
         ",".join(parameters['drugType']), 
-        ",".join(parameters['dataType']), 
+        parameters['dataType'],
         ",".join(parameters['sequencingType']), 
         ",".join(parameters['gene'])
     ]
+
+    print(cmd)
 
     # variable to store results
     out = None

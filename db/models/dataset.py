@@ -1,17 +1,20 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Text
-from sqlalchemy.orm import relationship
-from .base import Base
+from utils.serializer import Serializer
+from ..db import db
 
 
-class Dataset(Base):
+class Dataset(db.Model, Serializer):
     __tablename__ = "dataset"
-    dataset_id = Column(Integer, primary_key=True, index=True, unique=True)
-    dataset_name = Column(String(32))
+    dataset_id = db.Column(db.Integer, primary_key=True, index=True, unique=True)
+    dataset_name = db.Column(db.String(32))
     # metadata
-    pmid = Column(Text)
-    title = Column(Text)
-    summary = Column(Text)
-    authors = Column(Text)
+    pmid = db.Column(db.Text)
+    title = db.Column(db.Text)
+    summary = db.Column(db.Text)
+    authors = db.Column(db.Text)
     # relationships to other tables
-    clinical_infos = relationship("Patient", backref="dataset")
-    dataset_genes = relationship("DatasetGene", backref="dataset")
+    clinical_infos = db.relationship("Patient", backref="dataset")
+    dataset_genes = db.relationship("DatasetGene", backref="dataset")
+
+    def serialize(self):
+        serialized = Serializer.serialize(self)
+        return serialized

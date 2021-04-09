@@ -2,8 +2,8 @@
 import math
 from flask import request
 from flask_restful import Resource
-from models.signature_individual import Individual
-from models.signature_meta import Meta
+from db.models.signature_individual import Individual
+from db.models.signature_meta import Meta
 
 class VolcanoPlot(Resource):
     '''

@@ -1,9 +1,13 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, ForeignKey
-from .base import Base
+from utils.serializer import Serializer
+from ..db import db
 
 
-class DatasetGene(Base):
+class DatasetGene(db.Model, Serializer):
     __tablename__ = "dataset_gene"
-    id = Column(Integer, primary_key=True, index=True, unique=True)
-    dataset_id = Column(Integer, ForeignKey("dataset.dataset_id"))
-    gene_id = Column(Integer, ForeignKey("gene.gene_id"))
+    id = db.Column(db.Integer, primary_key=True, index=True, unique=True)
+    dataset_id = db.Column(db.Integer, db.ForeignKey("dataset.dataset_id"))
+    gene_id = db.Column(db.Integer, db.ForeignKey("gene.gene_id"))
+
+    def serialize(self):
+        serialized = Serializer.serialize(self)
+        return serialized
