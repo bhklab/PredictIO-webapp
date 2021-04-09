@@ -61,7 +61,7 @@ const PlotHeader = styled.div`
 
 const ForestPlotContainer = (props) => {
 
-    const {parameters, forestPlotData} = props;
+    const {parameters, forestPlotData, getModalData} = props;
     const [plotData, setPlotdata] = useState({ready: false, individuals: [], meta: []});
     const [sort, setSort] = useState({value: 'effect_size', asc: true});
     const [tissueValue, setTissueValue] = useState('ALL');
@@ -76,6 +76,7 @@ const ForestPlotContainer = (props) => {
 
     useEffect(() => {
 
+        const getModalData = props
         let tmp = forestPlotData.data.meta.filter(item => item.subgroup === 'Tumor' && item.n >= 3);
         tmp = tmp.map(item => ({value: item.tissue_type, label: item.tissue_type})).sort((a, b) => (a.label.localeCompare(b.label)));
         tmp.unshift({value: 'ALL', label: 'All'});
@@ -198,7 +199,7 @@ const ForestPlotContainer = (props) => {
                             <div className='valueLine'>I2 Pval: <span className='value'>{Number(plotData.meta[0].pval_i2).toFixed(3)}</span></div>
                         </div>
                     </PlotHeader>
-                    <ForestPlot id='forestplot' individuals={plotData.individuals} meta={plotData.meta} />
+                    <ForestPlot id='forestplot' individuals={plotData.individuals} meta={plotData.meta} getModalData={getModalData}/>
                 </Container>
             }
         </div>

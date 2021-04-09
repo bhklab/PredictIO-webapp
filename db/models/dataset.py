@@ -16,5 +16,12 @@ class Dataset(db.Model, Serializer):
     dataset_genes = db.relationship("DatasetGene", backref="dataset")
 
     def serialize(self):
-        serialized = Serializer.serialize(self)
+        serialized = {
+            'dataset_id': self.dataset_id,
+            'dataset_name': self.dataset_name,
+            'pmid': self.pmid,
+            'title': self.title,
+            'summary': self.summary,
+            'authors': self.authors
+        }
         return serialized
