@@ -2,6 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Navigation from '../Navigation/Navigation';
 import Footer from '../Footer/Footer';
+import styled from 'styled-components';
+
+const Main = styled.main`
+    height: 100vh;
+    width: 85%;
+    max-width: 1500px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: column;
+`;
+
 /**
  * wrapper for every page
  */
@@ -10,9 +22,9 @@ const Layout = (props) => {
     return(
         <React.Fragment>
             <Navigation />
-            <main>
+            <Main>
                 {children}
-            </main>
+            </Main>
             <Footer />
         </React.Fragment>
     );

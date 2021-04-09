@@ -23,7 +23,7 @@ const PlotParameters = styled.div`
 
 const VolcanoPlotContainer = (props) => {
 
-    const { parameters, setParameters, volcanoPlotData, getForestPlotData } = props;
+    const { parameters, setParameters, volcanoPlotData, getForestPlotData, onthefly } = props;
 
     return(
         <Container>
@@ -31,7 +31,7 @@ const VolcanoPlotContainer = (props) => {
             <PlotParameters>
                 <div className='parameterLine'>Outcome: <span className='value'>{parameters.outcome}</span></div>
                 <div className='parameterLine'>Model: <span className='value'>{parameters.model}</span></div>
-                <div className='parameterLine'>Subgroup: <span className='value'>{parameters.subgroup}</span></div>
+                {!onthefly ? <div className='parameterLine'>Subgroup: <span className='value'>{parameters.subgroup}</span></div> : ''}
             </PlotParameters>
             <VolcanoPlot 
                 plotId='volcano-plot' 

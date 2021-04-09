@@ -4,8 +4,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // individual page components
 import {
   Home,
-  Predict,
-  Test
+  GeneSignatureRequest,
+  Test,
+  GeneSignatureResult
 } from './Components/index';
 
 // styled component
@@ -18,7 +19,8 @@ const App = () => {
         <Router>
           <Switch>
             <Route path='/' exact component={Home} />
-            <Route path='/predict' exact component={Predict} />
+            <Route path='/explore/signature/request' exact component={GeneSignatureRequest} />
+            <Route path='/explore/signature/result/:id' component={GeneSignatureResult} />
             <Route path='/test' exact component={Test} />
           </Switch>
         </Router>
