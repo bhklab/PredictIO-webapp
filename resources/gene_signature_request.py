@@ -1,5 +1,5 @@
 """
-Module for the IO Predict feature
+Module for the on the fly gene signature meta analysis feature
 """
 import sys
 import threading
@@ -14,7 +14,7 @@ from db.models.analysis_request import AnalysisRequest
 from datetime import datetime
 
 """
-IO Predict Route class.
+GeneSignatureReauest Route class.
 """
 class GeneSignatureRequest(Resource):
     def get(self):
