@@ -149,6 +149,7 @@ const GeneSignatureResult = () => {
                     }
                     </StyledPlotArea>
                 </PlotContainer>
+                <PlotContainer>
                 {
                     modalData.ready &&
                     <ModalContainer
@@ -156,6 +157,7 @@ const GeneSignatureResult = () => {
                         removeModalData = {removeModalData}
                     /> 
                 }
+                </PlotContainer>
             </ResultContainer>
         </Layout>
     );
