@@ -46,14 +46,17 @@ CORS(app)
 
 # initialize mail object 
 # comment this code out for Azure deployment
-# app.config['MAIL_SERVER'] = config('MAIL_SERVER_TEST')
-# app.config['MAIL_PORT'] = config('MAIL_PORT_TEST')
-# app.config['MAIL_USERNAME'] = config('MAIL_USERNAME_TEST')
-# app.config['MAIL_PASSWORD'] = config('MAIL_PASSWORD_TEST')
-# mail.init_app(app)
-# app.extensions['mail'].debug = 0
+app.config['MAIL_SERVER'] = config('MAIL_SERVER_TEST')
+app.config['MAIL_PORT'] = config('MAIL_PORT_TEST')
+app.config['MAIL_USERNAME'] = config('MAIL_USERNAME_TEST')
+app.config['MAIL_PASSWORD'] = config('MAIL_PASSWORD_TEST')
+mail.init_app(app)
+app.extensions['mail'].debug = 0
 
 api = Api(app)
+
+# register app domain name to the config object so that it can be accessed by the mailer.
+app.config['APP_DOMAIN'] = config('APP_DOMAIN')
 
 # routes
 api.add_resource(Test, '/api/test')
