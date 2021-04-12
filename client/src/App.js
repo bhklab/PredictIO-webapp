@@ -20,7 +20,7 @@ const App = () => {
           <Switch>
             <Route path='/' exact component={Home} />
             <Route path='/explore/signature/request' exact component={GeneSignatureRequest} />
-            <Route path='/explore/signature/result/:id' component={GeneSignatureResult} />
+            <Route path='/explore/signature/result/:id' exact component={GeneSignatureResult} />
             <Route path='/test' exact component={Test} />
           </Switch>
         </Router>
