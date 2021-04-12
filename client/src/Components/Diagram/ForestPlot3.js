@@ -17,6 +17,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   .tooltip {
+    width: 200px;
     position: absolute;
     font-size: 11px;
     background-color: rgba(242,255,223,0.8);
@@ -126,7 +127,7 @@ const ForestPlot = (props) => {
                 .append('div')
                 .attr('id', id)
                 .attr('class', 'tooltip')
-                .style('left', `${xScale(1) + 10}px`)
+                .style('left', `${xScale(max_high()) - 100}px`)
                 .style('top', `${yScale(key) - 30}px`);
             if(point.study){
                 tooltip.html(

@@ -11,6 +11,7 @@ import ResultInfo from './ResultInfo';
 import VolcanoPlotContainer from '../IOExplore/VolcanoPlotContainer';
 import ForestPlotContainer from '../IOExplore/ForestPlotContainer';
 import { PlotContainer, StyledPlotArea, LoaderContainer } from '../../styles/PlotStyles';
+import ModalContainer from "../IOExplore/ModalContainer";
 import colors from '../../styles/colors';
 
 const ResultContainer = styled.div`
@@ -36,6 +37,7 @@ const GeneSignatureResult = () => {
     const [reqInfo, setReqInfo] = useState();
     const [volcanoPlotData, setVolcanoPlotData] = useState({data: {}, ready: false});
     const [forestPlotData, setForestPlotData] = useState({data: {}, loading: false, ready: false});
+    const [modalData, setModalData] = useState({data: {}, ready: false});
 
     const getForestPlotData = async (params) => {
         setForestPlotData({data: {}, loading: true, ready: false}); // reset the data object so that the plot is redrawn.
@@ -44,6 +46,17 @@ const GeneSignatureResult = () => {
         console.log(res.data);
         setForestPlotData({data: res.data, loading: false, ready: true});
     }
+
+    const getModalData = async (params) => {
+        // setModalData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
+        const res = await axios.post('/api/explore/description_modal', params);
+        console.log(res.data)
+        setModalData({data: res.data, ready: true});
+    };
+
+    const removeModalData = () => {
+        setModalData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
+    };
 
     useEffect(() => {
         const getData = async () => {
@@ -120,7 +133,7 @@ const GeneSignatureResult = () => {
                     <StyledPlotArea width='60%'>
                     {
                         forestPlotData.ready ?
-                        <ForestPlotContainer parameters={parameters} forestPlotData={forestPlotData} />
+                        <ForestPlotContainer parameters={parameters} forestPlotData={forestPlotData} getModalData={getModalData} />
                         :
                         forestPlotData.loading ?
                             <LoaderContainer>
@@ -136,6 +149,13 @@ const GeneSignatureResult = () => {
                     }
                     </StyledPlotArea>
                 </PlotContainer>
+                {
+                    modalData.ready &&
+                    <ModalContainer
+                        modalData={modalData}
+                        removeModalData = {removeModalData}
+                    /> 
+                }
             </ResultContainer>
         </Layout>
     );

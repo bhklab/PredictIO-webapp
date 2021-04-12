@@ -76,7 +76,7 @@ const ForestPlotContainer = (props) => {
 
     useEffect(() => {
 
-        const getModalData = props
+        // const getModalData = props
         let tmp = forestPlotData.data.meta.filter(item => item.subgroup === 'Tumor' && item.n >= 3);
         tmp = tmp.map(item => ({value: item.tissue_type, label: item.tissue_type})).sort((a, b) => (a.label.localeCompare(b.label)));
         tmp.unshift({value: 'ALL', label: 'All'});
