@@ -1,7 +1,6 @@
 """
 Module for the on the fly gene signature meta analysis feature
 """
-import sys
 import threading
 import uuid
 import traceback
@@ -58,7 +57,7 @@ class GeneSignatureRequest(Resource):
                 'input_study': parameters['study']
             })
 
-            # TO DO: insert analysis request into database.
+            # Insert analysis request into database.
             db.session.add(analysis)
             db.session.commit()
 
