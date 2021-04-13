@@ -29,14 +29,14 @@ const StyledModal = styled.div`
   align-items: center;
   top: -25%;
   left: 0%;
-  padding: 10px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   border-radius: 10px;
   z-index: 9;
   //background: rgb(255, 255, 255);
-  background: rgba(88, 88, 88, 0.95);
+  background: rgba(96, 96, 96, 0.95);
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.3);
   position: absolute;
   align-content: center;
@@ -63,16 +63,21 @@ export const Modal = (props) => {
     return (
         <StyledModal>
             <div>
-                <h4>{dataset_name}</h4>
+                <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                    <h3>{dataset_name} Study</h3>
+                </div>
                 <div><h4>{title}</h4></div>
-                <div><Heading>Authors: </Heading> {authors}</div><br/>
-                <div><Heading>Summary: </Heading> {summary}</div><br/>
+                <div>{summary}</div><br/>
+                {/*<div><Heading>Authors: </Heading> {authors}</div><br/>*/}
+                {/*<div><Heading>Summary: </Heading> {summary}</div><br/>*/}
             </div>
             <br />
             <div style={{ display: 'flex', float: 'center', position:"absolute", right:"20px", bottom:"10px"}}>
+            {/*<div style={{ display: "flex", justifyContent: "center", alignItems: "center"}}>*/}
                 <div>
                     <StyledButton
                         style={{width: '90px', height: '34px', fontSize: '14px', marginLeft: '100px'}}
+                        // style={{width: '90px', height: '34px', fontSize: '14px'}}
                         as="a"
                         href={pmid}
                         target="_blank"
