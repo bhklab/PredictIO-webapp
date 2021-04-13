@@ -64,7 +64,7 @@ export const Modal = (props) => {
         <StyledModal>
             <div>
                 <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                    <h4>{dataset_name}</h4>
+                    <h3>{dataset_name} Study</h3>
                 </div>
                 <div><h4>{title}</h4></div>
                 <div>{summary}</div><br/>
