@@ -15,7 +15,7 @@ import ModalContainer from "../IOExplore/ModalContainer";
 import colors from '../../styles/colors';
 
 const ResultContainer = styled.div`
-    
+   
 `;
 
 const GeneSignatureResult = () => {
