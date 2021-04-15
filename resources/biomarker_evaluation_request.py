@@ -15,7 +15,7 @@ from datetime import datetime
 """
 GeneSignatureReauest Route class.
 """
-class GeneSignatureRequest(Resource):
+class BiomarkerEvaluationRequest(Resource):
     def get(self):
         return "Only post method is allowed", 400
     

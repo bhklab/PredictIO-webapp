@@ -12,11 +12,12 @@ import GeneSearch from './GeneSearch';
 
 // {value: 'B2M', label: 'B2M'}, {value: 'CD8A', label: 'CD8A'}, {value: 'GZMA', label: 'GZMA'}
 
-const StyledPredict = styled.div`
+const Container = styled.div`
     width: 50%;
+    height: calc(100vh + 50px);
 `;
 
-const Predict = (props) => {
+const BiomarkerEvaluationRequest = () => {
 
     const [parameters, setParameters] = useState({
         gene: [],
@@ -64,7 +65,7 @@ const Predict = (props) => {
                 dataType = 'CNA';
                 break;
         }
-        const res = await axios.post('/api/explore/signature/request', {
+        const res = await axios.post('/api/explore/biomarker/request', {
             ...parameters, 
             gene: parameters.gene.map(g => g.name),
             dataType: dataType 
@@ -216,8 +217,8 @@ const Predict = (props) => {
 
     return(
         <Layout>
-            <StyledPredict>
-                <h4>IOPredict</h4>
+            <Container>
+                <h4>Biomarker Evaluation</h4>
                 <StyledForm flexDirection='column'>
                     <div className='formField'>
                         <div className='label'>Search for Gene(s): </div>
@@ -322,9 +323,9 @@ const Predict = (props) => {
                         />
                     </div>
                 </StyledForm>
-            </StyledPredict>
+            </Container>
         </Layout>
     );
 }
 
-export default Predict;
+export default BiomarkerEvaluationRequest;

@@ -4,7 +4,7 @@ from flask_restful import Resource
 from db.models.analysis_request import AnalysisRequest
 from db.models.signature_user_requested import UserRequested
 
-class GeneSignatureResult(Resource):
+class BiomarkerEvaluationResult(Resource):
     def get(self, analysis_id):
         print(analysis_id)
         result = {}
@@ -30,7 +30,7 @@ class GeneSignatureResult(Resource):
     def post(self):
         return "Only get method is allowed", 400
 
-class GeneSignatureVolcanoPlot(Resource):
+class BiomarkerEvaluationVolcanoPlot(Resource):
     def get(self, analysis_id):
         volcano = UserRequested.query.filter(
             UserRequested.analysis_id == analysis_id,
@@ -48,7 +48,7 @@ class GeneSignatureVolcanoPlot(Resource):
     def post(self):
         return "Only get method is allowed", 400
 
-class GeneSignatureForestPlot(Resource):
+class BiomarkerEvaluationForestPlot(Resource):
     def get(self, analysis_id):
         result = {}
 

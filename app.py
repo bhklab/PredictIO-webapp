@@ -25,8 +25,8 @@ from resources.modal_data import DescriptionModal
 from resources.dropdown_explore import ExploreDropdownOption
 from resources.dropdown_clinical_data import ClinicalDataDropdown
 from resources.search_gene import SearchGene
-from resources.gene_signature_request import GeneSignatureRequest
-from resources.gene_signature_result import GeneSignatureResult, GeneSignatureVolcanoPlot, GeneSignatureForestPlot
+from resources.biomarker_evaluation_request import BiomarkerEvaluationRequest
+from resources.biomarker_evaluation_result import BiomarkerEvaluationResult, BiomarkerEvaluationVolcanoPlot, BiomarkerEvaluationForestPlot
 from resources.itnt_visualization import ITNTVisualization
 
 app = Flask(__name__,
@@ -67,10 +67,10 @@ api.add_resource(SearchGene, '/api/search_gene')
 
 api.add_resource(ForestPlot, '/api/explore/forest_plot')
 api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
-api.add_resource(GeneSignatureRequest, '/api/explore/signature/request')
-api.add_resource(GeneSignatureResult, '/api/explore/signature/result/<analysis_id>')
-api.add_resource(GeneSignatureVolcanoPlot, '/api/explore/signature/volcano_plot/<analysis_id>')
-api.add_resource(GeneSignatureForestPlot, '/api/explore/signature/forest_plot/<analysis_id>')
+api.add_resource(BiomarkerEvaluationRequest, '/api/explore/biomarker/request')
+api.add_resource(BiomarkerEvaluationResult, '/api/explore/biomarker/result/<analysis_id>')
+api.add_resource(BiomarkerEvaluationVolcanoPlot, '/api/explore/biomarker/result/volcano_plot/<analysis_id>')
+api.add_resource(BiomarkerEvaluationForestPlot, '/api/explore/biomarker/result/forest_plot/<analysis_id>')
 
 api.add_resource(DescriptionModal, '/api/explore/description_modal')
 api.add_resource(ITNTVisualization, '/api/explore/itnt_data')
