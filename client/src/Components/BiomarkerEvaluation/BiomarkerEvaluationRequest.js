@@ -1,7 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
+import Loader from 'react-loader-spinner';
 import axios from 'axios';
+import { Messages } from 'primereact/messages';
 
+import colors from '../../styles/colors';
 import Layout from '../UtilComponents/Layout';
 import StyledForm from '../UtilComponents/StyledForm';
 import ActionButton from '../UtilComponents/ActionButton';
@@ -13,11 +16,27 @@ import GeneSearch from './GeneSearch';
 // {value: 'B2M', label: 'B2M'}, {value: 'CD8A', label: 'CD8A'}, {value: 'GZMA', label: 'GZMA'}
 
 const Container = styled.div`
-    width: 50%;
+    width: 80%;
     height: calc(100vh + 50px);
 `;
 
+const StyledMessages = styled(Messages)`
+    .p-message {
+        font-size: 12px;
+        .p-message-icon {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .p-message-summary {
+            font-size: 14px;
+            font-weight: bold;
+            padding-right: 10px;
+        }
+    }
+`;
+
 const BiomarkerEvaluationRequest = () => {
+    const messages = useRef(null);
 
     const [parameters, setParameters] = useState({
         gene: [],
@@ -27,7 +46,8 @@ const BiomarkerEvaluationRequest = () => {
         drugType: [],
         sequencingType: [],
         study: [],
-        email: ''
+        email: '',
+        submitting: false
     });
 
     const [dataTypeOptions, setDataTypeOptions] = useState({options: [], disabled: true});
@@ -47,11 +67,14 @@ const BiomarkerEvaluationRequest = () => {
             parameters.dataType.length === 0 ||
             parameters.sequencingType.length === 0 ||
             parameters.email.length === 0 ||
-            !regex.test(parameters.email)
+            !regex.test(parameters.email) ||
+            parameters.submitting
         )
     }
 
-    const submitRequest = async () => {
+    const submitRequest = async (e) => {
+        e.preventDefault();
+        setParameters({...parameters, submitting: true});
         console.log(parameters);
         let dataType = '';
         switch(parameters.dataType){
@@ -68,9 +91,29 @@ const BiomarkerEvaluationRequest = () => {
         const res = await axios.post('/api/explore/biomarker/request', {
             ...parameters, 
             gene: parameters.gene.map(g => g.name),
-            dataType: dataType 
+            dataType: dataType
         });
         console.log(res.data);
+        setParameters({...parameters, submitting: false});
+        if(res.data.error){
+            messages.current.show([
+                { 
+                    severity: 'error', 
+                    summary: 'Unable to submit request', 
+                    detail: 'Please try again, or contact support@predictio.ca.', 
+                    sticky: true 
+                }
+            ]);
+        }else{
+            messages.current.show([
+                { 
+                    severity: 'success', 
+                    summary: 'Request has been submitted', 
+                    detail: 'You will receive an email notification once your request is processed.', 
+                    sticky: true 
+                }
+            ]);
+        }
     }
 
     const getDropdownOptions = async (dropdownName, paramStr) => {
@@ -219,6 +262,7 @@ const BiomarkerEvaluationRequest = () => {
         <Layout>
             <Container>
                 <h4>Biomarker Evaluation</h4>
+                <StyledMessages ref={messages} />
                 <StyledForm flexDirection='column'>
                     <div className='formField'>
                         <div className='label'>Search for Gene(s): </div>
@@ -315,12 +359,23 @@ const BiomarkerEvaluationRequest = () => {
                         />
                     </div>
                     <div className='formField buttonField'>
-                        <ActionButton 
-                            onClick={(e) => {submitRequest()}} 
-                            text='Submit' 
-                            style={{width: '90px', height: '34px', fontSize: '14px'}} 
-                            disabled={disableSubmit()}
+                        <ActionButton
+                            onClick={(e) => {setParameters({...parameters, gene: [], email: ''})}}
+                            text='Reset'
+                            type='reset'
+                            style={{width: '90px', height: '34px', fontSize: '14px', marginRight: '10px'}}
                         />
+                        {
+                            parameters.submitting ?
+                            <Loader type="Oval" color={colors.blue} height={35} width={35}/>
+                            :
+                            <ActionButton 
+                                onClick={submitRequest} 
+                                text='Submit' 
+                                style={{width: '90px', height: '34px', fontSize: '14px'}} 
+                                disabled={disableSubmit()}
+                            />
+                        }
                     </div>
                 </StyledForm>
             </Container>
