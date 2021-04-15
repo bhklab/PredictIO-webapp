@@ -15,7 +15,7 @@ def send_mail(output):
         Your requested analysis is ready and available at:<br />\
         <a href={0}{1}{2}>{0}{1}{2}</a>\
     </div>'''\
-    .format(current_app.config['APP_DOMAIN'], '/explore/signature/result/', output['analysis_id'][0])
+    .format(current_app.config['APP_DOMAIN'], '/explore/biomarker/result/', output['analysis_id'][0])
 
     footer = '''<div style='font-size:12px;'>\
         Thank you for using IO.db, powered by <a href=https://www.pmgenomics.ca/bhklab/>BHK Lab</a>.\

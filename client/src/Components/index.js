@@ -1,15 +1,15 @@
 import Home from './Home/Home';
 import Explore from './IOExplore/Explore';
-import GeneSignatureRequest from './GeneSignature/GeneSignatureRequest';
-import GeneSignatureResult from './GeneSignature/GeneSignatureResult';
+import BiomarkerEvaluationRequest from './BiomarkerEvaluation/BiomarkerEvaluationRequest';
+import BiomarkerEvaluationResult from './BiomarkerEvaluation/BiomarkerEvaluationResult';
 import ForestPlot from "./Diagram/ForestPlot";
 import Test from './Test/Test';
 
 export {
   Home,
   Explore,
-  GeneSignatureRequest,
-  GeneSignatureResult,
+  BiomarkerEvaluationRequest,
+  BiomarkerEvaluationResult,
   ForestPlot,
   Test
 };

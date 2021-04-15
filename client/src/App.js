@@ -4,9 +4,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // individual page components
 import {
   Home,
-  GeneSignatureRequest,
+  BiomarkerEvaluationRequest,
+  BiomarkerEvaluationResult,
   Test,
-  GeneSignatureResult
 } from './Components/index';
 
 // styled component
@@ -19,8 +19,8 @@ const App = () => {
         <Router>
           <Switch>
             <Route path='/' exact component={Home} />
-            <Route path='/explore/signature/request' exact component={GeneSignatureRequest} />
-            <Route path='/explore/signature/result/:id' exact component={GeneSignatureResult} />
+            <Route path='/explore/biomarker/request' exact component={BiomarkerEvaluationRequest} />
+            <Route path='/explore/biomarker/result/:id' exact component={BiomarkerEvaluationResult} />
             <Route path='/test' exact component={Test} />
           </Switch>
         </Router>

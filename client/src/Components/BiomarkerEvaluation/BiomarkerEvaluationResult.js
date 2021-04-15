@@ -18,7 +18,7 @@ const ResultContainer = styled.div`
    
 `;
 
-const GeneSignatureResult = () => {
+const BiomarkerEvaluationResult = () => {
 
     let { id } = useParams();
     const [parameters, setParameters] = useState({
@@ -42,7 +42,7 @@ const GeneSignatureResult = () => {
     const getForestPlotData = async (params) => {
         setForestPlotData({data: {}, loading: true, ready: false}); // reset the data object so that the plot is redrawn.
         setParameters(params);
-        const res = await axios.get(`/api/explore/signature/forest_plot/${id}?model=${params.model}&outcome=${params.outcome}`);
+        const res = await axios.get(`/api/explore/biomarker/result/forest_plot/${id}?model=${params.model}&outcome=${params.outcome}`);
         console.log(res.data);
         setForestPlotData({data: res.data, loading: false, ready: true});
     }
@@ -61,7 +61,7 @@ const GeneSignatureResult = () => {
     useEffect(() => {
         const getData = async () => {
             console.log(id);
-            const res = await axios.get(`/api/explore/signature/result/${id}`);
+            const res = await axios.get(`/api/explore/biomarker/result/${id}`);
             console.log(res.data);
             
             // let outcome = [...new Set(res.data.result.map(item => item.outcome))];
@@ -87,7 +87,7 @@ const GeneSignatureResult = () => {
     return(
         <Layout>
             <ResultContainer>
-                <h3>Gene Signature Analysis Result</h3>
+                <h3>Biomarker Evaluation Result</h3>
                 {
                     typeof reqInfo !== 'undefined' && <ResultInfo reqInfo={reqInfo} />
                 }
@@ -163,4 +163,4 @@ const GeneSignatureResult = () => {
     );
 }
 
-export default GeneSignatureResult;
+export default BiomarkerEvaluationResult;
