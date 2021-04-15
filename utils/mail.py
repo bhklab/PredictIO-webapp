@@ -6,7 +6,7 @@ from flask import current_app
 
 mail = Mail()
 
-def send_mail(output):
+def send_mail(email, output):
     """sends email"""
 
     header = "Your analysis is ready"
@@ -18,7 +18,7 @@ def send_mail(output):
     .format(current_app.config['APP_DOMAIN'], '/explore/biomarker/result/', output['analysis_id'][0])
 
     footer = '''<div style='font-size:12px;'>\
-        Thank you for using IO.db, powered by <a href=https://www.pmgenomics.ca/bhklab/>BHK Lab</a>.\
+        Thank you for using PredictIO, powered by <a href=https://www.pmgenomics.ca/bhklab/>BHK Lab</a>.\
         </div>'''
 
     if(output["error"][0]):
@@ -26,12 +26,12 @@ def send_mail(output):
 
         content = '''<div style='font-size:14px;'>\
             Error occurred during your analysis.<br />\
-            Please contact <b>support@iodb.ca</b> by citing your analysis ID: {0}\
+            Please contact <b>support@PredictIO.ca</b> by citing your analysis ID: {0}\
             </div>'''.format(output['analysis_id'][0]) 
 
     body = "<div style='font-family:arial;'>{0}<br /><br />{1}</div>".format(content, footer)
 
-    msg = Message("[IO.db] " + header, sender='no-reply@iodb.ca', recipients=['user@email.com'])
+    msg = Message("[PredictIO] " + header, sender='PredictIO@PredictIO.ca', recipients=[email])
     msg.html = body
 
     print('sending email')
