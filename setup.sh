@@ -72,26 +72,26 @@ sudo apt-get install -y nginx
 sudo rm /etc/nginx/sites-enabled/default
 
 # create iodb.nginx file under /etc/nginx/sites-available directory, and add the following:
-    # server {
-    #     listen 80;
-    #     root /home/ubuntu/IOdb/client/build; # Sets the root directory to React's build file.
-    #     index index.html; # The index file in the build directory.
+    server {
+        listen 80;
+        root /home/ubuntu/IOdb/client/build; # Sets the root directory to React's build file.
+        index index.html; # The index file in the build directory.
 
-    #     location / {
-    #         try_files $uri $uri/ =404;
-    #         add_header Cache-Control "no-cache"; # caching directives
-    #     }
+        location / {
+            try_files $uri $uri/ =404;
+            add_header Cache-Control "no-cache"; # caching directives
+        }
 
-    #     location /static {
-    #         expires 1y;
-    #         add_header Cache-Control "public"; # caching directives
-    #     }
+        location /static {
+            expires 1y;
+            add_header Cache-Control "public"; # caching directives
+        }
 
-    #     location /api { # reverse proxy for the API service - all the URLs that begin with /api follows this proxy 
-    #     	include proxy_params;
-    #     	proxy_pass http://localhost:5000;
-    #     }
-    # }
+        location /api { # reverse proxy for the API service - all the URLs that begin with /api follows this proxy 
+        	include proxy_params;
+        	proxy_pass http://localhost:5000;
+        }
+    }
 
 # Reload nginx so the changes take effect
 sudo systemctl reload nginx
@@ -127,3 +127,54 @@ sudo systemctl status iodb # you should see "Active: active (running)" you can f
 
 # 10. Set firewall with Uncomplicated Firewall (ufw) to allow only ssh, http and https connections to the server.
 sudo ufw allow ssh http https
+
+# 11. Get a domain name and register it with the IP address
+# Reference: Option #3 of this tutorial: https://www.namecheap.com/support/knowledgebase/article.aspx/9837/46/how-to-connect-a-domain-to-a-server-or-hosting/
+
+# 12. Turn on https
+    # 1. Create SSL certificates with certbot
+    # Reference: https://dev.to/ope/securing-your-azure-web-app-with-let-s-encrypt-4g99 (up to the point where you add the certificate to app service)
+
+    # 2. Upload fullchain.pem and privkey.pem to the server using scp as done in Step 4.
+    # Currently the .pem files are uploaded to /home/ubuntu/certs directory.
+
+    # 3. Disallow http connection to the server
+    sudo ufw delete allow http
+
+    # 4. Change the nginx config as follows (Reference: https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https):
+    server {
+        server_name predictio.ca www.predictio.ca; # Domain name set as server name
+        listen 443 ssl; # Port changed to 443
+        root /home/ubuntu/IOdb/client/build; # Sets the root directory to React's build file.
+        index index.html; # The index file in the build directory.
+        
+        # Location of the certificate files.
+        ssl_certificate /home/ubuntu/certs/fullchain1.pem;
+        ssl_certificate_key /home/ubuntu/certs/privkey1.pem;
+
+        location / {
+            try_files $uri /index.html;
+        add_header Cache-Control "no-cache"; # caching directives
+        }
+
+        location /static {
+            expires 1y;
+        add_header Cache-Control "public"; # caching directives
+        }
+
+        location /api { # reverse proxy for the API service - all the URLs that begin with /api follows this proxy 
+            include proxy_params;
+            proxy_pass http://localhost:5000;
+        }
+    }
+
+    # Add another server block to redirect http connections to https
+    server {
+        listen 80;
+        server_name predictio.ca www.predictio.ca;
+        location / {
+            return 301 https://$host$request_uri;
+        }
+    }
+
+

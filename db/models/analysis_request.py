@@ -21,8 +21,8 @@ class AnalysisRequest(db.Model, Serializer):
     def serialize(self):
         serialized = {
             'analysis_id': self.analysis_id,
-            'time_submitted': self.time_submitted.strftime('%Y-%M-%d, %H:%M:%S'),
-            'time_completed': self.time_completed.strftime('%Y-%M-%d, %H:%M:%S'),
+            'time_submitted': self.time_submitted.strftime('%Y-%m-%d, %H:%M:%S'),
+            'time_completed': self.time_completed.strftime('%Y-%m-%d, %H:%M:%S'),
             'input_genes': self.input_genes.split(','),
             'input_datatype': self.input_datatype,
             'input_sex': self.input_sex.split(','),
