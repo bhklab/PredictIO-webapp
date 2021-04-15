@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {StyledNavigation, NavigationContent, LogoContainer, StyledLinks} from '../../styles/NavigationStyles';
+import {StyledNavigation, NavigationContent, LogoContainer, StyledLinks} from './NavigationStyles';
 
 /**
  * Component for the navigation with links and logo.
@@ -14,7 +14,7 @@ const Navigation = () => {
         <StyledNavigation>
             <NavigationContent>
                 <LogoContainer>
-                    <img alt='IO.db' src='./images/logos/IOdb-logo-white.png'/>
+                    <img alt='IO.db' src='./images/logos/logo-white.png'/>
                 </LogoContainer>
                 <StyledLinks>
                     <Link to='/'>Home</Link>

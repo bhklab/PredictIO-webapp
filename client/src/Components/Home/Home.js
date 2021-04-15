@@ -65,7 +65,7 @@ const Home = () => {
                 displayHome ?
                 <HomeContainer>
                     <HomeLogo>
-                        <img alt='IO.db' src='./images/logos/IOdb-logo-main.png' />
+                        <img alt='IO.db' src='./images/logos/logo-main.png' />
                     </HomeLogo>
                     <AppDescription>
                         Investigate predictive and prognostic values of your gene.
