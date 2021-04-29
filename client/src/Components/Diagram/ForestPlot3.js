@@ -244,7 +244,7 @@ const ForestPlot = (props) => {
                 .attr('y', yScale(index))
                 .attr('font-size', initial.fontSize)
                 .attr('fill', "#444444")
-                .text(`${dataset[key].study}(${dataset[key].primary_tissue}, ${dataset[key].sequencing})`);
+                .text(`${dataset[key].study} (${dataset[key].primary_tissue}, ${dataset[key].sequencing})`);
 
             let line = datapoint.append('line')
                 .attr('id', "interval-" + index)
