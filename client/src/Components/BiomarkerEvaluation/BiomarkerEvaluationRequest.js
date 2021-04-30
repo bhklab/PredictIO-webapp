@@ -127,24 +127,43 @@ const BiomarkerEvaluationRequest = () => {
                 setDataTypeOptions({options: res.data, disabled: false});
                 break;
             case 'sex':
-                setSexOptions({options: res.data, disabled: false});
+                setSexOptions({options: res.data.sex, disabled: false});
+                setPrimaryOptions({options: res.data.primary, disabled: false});
+                setDrugTypeOptions({options: res.data.drugtype, disabled: false});
+                setSequencingOptions({options: res.data.sequencing, disabled: false});
+                setStudyOptions({options: res.data.study, disabled: false});
+                setParameters({
+                    ...parameters, 
+                    sex: res.data.sex.map(item => item.value),
+                    primary: res.data.primary.map(item => item.value),
+                    drugType: res.data.drugtype.map(item => item.value),
+                    sequencingType: res.data.sequencing.map(item => item.value),
+                    study: res.data.study.map(item => item.value)
+                });
                 break;
             case 'primary':
-                setPrimaryOptions({options: res.data, disabled: false});
+                setPrimaryOptions({options: res.data.primary, disabled: false});
+                setDrugTypeOptions({options: res.data.drugtype, disabled: false});
+                setSequencingOptions({options: res.data.sequencing, disabled: false});
+                setStudyOptions({options: res.data.study, disabled: false});
                 break;
             case 'drugtype':
-                setDrugTypeOptions({options: res.data, disabled: false});
+                setDrugTypeOptions({options: res.data.drugtype, disabled: false});
+                setSequencingOptions({options: res.data.sequencing, disabled: false});
+                setStudyOptions({options: res.data.study, disabled: false});
                 break;
             case 'sequencing':
-                setSequencingOptions({options: res.data, disabled: false});
+                setSequencingOptions({options: res.data.sequencing, disabled: false});
+                setStudyOptions({options: res.data.study, disabled: false});
                 break;
             case 'study':
-                setStudyOptions({options: res.data, disabled: false});
-                setParameters({...parameters, study: res.data.map(item => item.value)});
+                setStudyOptions({options: res.data.study, disabled: false});
                 break;
             default:
                 break;
         }
+
+        return res.data;
     }
 
     const buildQueryStr = (paramList, paramName) => {
@@ -185,14 +204,13 @@ const BiomarkerEvaluationRequest = () => {
             // build query parameter string
             let paramStr = buildQueryStr(parameters.gene.map(g => g.value), 'gene');
             paramStr = paramStr.concat(`&datatype=${parameters.dataType}`);
-            // get available data type options and enable the dropdown
+            // get available data type options and enable downstream dropdowns
             getDropdownOptions('sex', paramStr);
         }
     }, [parameters.dataType]);
 
-    useEffect(() => {
-        // reset parameters and disable dropdowns
-        setParameters({...parameters, primary: [], drugType: [], sequencingType: [], study: []});
+    const getDownstreamSex = async (sex) => {
+        // reset downstream dropdowns
         setPrimaryOptions({options: [], disabled: true});
         setDrugTypeOptions({options: [], disabled: true});
         setSequencingOptions({options: [], disabled: true});
@@ -201,15 +219,24 @@ const BiomarkerEvaluationRequest = () => {
             // build query parameter string
             let paramStr = buildQueryStr(parameters.gene.map(g => g.value), 'gene');
             paramStr = paramStr.concat(`&datatype=${parameters.dataType}`);
-            paramStr = paramStr.concat(`&${buildQueryStr(parameters.sex, 'sex')}`);
-            // get available data type options and enable the dropdown
-            getDropdownOptions('primary', paramStr);
+            paramStr = paramStr.concat(`&${buildQueryStr(sex, 'sex')}`);
+            // get available options and enable downstream dropdowns
+            let options = await getDropdownOptions('primary', paramStr);
+            setParameters({
+                ...parameters,
+                sex: sex, 
+                primary: options.primary.map(item => item.value),
+                drugType: options.drugtype.map(item => item.value),
+                sequencingType: options.sequencing.map(item => item.value),
+                study: options.study.map(item => item.value)
+            });
+        }else{
+            setParameters({...parameters, primary: [], drugType: [], sequencingType: [], study: []});
         }
-    }, [parameters.sex]);
+    };
 
-    useEffect(() => {
-        // reset parameters and disable dropdowns
-        setParameters({...parameters, drugType: [], sequencingType: [], study: []});
+    const getDownStreamPrimary = async (primary) => {
+        // reset downstream dropdowns
         setDrugTypeOptions({options: [], disabled: true});
         setSequencingOptions({options: [], disabled: true});
         setStudyOptions({options: [], disabled: true});
@@ -218,16 +245,24 @@ const BiomarkerEvaluationRequest = () => {
             let paramStr = buildQueryStr(parameters.gene.map(g => g.value), 'gene');
             paramStr = paramStr.concat(`&datatype=${parameters.dataType}`);
             paramStr = paramStr.concat(`&${buildQueryStr(parameters.sex, 'sex')}`);
-            paramStr = paramStr.concat(`&${buildQueryStr(parameters.primary, 'primary')}`);
-            // get available data type options and enable the dropdown
-            getDropdownOptions('drugtype', paramStr);
+            paramStr = paramStr.concat(`&${buildQueryStr(primary, 'primary')}`);
+            // get available options and enable downstream dropdowns
+            let options = await getDropdownOptions('drugtype', paramStr);
+            setParameters({
+                ...parameters,
+                primary: primary,
+                drugType: options.drugtype.map(item => item.value),
+                sequencingType: options.sequencing.map(item => item.value),
+                study: options.study.map(item => item.value)
+            });
+        }else{
+            setParameters({...parameters, drugType: [], sequencingType: [], study: []});
         }
-    }, [parameters.primary]);
+    };
 
-    useEffect(() => {
+    const getDownstreamDrugType = async (drugType) => {
         if(parameters.drugType.length > 0){
-            // reset parameters and disable dropdowns
-            setParameters({...parameters, sequencingType: [], study: []});
+            // reset downstream dropdowns
             setSequencingOptions({options: [], disabled: true});
             setStudyOptions({options: [], disabled: true});
             // build query parameter string
@@ -235,15 +270,22 @@ const BiomarkerEvaluationRequest = () => {
             paramStr = paramStr.concat(`&datatype=${parameters.dataType}`);
             paramStr = paramStr.concat(`&${buildQueryStr(parameters.sex, 'sex')}`);
             paramStr = paramStr.concat(`&${buildQueryStr(parameters.primary, 'primary')}`);
-            paramStr = paramStr.concat(`&${buildQueryStr(parameters.drugType, 'drugtype')}`);
-            // get available data type options and enable the dropdown
-            getDropdownOptions('sequencing', paramStr);
+            paramStr = paramStr.concat(`&${buildQueryStr(drugType, 'drugtype')}`);
+            // get available options and enable downstream dropdowns
+            let options = await getDropdownOptions('sequencing', paramStr);
+            setParameters({
+                ...parameters,
+                drugType: drugType,
+                sequencingType: options.sequencing.map(item => item.value),
+                study: options.study.map(item => item.value)
+            });
+        }else{
+            setParameters({...parameters, sequencingType: [], study: []});
         }
-    }, [parameters.drugType]);
+    };
 
-    useEffect(() => {
-        // reset parameters and disable dropdowns
-        setParameters({...parameters, study: []});
+    const getDownstreamSequencing = async (sequencingType) => {
+        // reset downstream dropdowns
         setStudyOptions({options: [], disabled: true});
         if(parameters.sequencingType.length > 0){
             // build query parameter string
@@ -252,11 +294,18 @@ const BiomarkerEvaluationRequest = () => {
             paramStr = paramStr.concat(`&${buildQueryStr(parameters.sex, 'sex')}`);
             paramStr = paramStr.concat(`&${buildQueryStr(parameters.primary, 'primary')}`);
             paramStr = paramStr.concat(`&${buildQueryStr(parameters.drugType, 'drugtype')}`);
-            paramStr = paramStr.concat(`&${buildQueryStr(parameters.sequencingType, 'sequencing')}`);
-            // get available data type options and enable the dropdown
-            getDropdownOptions('study', paramStr);
+            paramStr = paramStr.concat(`&${buildQueryStr(sequencingType, 'sequencing')}`);
+            // get available options and enable downstream dropdowns
+            let options = await getDropdownOptions('study', paramStr);
+            setParameters({
+                ...parameters,
+                sequencingType: sequencingType,
+                study: options.study.map(item => item.value)
+            });
+        }else{
+            setParameters({...parameters, study: []});
         }
-    }, [parameters.sequencingType]);
+    };
 
     return(
         <Layout>
@@ -291,7 +340,7 @@ const BiomarkerEvaluationRequest = () => {
                             className='input'
                             value={parameters.sex}
                             options={sexOptions.options} 
-                            onChange={(e) => {setParameters({...parameters, sex: e.value})}} 
+                            onChange={(e) => {getDownstreamSex(e.value)}} 
                             filter={true}
                             checkbox={true}
                             placeholder='Select...'
@@ -304,7 +353,7 @@ const BiomarkerEvaluationRequest = () => {
                             className='input'
                             value={parameters.primary}
                             options={primaryOptions.options} 
-                            onChange={(e) => {setParameters({...parameters, primary: e.value})}} 
+                            onChange={(e) => {getDownStreamPrimary(e.value)}} 
                             filter={true}
                             checkbox={true}
                             placeholder='Select...'
@@ -317,7 +366,7 @@ const BiomarkerEvaluationRequest = () => {
                             className='input'
                             value={parameters.drugType}
                             options={drugTypeOptions.options} 
-                            onChange={(e) => {setParameters({...parameters, drugType: e.value})}} 
+                            onChange={(e) => {getDownstreamDrugType(e.value)}} 
                             filter={true}
                             checkbox={true}
                             placeholder='Select...'
@@ -330,7 +379,7 @@ const BiomarkerEvaluationRequest = () => {
                             className='input'
                             value={parameters.sequencingType}
                             options={sequencingOptions.options} 
-                            onChange={(e) => {setParameters({...parameters, sequencingType: e.value})}} 
+                            onChange={(e) => {getDownstreamSequencing(e.value)}} 
                             filter={true}
                             checkbox={true}
                             placeholder='Select...'

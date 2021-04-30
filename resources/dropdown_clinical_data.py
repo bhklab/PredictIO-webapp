@@ -7,49 +7,24 @@ from db.models.dataset import Dataset
 
 class ClinicalDataDropdown(Resource):
     def get(self, dropdown_type):
-
         result = {}
         status = 200
 
+        query = {
+            'genes': request.args.getlist('gene'),
+            'datatype': request.args.get('datatype'),
+            'sex': request.args.getlist('sex'),
+            'primary': request.args.getlist('primary'),
+            'drugtype': request.args.getlist('drugtype'),
+            'sequencing': request.args.getlist('sequencing')
+        }
+        print(query)
         try:
             if(dropdown_type == 'datatype'):
                 genes = request.args.getlist('gene')
                 result = get_available_datatype(genes)
-            elif(dropdown_type == 'sex'):
-                genes = request.args.getlist('gene')
-                datatype = request.args.get('datatype')
-                result = get_available_sex(genes, datatype)
-            elif(dropdown_type == 'primary'):
-                genes = request.args.getlist('gene')
-                datatype = request.args.get('datatype')
-                sex = request.args.getlist('sex')
-                result = get_available_primary_tissue(genes, datatype, sex)
-            elif(dropdown_type == 'drugtype'):
-                genes = request.args.getlist('gene')
-                datatype = request.args.get('datatype')
-                sex = request.args.getlist('sex')
-                primary = request.args.getlist('primary')
-                result = get_available_drugtype(genes, datatype, sex, primary)
-            elif(dropdown_type == 'sequencing'):
-                genes = request.args.getlist('gene')
-                datatype = request.args.get('datatype')
-                sex = request.args.getlist('sex')
-                primary = request.args.getlist('primary')
-                drugtype = request.args.getlist('drugtype')
-                result = get_available_sequencing_type(genes, datatype, sex, primary, drugtype)
-            elif(dropdown_type == 'study'):
-                genes = request.args.getlist('gene')
-                datatype = request.args.get('datatype')
-                sex = request.args.getlist('sex')
-                primary = request.args.getlist('primary')
-                drugtype = request.args.getlist('drugtype')
-                sequencing = request.args.getlist('sequencing')
-                result = get_available_datasets(genes, datatype, sex, primary, drugtype, sequencing)
             else:
-                result = {}
-
-            result = sorted(result, key=lambda k: k["label"])
-            
+                result = get_downstream_dropdowns(query)
         except Exception as e:
             print('Exception ', e)
             print(traceback.format_exc())
@@ -59,158 +34,94 @@ class ClinicalDataDropdown(Resource):
             return result, status
     
     def post(self): 
-
         return  'Only post method is allowed', 400
 
 def get_available_datatype(genes):
-    datatype = {"disableExp": True, "disableCNA": True, "disableSNV": True}
-
     # get joined database table to extract data from
     patient_list = DatasetGene.query\
+        .join(Patient, DatasetGene.dataset_id == Patient.dataset_id)\
+        .add_columns(Patient.expression, Patient.cna, Patient.snv)
+    filtered = filter_by_genes(patient_list, genes)
+    filtered = filtered.all()
+
+    dropdown = [
+        {"label": "Expression", "value": "expression", "disabled": not any(item.expression == 1 for item in filtered)},
+        {"label": "CNA", "value": "cna", "disabled": not any(item.cna == 1 for item in filtered)},
+        {"label": "SNV", "value": "snv", "disabled": not any(item.snv == 1 for item in filtered)}
+    ]
+
+    return sorted(dropdown, key=lambda k: k["label"])
+
+def get_downstream_dropdowns(query):
+    # get joined database table to extract data from
+    patient_list = get_joined_clinical_table()
+    
+    # perform filtering by selected genes and datatype
+    filtered = filter_by_genes(patient_list, query['genes'])
+    filtered = filter_by_datatype(filtered, query['datatype'])
+
+    if(len(query['sex']) > 0):
+        filtered = filter_by_sex(filtered, query['sex'])
+    if(len(query['datatype']) > 0):
+        filtered = filter_by_datatype(filtered, query['datatype'])
+    if(len(query['primary']) > 0):
+        filtered = filter_by_primary(filtered, query['primary'])
+    if(len(query['drugtype']) > 0):
+        filtered = filter_by_drugtype(filtered, query['drugtype'])
+    if(len(query['sequencing']) > 0):
+        filtered = filter_by_sequencing(filtered, query['sequencing'], query['datatype'])
+    
+    filtered = filtered.all()
+
+    # sex dropdown
+    sex = set([p.sex for p in filtered if len(p.sex) > 0])
+    sex = list(map((lambda item: {'label': 'Female' if item == 'F' else 'Male', 'value': item}), sex))
+    
+    # primary dropdown
+    tissues = set([p.primary_tissue for p in filtered if len(p.primary_tissue) > 0 and p.primary_tissue != 'Unknown' and p.primary_tissue != 'Other'])
+    tissues = list(map((lambda item: {'label': item, 'value': item}), tissues))
+    
+    # drugtype dropdown
+    drugtypes = set([p.drug_type for p in filtered if len(p.drug_type) > 0])
+    drugtypes = list(map((lambda item: {'label': item, 'value': item}), drugtypes))
+    
+    # sequencing dropdown
+    sequencing = []
+    if(query['datatype'] == 'expression'):
+        sequencing = set([p.rna for p in filtered if len(p.rna) > 0])
+    else:
+        sequencing = set([p.dna for p in filtered if len(p.dna) > 0])
+    sequencing = list(map((lambda item: {'label': item.upper(), 'value': item.upper()}), sequencing))
+    
+    # dataset dropdown
+    dataset = set([p.dataset_name for p in filtered])
+    dataset = list(map((lambda item: {'label': item, 'value': item}), dataset))
+
+    return(
+        {
+            "sex": sorted(sex, key=lambda k: k["label"]),
+            "primary": sorted(tissues, key=lambda k: k["label"]),
+            "drugtype": sorted(drugtypes, key=lambda k: k["label"]),
+            "sequencing": sorted(sequencing, key=lambda k: k["label"]),
+            "study": sorted(dataset, key=lambda k: k["label"])
+        }
+    )
+
+def get_joined_clinical_table():
+    # get joined database table to extract data from
+    join_table = DatasetGene.query\
+        .join(Dataset, DatasetGene.dataset_id == Dataset.dataset_id)\
         .join(Patient, DatasetGene.dataset_id == Patient.dataset_id)\
         .add_columns(
-            Patient.expression.label("expression"), 
-            Patient.cna.label("cna"), 
-            Patient.snv.label("snv"))
-
-    filtered = filter_by_genes(patient_list, genes)
-
-    for patient in filtered.all():
-            if patient.expression == 1:
-                datatype["disableExp"] = False
-            if patient.cna == 1:
-                datatype["disableCNA"] = False
-            if patient.snv == 1:
-                datatype["disableSNV"] = False
-            
-            if(not datatype["disableExp"] and not datatype["disableCNA"] and not datatype["disableSNV"]):
-                break
-
-    result = [
-        {"label": "Expression", "value": "expression", "disabled": datatype["disableExp"]},
-        {"label": "CNA", "value": "cna", "disabled": datatype["disableCNA"]},
-        {"label": "SNV", "value": "snv", "disabled": datatype["disableSNV"]}
-    ]
-
-    return result
-
-def get_available_sex(genes, datatype):
-    sex = {"disableMale": True, "disableFemale": True}
-
-    # get joined database table to extract data from
-    patient_list = DatasetGene.query\
-        .join(Patient, DatasetGene.dataset_id == Patient.dataset_id)\
-        .add_columns(Patient.sex.label("sex"))
-
-    # perform filtering
-    filtered = filter_by_genes(patient_list, genes)
-    filtered = filter_by_datatype(filtered, datatype)
+            Patient.sex,
+            Patient.primary_tissue,
+            Patient.drug_type,
+            Patient.rna,
+            Patient.dna,
+            Dataset.dataset_name
+        )
     
-    # enable each dropdown option if it exists in filtered data
-    for patient in filtered.all():
-        if patient.sex == "M":
-            sex["disableMale"] = False
-        if patient.sex == "F":
-            sex["disableFemale"] = False
-        if(not sex["disableMale"] and not sex["disableFemale"]):
-            break
-    
-    result = [
-        {"label": "Male", "value": "M", "disabled": sex["disableMale"]},
-        {"label": "Female", "value": "F", "disabled": sex["disableFemale"]},
-    ]
-
-    return result
-
-def get_available_primary_tissue(genes, datatype, sex):
-
-    # get joined database table to extract data from
-    patient_list = DatasetGene.query\
-        .join(Patient, DatasetGene.dataset_id == Patient.dataset_id)\
-        .add_columns(Patient.primary_tissue)
-    
-    # perform filtering
-    filtered = filter_by_genes(patient_list, genes)
-    filtered = filter_by_datatype(filtered, datatype)
-    filtered = filter_by_sex(filtered, sex)
-
-    tissues = set([p.primary_tissue for p in filtered.all() if p.primary_tissue != 'Unknown' and p.primary_tissue != 'Other'])
-
-    result = []
-    for tissue in tissues:
-        result.append({"label": tissue, "value": tissue})
-
-    return result
-
-def get_available_drugtype(genes, datatype, sex, primary):
-    # get joined database table to extract data from
-    patient_list = DatasetGene.query\
-        .join(Patient, DatasetGene.dataset_id == Patient.dataset_id)\
-        .add_columns(Patient.drug_type)
-    
-    # perform filtering
-    filtered = filter_by_genes(patient_list, genes)
-    filtered = filter_by_datatype(filtered, datatype)
-    filtered = filter_by_sex(filtered, sex)
-    filtered = filter_by_primary(filtered, primary)
-
-    drugtypes = set([p.drug_type for p in filtered.all()])
-
-    result = []
-    for drugtype in drugtypes:
-        result.append({"label": drugtype, "value": drugtype})
-
-    return result
-
-def get_available_sequencing_type(genes, datatype, sex, primary, drug_type):
-    # get joined database table to extract data from
-    patient_list = DatasetGene.query.join(Dataset, DatasetGene.dataset_id == Dataset.dataset_id)
-    if(datatype == 'expression'):
-        patient_list = patient_list.add_columns(Patient.rna)
-    else:
-        patient_list = patient_list.add_columns(Patient.dna)
-    
-    # perform filtering
-    filtered = filter_by_genes(patient_list, genes)
-    filtered = filter_by_datatype(filtered, datatype)
-    filtered = filter_by_sex(filtered, sex)
-    filtered = filter_by_primary(filtered, primary)
-    filtered = filter_by_drugtype(filtered, drug_type)
-
-    sequencing = []
-    if(datatype == 'expression'):
-        sequencing = set([p.rna for p in filtered.all()])
-    else:
-        sequencing = set([p.dna for p in filtered.all()])
-    
-    result = []
-    for seq in sequencing:
-        if len(seq) > 0:
-            result.append({"label": seq.upper(), "value": seq.upper()})
-    
-    return result
-
-def get_available_datasets(genes, datatype, sex, primary, drug_type, sequencing):
-    # get joined database table to extract data from
-    patient_list = DatasetGene.query\
-        .join(Dataset, DatasetGene.dataset_id == Dataset.dataset_id)\
-            .join(Patient, DatasetGene.dataset_id == Patient.dataset_id)\
-                .add_columns(Dataset.dataset_name)
-    
-    # perform filtering
-    filtered = filter_by_genes(patient_list, genes)
-    filtered = filter_by_datatype(filtered, datatype)
-    filtered = filter_by_sex(filtered, sex)
-    filtered = filter_by_primary(filtered, primary)
-    filtered = filter_by_drugtype(filtered, drug_type)
-    filtered = filter_by_sequencing(filtered, sequencing, datatype)
-
-    dataset = set([p.dataset_name for p in filtered.all()])
-    result = []
-    for data in dataset:
-        result.append({"label": data, "value": data})
-
-    return result 
+    return join_table
 
 def filter_by_genes(filtered, genes):
     return filtered.filter(DatasetGene.gene_id.in_(genes))
