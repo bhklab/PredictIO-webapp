@@ -272,14 +272,6 @@ const ForestPlot = (props) => {
         });
 
         /*Creating Diamond*/
-        canvas.attr('id', 'pooled-effect')
-            .on('mouseover', () => {
-                renderToolTip(-1, 'polygon-tooltip', overall);
-            })
-            .on('mouseout', () => {
-                removeToolTip('#polygon-tooltip');
-            });
-
         canvas.append('line')
             .attr('id', 'yAxe-dash')
             .attr('x1', xScale(overall.effect_size))
@@ -288,7 +280,14 @@ const ForestPlot = (props) => {
             .attr('y2', yScale(dataset.length))
             .attr('stroke-dasharray', '3,4')
             .style('stroke', colors.orange_highlight)
-            .style('stroke-width', '1');
+            .style('stroke-width', '1')
+            .style('cursor', 'hand')
+            .on('mouseover', () => {
+                renderToolTip(-1, 'polygon-tooltip', overall);
+            })
+            .on('mouseout', () => {
+                removeToolTip('#polygon-tooltip');
+            });
 
         canvas.append('text')
             .attr('id', "tag-pooled-effect")
@@ -296,12 +295,25 @@ const ForestPlot = (props) => {
             .attr('y', yScale(-1))
             .attr('font-size', initial.fontSize)
             .attr('fill', "#444444")
-            .text(`Pooled Effect Sizes`);
+            .text(`Pooled Effect Sizes`)
+            .on('mouseover', () => {
+                renderToolTip(-1, 'polygon-tooltip', overall);
+            })
+            .on('mouseout', () => {
+                removeToolTip('#polygon-tooltip');
+            });
 
         canvas.append('polygon')
             .attr('id', 'diamond')
             .attr('points', polygonPoints())
-            .style('fill', colors.orange_highlight);
+            .style('fill', colors.orange_highlight)
+            .style('cursor', 'hand')
+            .on('mouseover', () => {
+                renderToolTip(-1, 'polygon-tooltip', overall);
+            })
+            .on('mouseout', () => {
+                removeToolTip('#polygon-tooltip');
+            });
     }
 
     /***
