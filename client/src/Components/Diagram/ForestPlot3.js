@@ -111,7 +111,7 @@ const ForestPlot = (props) => {
         }
 
         /***
-         * Set a threshold for labels on x value - to ignore values too close to base line
+         * Set a threshold for labels on x line- to ignore values too close to base line
          ***/
         const xAxeLabels= () => {
             const threshold = 18
