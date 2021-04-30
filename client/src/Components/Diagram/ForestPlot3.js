@@ -280,7 +280,7 @@ const ForestPlot = (props) => {
             .attr('y2', yScale(dataset.length))
             .attr('stroke-dasharray', '3,4')
             .style('stroke', colors.orange_highlight)
-            .style('stroke-width', '1')
+            .style('stroke-width', '2')
             .style('cursor', 'hand')
             .on('mouseover', () => {
                 renderToolTip(-1, 'polygon-tooltip', overall);
@@ -295,13 +295,7 @@ const ForestPlot = (props) => {
             .attr('y', yScale(-1))
             .attr('font-size', initial.fontSize)
             .attr('fill', "#444444")
-            .text(`Pooled Effect Sizes`)
-            .on('mouseover', () => {
-                renderToolTip(-1, 'polygon-tooltip', overall);
-            })
-            .on('mouseout', () => {
-                removeToolTip('#polygon-tooltip');
-            });
+            .text(`Pooled Effect Sizes`);
 
         canvas.append('polygon')
             .attr('id', 'diamond')
