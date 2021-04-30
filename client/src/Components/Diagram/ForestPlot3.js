@@ -53,8 +53,13 @@ const ForestPlot = (props) => {
             fontSize: 11,
             xAxeMargin: 30,
             topMargin: 20,
-            leftMargin: 200,
-            rightMargin: 10
+            leftMargin: 250,
+            rightMargin: 50
+        }
+
+        const base = () => {
+            if (overall.model === "DI") return 1
+            return 0
         }
 
         /***
@@ -62,7 +67,6 @@ const ForestPlot = (props) => {
          **/
         const dataset = props.individuals;
         const overall = props.meta[0]
-
 
         /***
          * Find the min and max value of all studies for adjusting the scales and axes
@@ -106,8 +110,18 @@ const ForestPlot = (props) => {
             )
         }
 
-        const xAxeTag = [min_low(), Math.round(overall.effect_size * 100) / 100, 0 , max_high()];
-
+        /***
+         * Set a threshold for labels on x value - to ignore values too close to base line
+         ***/
+        const xAxeLabels= () => {
+            const threshold = 18
+            let studyValues = [min_low(), Math.round(overall.effect_size * 100) / 100 , max_high()];
+            let list= [base()]
+            for (let i = 0;i < studyValues.length ; i++)
+                if (Math.abs(xScale(studyValues[i])- xScale(base()))> threshold)
+                    list.push(studyValues[i])
+            return list
+        }
 
         /***
          * Click on Study rect
@@ -159,7 +173,7 @@ const ForestPlot = (props) => {
         /*Creating axes*/
         canvas.append('line')
             .attr('id', 'xAxe')
-            .attr('x1', xScale(min_low())-initial.leftMargin/2)
+            .attr('x1', xScale(min_low())-initial.leftMargin)
             .attr('x2', xScale(max_high())+initial.xAxeMargin)
             .attr('y1', yScale(dataset.length))
             .attr('y2', yScale(dataset.length))
@@ -168,40 +182,30 @@ const ForestPlot = (props) => {
 
         canvas.append('line')
             .attr('id', 'yAxe')
-            .attr('x1', xScale(0))
-            .attr('x2', xScale(0))
+            .attr('x1', xScale(base()))
+            .attr('x2', xScale(base()))
             .attr('y1', yScale(-2))
             .attr('y2', yScale(dataset.length))
             .style('stroke', "#949494")
             .style('stroke-width', '1.5');
 
-        canvas.append('line')
-            .attr('id', 'yAxe-dash')
-            .attr('x1', xScale(overall.effect_size))
-            .attr('x2', xScale(overall.effect_size))
-            .attr('y1', yScale(-2))
-            .attr('y2', yScale(dataset.length))
-            .attr('stroke-dasharray', '3,4')
-            .style('stroke', colors.orange_highlight)
-            .style('stroke-width', '1');
-
-        Object.keys(xAxeTag).forEach((key, index) => {
+        Object.keys(xAxeLabels()).forEach((key, index) => {
             canvas.append('text')
                 .attr('id', "xTag-"+ index)
-                .attr('x', xScale(xAxeTag[index]))
-                .attr('y', yScale(dataset.length + 0.5))
+                .attr('x', xScale(xAxeLabels()[index]))
+                .attr('y', yScale(dataset.length + 0.65))
                 .attr('font-size', initial.fontSize)
                 .attr('font-weight', 'regular')
                 .attr('fill', "#444444")
                 .attr('text-anchor', 'middle')
-                .text(xAxeTag[index])
+                .text(xAxeLabels()[index])
         });
 
-        Object.keys(xAxeTag).forEach((key, index) => {
+        Object.keys(xAxeLabels()).forEach((key, index) => {
             canvas.append('line')
                 .attr('id', "xAxeDash"+ index)
-                .attr('x1', xScale(xAxeTag[index]))
-                .attr('x2', xScale(xAxeTag[index]))
+                .attr('x1', xScale(xAxeLabels()[index]))
+                .attr('x2', xScale(xAxeLabels()[index]))
                 .attr('y1', yScale(dataset.length) - 5)
                 .attr('y2', yScale(dataset.length) + 5)
                 .style('stroke', "#949494")
@@ -246,7 +250,7 @@ const ForestPlot = (props) => {
                 .attr('fill', "#444444")
                 .text(`${dataset[key].study} (${dataset[key].primary_tissue}, ${dataset[key].sequencing})`);
 
-            let line = datapoint.append('line')
+            datapoint.append('line')
                 .attr('id', "interval-" + index)
                 .attr('x1', xScale(Number(dataset[key]["_95ci_low"])))
                 .attr('x2', xScale(Number(dataset[key]["_95ci_high"])))
@@ -254,8 +258,10 @@ const ForestPlot = (props) => {
                 .attr('y2', yScale(index))
                 .style('stroke', "#8b9eae")
                 .style('stroke-width', '2');
-            line.append('title')
+
+            datapoint.append('title')
                 .text(`95CI:(${dataset[key]["_95ci_low"]}, ${dataset[key]["_95ci_high"]})`);
+
             datapoint.append('rect')
                 .attr('id', "datPoint-" +index)
                 .attr('x', xScale(Number(dataset[key]["effect_size"])) - initial.edgeSize / 2)
@@ -266,8 +272,7 @@ const ForestPlot = (props) => {
         });
 
         /*Creating Diamond*/
-        let pooledEffect = svg.append('g')
-            .attr('id', 'pooled-effect')
+        canvas.attr('id', 'pooled-effect')
             .on('mouseover', () => {
                 renderToolTip(-1, 'polygon-tooltip', overall);
             })
@@ -275,7 +280,17 @@ const ForestPlot = (props) => {
                 removeToolTip('#polygon-tooltip');
             });
 
-        pooledEffect.append('text')
+        canvas.append('line')
+            .attr('id', 'yAxe-dash')
+            .attr('x1', xScale(overall.effect_size))
+            .attr('x2', xScale(overall.effect_size))
+            .attr('y1', yScale(-2))
+            .attr('y2', yScale(dataset.length))
+            .attr('stroke-dasharray', '3,4')
+            .style('stroke', colors.orange_highlight)
+            .style('stroke-width', '1');
+
+        canvas.append('text')
             .attr('id', "tag-pooled-effect")
             .attr('x', 0)
             .attr('y', yScale(-1))
@@ -283,7 +298,7 @@ const ForestPlot = (props) => {
             .attr('fill', "#444444")
             .text(`Pooled Effect Sizes`);
 
-        pooledEffect.append('polygon')
+        canvas.append('polygon')
             .attr('id', 'diamond')
             .attr('points', polygonPoints())
             .style('fill', colors.orange_highlight);
