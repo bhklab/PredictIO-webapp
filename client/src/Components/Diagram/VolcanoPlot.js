@@ -18,7 +18,7 @@ const unhover = () => {
 };
 
 const VolcanoPlot = (props) => {
-    const {data, plotId, getForestPlotData, parameters, setParameters} = props;
+    const {data, plotId, getForestPlotData, parameters, setParameters, onthefly} = props;
 
     const [plotData, setPlotData] = useState({
         x: [], 
@@ -28,7 +28,7 @@ const VolcanoPlot = (props) => {
         pointSize: []
     });
 
-    const [selectedPointIndex, setSelectedPointIndex] = useState(null);
+    const [selectedPointIndex, setSelectedPointIndex] = useState(undefined);
 
     useEffect(() => {
         console.log(data);
@@ -44,7 +44,7 @@ const VolcanoPlot = (props) => {
     }, []);
 
     useEffect(() => {
-        if(selectedPointIndex){
+        if(typeof selectedPointIndex !== 'undefined'){
             console.log(selectedPointIndex);
             let pointColor = getPointColor(data, selectedPointIndex);
             let pointLine = getPointOutline(data, selectedPointIndex);
@@ -58,7 +58,6 @@ const VolcanoPlot = (props) => {
 
     const onClick = (data) => {
         let selectedPoint = props.data[data.points[0].pointIndex]
-        console.log(selectedPoint);
         setSelectedPointIndex(data.points[0].pointIndex);
         setParameters({...parameters, signature: selectedPoint.signature});
         getForestPlotData({
@@ -92,7 +91,7 @@ const VolcanoPlot = (props) => {
      * get data point color based on HR (effect size) value and -log10 p-value
      * @param {*} points 
      */
-    const getPointColor = (points, index = null) => {
+    const getPointColor = (points, index = undefined) => {
         let pointColors = [];
         for(let i = 0; i < points.length; i++){
             if(i === index){
@@ -100,13 +99,17 @@ const VolcanoPlot = (props) => {
                 continue;
             }
 
-            if(points[i].logPval < -Math.log10(0.05)){
-                pointColors.push(colors.gray_text);
+            if(points[i].analysis_id){
+                pointColors.push(colors.purple);
             }else{
-                if(points[i].effect_size > 0){
-                    pointColors.push(colors.red);
+                if(points[i].logPval < -Math.log10(0.05)){
+                    pointColors.push(colors.gray_text);
                 }else{
-                    pointColors.push(colors.blue);
+                    if(points[i].effect_size > 0){
+                        pointColors.push(colors.red);
+                    }else{
+                        pointColors.push(colors.blue);
+                    }
                 }
             }
         }
@@ -119,7 +122,7 @@ const VolcanoPlot = (props) => {
      * @param {*} points 
      * @param {*} index 
      */
-    const getPointOutline = (points, index=null) => {
+    const getPointOutline = (points, index=undefined) => {
         let outlineColor = [];
         let outlineWidth = [];
         points.forEach((point, i) => {
@@ -142,7 +145,13 @@ const VolcanoPlot = (props) => {
         let hoverText = [];
         points.forEach(point => {
             hoverText.push(
-            `Subgroup: ${point.subgroup}<br>Signature: ${point.signature}<br>Coef: ${Math.round(point.effect_size * 1000) / 1000}<br>P-value: ${Math.round(point.pval * 10000) / 10000}<br>I2: ${Math.round(point.i2 * 10000) / 10000}<br>P-value I2: ${Math.round(point.pval_i2 * 1000) / 1000}`)
+                `${onthefly ? '' : `Subgroup: ${point.subgroup}<br>`}` +
+                `Signature: ${point.signature ? point.signature : 'Custom'}<br>` + 
+                `Coef: ${Math.round(point.effect_size * 1000) / 1000}<br>` +
+                `P-value: ${Math.round(point.pval * 10000) / 10000}<br>` +
+                `I2: ${Math.round(point.i2 * 10000) / 10000}<br>` +
+                `P-value I2: ${Math.round(point.pval_i2 * 1000) / 1000}`
+            )
         });
         return hoverText;
     }

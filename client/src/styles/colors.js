@@ -1,6 +1,7 @@
 const colors = {
     blue: '#3375B1',
     red: '#b13336',
+    purple: 'b15f9b',
     hover_blue: '#2A6193',
     hover_red: '#9f2d30',
     orange_highlight: '#F2950B',

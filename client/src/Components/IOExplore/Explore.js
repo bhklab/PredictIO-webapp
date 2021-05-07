@@ -80,9 +80,10 @@ const Explore = (props) => {
                 <StyledPlotArea width='60%'>
                 {
                     forestPlotData.ready ?
-                    <ForestPlotContainer parameters={parameters}
-                                         forestPlotData={forestPlotData}
-                                         getModalData={getModalData}
+                    <ForestPlotContainer 
+                        parameters={parameters}
+                        forestPlotData={forestPlotData}
+                        getModalData={getModalData}
                     />
                     :
                     forestPlotData.loading ?

@@ -6,15 +6,14 @@ const StyledButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 5px;
+    border-radius: 4px;
     border: none;
     font-weight: normal;
-    letter-spacing: 1.5px;
-    width: ${props => props.style.width ? props.style.width : '45%'};
-    height: ${props => props.style.height ? props.style.height : '80px'};
+    letter-spacing: 1px;
+    padding: 0.4rem 0.6rem;
     background-color: ${props => props.disabled ? colors.light_gray : props.color.background};
-    font-size: ${props => props.style.fontSize ? props.style.fontSize : '20px'};
-    color: ${props => props.style.fontColor ? props.style.fontColor : '#ffffff'};
+    font-size: 12px;
+    color: ${props => props.fontColor ? props.fontColor : '#ffffff'};
     cursor: ${props => props.disabled ? 'default' : 'pointer'};
 
     :hover {
@@ -24,7 +23,7 @@ const StyledButton = styled.button`
 `;
 
 const ActionButton = (props) => {
-    const {onClick, text, style} = props;
+    const {className, onClick, text, style} = props;
     const [colorScheme, setColorScheme] = useState({
         background: colors.blue,
         hover: colors.hover_blue,
@@ -50,7 +49,7 @@ const ActionButton = (props) => {
         <React.Fragment>
             {
                 colorScheme.ready &&
-                <StyledButton onClick={onClick} color={colorScheme} style={style} disabled={props.disabled} >
+                <StyledButton className={className} onClick={onClick} color={colorScheme} style={style} disabled={props.disabled} >
                     {text}
                 </StyledButton>
             }

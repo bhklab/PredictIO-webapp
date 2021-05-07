@@ -5,7 +5,7 @@ import Footer from '../Footer/Footer';
 import styled from 'styled-components';
 
 const Main = styled.main`
-    height: (100vh + 45px);
+    min-height: 100vh;
     width: 85%;
     max-width: 1500px;
     margin-left: auto;

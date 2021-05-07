@@ -15,6 +15,9 @@ const StyledDropdown = styled(Dropdown)`
         font-family: 'Noto Sans', sans-serif;
         font-size: 12px;
     }
+    .p-inputtext{
+        padding: 0.3rem 0.5rem;
+    }
 `;
 
 const CustomDropdown = (props) => {
