@@ -175,8 +175,8 @@ const VolcanoPlot = (props) => {
                     paper_bgcolor: 'white',
                     plot_bgcolor: 'white',
                     orientation: 'v',
-                    yaxis: { ticklen: 0, title: '-log10(p value)' },
-                    xaxis: { title: 'Hazard Ratio', zeroline: false },
+                    yaxis: { ticklen: 0, title: '-log10(p value)','fixedrange':true },
+                    xaxis: { title: 'Hazard Ratio', zeroline: false,'fixedrange':true},
                     hovermode: 'closest',
                     font: {
                         size: 11,
