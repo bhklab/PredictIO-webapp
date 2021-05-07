@@ -130,20 +130,9 @@ const VolcanoPlotInput = (props) => {
                 />
             </div>
             <div className='formField buttonField'>
-                <ActionButton
-                    onClick={(e) => {onSubmit()}}
-                    text='Submit'
-                    disabled={readyToSubmit()}
-                    style={{width: '90px', height: '34px', fontSize: '14px'}}
-                />
+                <ActionButton className='left' onClick={(e) => {onSubmit()}} text='Submit' disabled={readyToSubmit()} />
                 {
-                    resetButton &&
-                    <ActionButton
-                        onClick={(e) => {onReset()}}
-                        text='Reset'
-                        type='reset'
-                        style={{width: '90px', height: '34px', fontSize: '14px', marginLeft: '10px'}}
-                    />
+                    resetButton && <ActionButton onClick={(e) => {onReset()}} text='Reset' type='reset' />
                 }
             </div>
         </StyledForm>

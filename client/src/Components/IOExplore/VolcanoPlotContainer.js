@@ -38,7 +38,9 @@ const VolcanoPlotContainer = (props) => {
                 parameters={parameters} 
                 setParameters={setParameters} 
                 data={volcanoPlotData.data} 
-                getForestPlotData={getForestPlotData}/>
+                getForestPlotData={getForestPlotData}
+                onthefly={onthefly}
+            />
         </Container>
     );
 }

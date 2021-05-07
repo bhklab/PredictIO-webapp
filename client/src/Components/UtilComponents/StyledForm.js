@@ -18,7 +18,7 @@ const StyledForm = styled.div`
         margin-right: ${props => props.flexDirection === 'column' ? '0px' : '20px'};
         .label {
             margin-right: 10px;
-            font-size: 14px;
+            font-size: 12px;
         }
         .input {
             width: 70%;
@@ -28,6 +28,9 @@ const StyledForm = styled.div`
     .buttonField {
         display: flex;
         justify-content: ${props => props.flexDirection === 'column' ? 'flex-end' : 'flex-start'};
+        .left {
+            margin-right: 5px;
+        }
     }
 `;
 

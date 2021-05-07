@@ -20,6 +20,9 @@ const StyledMultiSelect = styled(MultiSelect)`
         font-family: 'Noto Sans', sans-serif;
         font-size: 12px;
     }
+    .p-multiselect-label {
+        padding: 0.3rem 0.5rem;
+    }
     .p-multiselect-filter-container input {
         font-size: 12px;
     }

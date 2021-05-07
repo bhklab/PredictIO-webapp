@@ -139,7 +139,7 @@ const ForestPlotContainer = (props) => {
                     <h3>Forest Plot</h3>
                     <PlotHeader>
                         <div className='parameterLine'>
-                            Signature: <span className='value'>{parameters.signature}</span>
+                            Signature: <span className='value'>{parameters.signature ? parameters.signature : 'Custom'}</span>
                         </div>
                         <div className='filter'>
                             <span className='label'>Sort By:</span>
