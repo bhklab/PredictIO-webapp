@@ -5,7 +5,7 @@ from db.models.patient import Patient
 from db.models.dataset_gene import DatasetGene
 from db.models.dataset import Dataset
 
-class ClinicalDataDropdown(Resource):
+class BiomarkerEvaluationQuery(Resource):
     def get(self, dropdown_type):
         result = {}
         status = 200

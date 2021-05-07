@@ -23,7 +23,7 @@ from resources.plot_data import VolcanoPlot, ForestPlot
 from resources.modal_data import DescriptionModal
 # from resources.dropdown_option import DropdownOption
 from resources.dropdown_explore import ExploreDropdownOption
-from resources.dropdown_clinical_data import ClinicalDataDropdown
+from resources.biomarker_evaluation_query import BiomarkerEvaluationQuery
 from resources.search_gene import SearchGene
 from resources.biomarker_evaluation_request import BiomarkerEvaluationRequest
 from resources.biomarker_evaluation_result import BiomarkerEvaluationResult, BiomarkerEvaluationVolcanoPlot, BiomarkerEvaluationForestPlot
@@ -68,11 +68,11 @@ app.config['APP_DOMAIN'] = config('APP_DOMAIN')
 api.add_resource(Test, '/api/test')
 
 api.add_resource(ExploreDropdownOption, '/api/dropdown_option/explore')
-api.add_resource(ClinicalDataDropdown, '/api/dropdown_option/clinical_data/<dropdown_type>')
 api.add_resource(SearchGene, '/api/search_gene')
 
 api.add_resource(ForestPlot, '/api/explore/forest_plot')
 api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
+api.add_resource(BiomarkerEvaluationQuery, '/api/explore/biomarker/query/<dropdown_type>')
 api.add_resource(BiomarkerEvaluationRequest, '/api/explore/biomarker/request')
 api.add_resource(BiomarkerEvaluationResult, '/api/explore/biomarker/result/<analysis_id>')
 api.add_resource(BiomarkerEvaluationVolcanoPlot, '/api/explore/biomarker/result/volcano_plot/<analysis_id>')

@@ -117,7 +117,7 @@ const BiomarkerEvaluationRequest = () => {
     }
 
     const getDropdownOptions = async (dropdownName, paramStr) => {
-        let uri = `/api/dropdown_option/clinical_data/${dropdownName}?${paramStr}`;
+        let uri = `/api/explore/biomarker/query/${dropdownName}?${paramStr}`;
         console.log(uri);
         const res = await axios.get(uri);
         console.log(res.data);
