@@ -77,6 +77,7 @@ const BiomarkerEvaluationResult = () => {
             setModelDropdown(res.data.modelDropdown);
         }
         getData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -93,6 +94,7 @@ const BiomarkerEvaluationResult = () => {
             let models = modelDropdown.map(item => ({...item, disabled: false}));
             setModelDropdown(models);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [parameters.outcome]);
 
     return(
