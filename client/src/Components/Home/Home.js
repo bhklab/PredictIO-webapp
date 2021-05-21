@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
+import { Redirect } from 'react-router-dom';
 import Layout from '../UtilComponents/Layout';
 import VolcanoPlotInput from '../IOExplore/VolcanoPlotInput';
-import Explore from '../IOExplore/Explore';
 import styled from 'styled-components';
 
 const HomeContainer = styled.div`
@@ -46,26 +46,27 @@ const HomeInput = styled.div`
 `
 
 const Home = () => {
-
-    const [displayHome, setDisplayHome] = useState(true);
-
-    const [parameters, setParameters] = useState({
-        signatures: ['ALL'],
-        outcome: '',
-        model: ''
-    });
+    const [redirect, setRedirect] = useState(false);
+    const [parameters, setParameters] = useState({signatures: ['ALL'], outcome: '', model: ''});
 
     const onSubmit = async () => {
-        setDisplayHome(false);
+        setRedirect(true);
     };
 
     return (
         <Layout>
             {
-                displayHome ?
+                redirect ?
+                <Redirect 
+                    to={{
+                        pathname: '/explore/precomputed',
+                        state: { preset: parameters}
+                    }}
+                />
+                :
                 <HomeContainer>
                     <HomeLogo>
-                        <img alt='IO.db' src='./images/logos/logo-main.png' />
+                        <img alt='PredictIO' src='./images/logos/logo-main.png' />
                     </HomeLogo>
                     <AppDescription>
                         Investigate predictive and prognostic values of your gene.
@@ -75,14 +76,14 @@ const Home = () => {
                     <HomeInput>
                         <div className='subText'>Explore pre-computed signature data</div>
                         <VolcanoPlotInput 
-                                parameters={parameters} 
-                                setParameters={setParameters} 
-                                onSubmit={onSubmit} 
-                                flexDirection='column' />
+                            parameters={parameters} 
+                            setParameters={setParameters} 
+                            onSubmit={onSubmit} 
+                            onReset={() => {setParameters({signatures: ['ALL'], outcome: '', model: ''})}}
+                            flexDirection='column' 
+                        />
                     </HomeInput>
                 </HomeContainer>
-                :
-                <Explore parameters={parameters} setParameters={setParameters} />
             }
         </Layout>
     );
