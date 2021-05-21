@@ -41,8 +41,9 @@ python scripts/generate_seed_files.py
 - To create tables and seed the database, run the following command:
 
 ```bash
-python db/seed_database.py
+flask seed-database
 ```
+This command will run db/seed_database.py with app context. Modify the file if necessary.
 
 ## Build Instructions
 
