@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // individual page components
 import {
   Home,
+  Explore,
   BiomarkerEvaluationRequest,
   BiomarkerEvaluationResult,
   Test,
@@ -19,6 +20,7 @@ const App = () => {
         <Router>
           <Switch>
             <Route path='/' exact component={Home} />
+            <Route path='/explore/precomputed' exact component={Explore} />
             <Route path='/explore/biomarker/request' exact component={BiomarkerEvaluationRequest} />
             <Route path='/explore/biomarker/result/:id' exact component={BiomarkerEvaluationResult} />
             <Route path='/test' exact component={Test} />

@@ -46,14 +46,20 @@ const StyledModal = styled.div`
 `;
 
 
-const Heading = styled.h4`
-  display: inline;
-  margin-top:40px;
-`;
+// const Heading = styled.h4`
+//   display: inline;
+//   margin-top:40px;
+// `;
 
 
 export const Modal = (props) => {
-    const {dataset_name, title, authors, summary, pmid} = props.modalData.data;
+    const {
+        dataset_name, 
+        title, 
+        // authors, 
+        summary, 
+        pmid
+    } = props.modalData.data;
     const removeModalData = props.removeModalData
 
     const closeModal = () => {

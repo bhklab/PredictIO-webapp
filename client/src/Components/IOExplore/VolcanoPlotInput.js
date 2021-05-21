@@ -7,7 +7,7 @@ import CustomMultiSelect from '../UtilComponents/CustomMultiSelect';
 
 const VolcanoPlotInput = (props) => {
 
-    const {parameters, setParameters, onSubmit, onReset, resetButton} = props;
+    const { parameters, setParameters, onSubmit, onReset } = props;
 
     const [signatureOptions, setSignatureOptions] = useState([]);
     const [outcomeOptions, setOutcomeOptions] = useState([]);
@@ -130,10 +130,17 @@ const VolcanoPlotInput = (props) => {
                 />
             </div>
             <div className='formField buttonField'>
-                <ActionButton className='left' onClick={(e) => {onSubmit()}} text='Submit' disabled={readyToSubmit()} />
-                {
-                    resetButton && <ActionButton onClick={(e) => {onReset()}} text='Reset' type='reset' />
-                }
+                <ActionButton 
+                    className='left' 
+                    onClick={(e) => {onSubmit()}} 
+                    text='Submit' 
+                    disabled={readyToSubmit()} 
+                />
+                <ActionButton 
+                    onClick={(e) => {onReset()}} 
+                    text='Reset' 
+                    type='reset' 
+                />
             </div>
         </StyledForm>
     );
