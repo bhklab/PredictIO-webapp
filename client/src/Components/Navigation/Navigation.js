@@ -18,6 +18,7 @@ const Navigation = () => {
                 </LogoContainer>
                 <StyledLinks>
                     <Link to='/'>Home</Link>
+                    <Link to='/explore/precomputed'>Pre-computed Signatures</Link>
                     <Link to='/explore/biomarker/request'>Biomarker Evaluation</Link>
                     <Link to='/'>About</Link>
                     <Link to='/'>Download</Link>

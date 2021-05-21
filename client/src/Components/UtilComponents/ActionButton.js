@@ -43,6 +43,7 @@ const ActionButton = (props) => {
                 setColorScheme({...colorScheme, ready: true});
                 break;
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
