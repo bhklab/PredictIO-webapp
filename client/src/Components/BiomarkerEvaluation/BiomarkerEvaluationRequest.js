@@ -87,6 +87,8 @@ const BiomarkerEvaluationRequest = () => {
             case 'cna':
                 dataType = 'CNA';
                 break;
+            default:
+                break;
         }
         const res = await axios.post('/api/explore/biomarker/request', {
             ...parameters, 
@@ -190,6 +192,7 @@ const BiomarkerEvaluationRequest = () => {
             // get available data type options and enable the dropdown
             getDropdownOptions('datatype', paramStr);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [parameters.gene]);
 
     useEffect(() => {
@@ -207,6 +210,7 @@ const BiomarkerEvaluationRequest = () => {
             // get available data type options and enable downstream dropdowns
             getDropdownOptions('sex', paramStr);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [parameters.dataType]);
 
     const getDownstreamSex = async (sex) => {

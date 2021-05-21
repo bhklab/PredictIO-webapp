@@ -39,6 +39,7 @@ const ForestPlot = (props) => {
 
     useEffect(() => {
         draw();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.size.width, props.individuals]);
 
     const draw = () => {

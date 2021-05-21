@@ -94,7 +94,7 @@ const ForestPlotContainer = (props) => {
             meta: forestPlotData.data.meta.filter(item => item.tissue_type === 'ALL'),
             ready: true
         });
-        
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -129,6 +129,7 @@ const ForestPlotContainer = (props) => {
             individuals: individuals,
             meta: meta.filter(item => item.tissue_type === filterVal)
         }));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sort, tissueValue, sequenceValue]);
 
     return(

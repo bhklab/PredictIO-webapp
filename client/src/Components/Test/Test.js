@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import Layout from '../UtilComponents/Layout';
 import axios from 'axios';
 
@@ -14,6 +14,7 @@ const Test = () => {
             }
         }
         getData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
