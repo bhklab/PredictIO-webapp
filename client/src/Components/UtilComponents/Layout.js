@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 const Main = styled.main`
     min-height: 100vh;
-    width: 85%;
+    width: 90%;
     max-width: 1500px;
     margin-left: auto;
     margin-right: auto;
