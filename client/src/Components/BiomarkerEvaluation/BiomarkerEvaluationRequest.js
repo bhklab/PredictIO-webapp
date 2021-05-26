@@ -13,8 +13,6 @@ import CustomInputText from '../UtilComponents/CustomInputText';
 import CustomDropdown from '../UtilComponents/CustomDropdown';
 import GeneSearch from './GeneSearch';
 
-// {value: 'B2M', label: 'B2M'}, {value: 'CD8A', label: 'CD8A'}, {value: 'GZMA', label: 'GZMA'}
-
 const Container = styled.div`
     width: 80%;
     height: calc(100vh + 50px);
@@ -39,8 +37,8 @@ const BiomarkerEvaluationRequest = () => {
     const messages = useRef(null);
 
     const [parameters, setParameters] = useState({
-        gene: [],
         dataType: '',
+        gene: [],
         sex: [],
         primary: [],
         drugType: [],
@@ -50,7 +48,10 @@ const BiomarkerEvaluationRequest = () => {
         submitting: false
     });
 
-    const [dataTypeOptions, setDataTypeOptions] = useState({options: [], disabled: true});
+    const [dataTypeOptions, setDataTypeOptions] = useState({
+        options: [{label: 'CNA', value: 'cna'}, {label: 'Expression', value: 'expression'}, {label: 'SNV', value: 'snv'}], 
+        disabled: false
+    });
     const [sexOptions, setSexOptions] = useState({options: [], disabled: true});
     const [primaryOptions, setPrimaryOptions] = useState({options: [], disabled: true});
     const [drugTypeOptions, setDrugTypeOptions] = useState({options: [], disabled: true});
@@ -119,29 +120,18 @@ const BiomarkerEvaluationRequest = () => {
     }
 
     const getDropdownOptions = async (dropdownName, paramStr) => {
-        let uri = `/api/dropdown_option/clinical_data/${dropdownName}?${paramStr}`;
+        let uri = `/api/explore/biomarker/query/${dropdownName}?${paramStr}`;
         console.log(uri);
         const res = await axios.get(uri);
         console.log(res.data);
 
         switch(dropdownName){
-            case 'datatype':
-                setDataTypeOptions({options: res.data, disabled: false});
-                break;
             case 'sex':
                 setSexOptions({options: res.data.sex, disabled: false});
                 setPrimaryOptions({options: res.data.primary, disabled: false});
                 setDrugTypeOptions({options: res.data.drugtype, disabled: false});
                 setSequencingOptions({options: res.data.sequencing, disabled: false});
                 setStudyOptions({options: res.data.study, disabled: false});
-                setParameters({
-                    ...parameters, 
-                    sex: res.data.sex.map(item => item.value),
-                    primary: res.data.primary.map(item => item.value),
-                    drugType: res.data.drugtype.map(item => item.value),
-                    sequencingType: res.data.sequencing.map(item => item.value),
-                    study: res.data.study.map(item => item.value)
-                });
                 break;
             case 'primary':
                 setPrimaryOptions({options: res.data.primary, disabled: false});
@@ -179,39 +169,40 @@ const BiomarkerEvaluationRequest = () => {
 
     useEffect(() => {
         // reset parameters and disable dropdowns
-        setParameters({...parameters, dataType: [], sex: [], primary: [], drugType: [], sequencingType: [], study: []});
-        setDataTypeOptions({options: [], disabled: true});
+        setParameters({...parameters, gene: [], sex: [], primary: [], drugType: [], sequencingType: [], study: []});
         setSexOptions({options: [], disabled: true});
         setPrimaryOptions({options: [], disabled: true});
         setDrugTypeOptions({options: [], disabled: true});
         setSequencingOptions({options: [], disabled: true});
         setStudyOptions({options: [], disabled: true});
-        if(parameters.gene.length > 0){
-            // build query parameter string
-            let paramStr = buildQueryStr(parameters.gene.map(g => g.value), 'gene');
-            // get available data type options and enable the dropdown
-            getDropdownOptions('datatype', paramStr);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [parameters.gene]);
+    }, [parameters.dataType]);
 
     useEffect(() => {
-        // reset parameters and disable dropdowns
-        setParameters({...parameters, sex: [], primary: [], drugType: [], sequencingType: [], study: []});
-        setSexOptions({options: [], disabled: true});
-        setPrimaryOptions({options: [], disabled: true});
-        setDrugTypeOptions({options: [], disabled: true});
-        setSequencingOptions({options: [], disabled: true});
-        setStudyOptions({options: [], disabled: true});
-        if(parameters.dataType.length > 0){
-            // build query parameter string
-            let paramStr = buildQueryStr(parameters.gene.map(g => g.value), 'gene');
-            paramStr = paramStr.concat(`&datatype=${parameters.dataType}`);
-            // get available data type options and enable downstream dropdowns
-            getDropdownOptions('sex', paramStr);
+        const getDownstreamOptions = async () => {
+            // reset parameters and disable dropdowns
+            setParameters({...parameters, sex: [], primary: [], drugType: [], sequencingType: [], study: []});
+            setSexOptions({options: [], disabled: true});
+            setPrimaryOptions({options: [], disabled: true});
+            setDrugTypeOptions({options: [], disabled: true});
+            setSequencingOptions({options: [], disabled: true});
+            setStudyOptions({options: [], disabled: true});
+            if(parameters.gene.length > 0){
+                // build query parameter string
+                let paramStr = buildQueryStr(parameters.gene.map(g => g.value), 'gene');
+                paramStr = paramStr.concat(`&datatype=${parameters.dataType}`);
+                let options = await getDropdownOptions('sex', paramStr);
+                setParameters({
+                    ...parameters, 
+                    sex: options.sex.map(item => item.value),
+                    primary: options.primary.map(item => item.value),
+                    drugType: options.drugtype.map(item => item.value),
+                    sequencingType: options.sequencing.map(item => item.value),
+                    study: options.study.map(item => item.value)
+                });
+            }
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [parameters.dataType]);
+        getDownstreamOptions();
+    }, [parameters.gene]);
 
     const getDownstreamSex = async (sex) => {
         // reset downstream dropdowns
@@ -318,14 +309,6 @@ const BiomarkerEvaluationRequest = () => {
                 <StyledMessages ref={messages} />
                 <StyledForm flexDirection='column'>
                     <div className='formField'>
-                        <div className='label'>Search for Gene(s): </div>
-                        <GeneSearch 
-                            className='input'
-                            selectedGenes={parameters.gene}
-                            onChange={(e) => {setParameters({...parameters, gene: e.value})}}
-                        />
-                    </div>
-                    <div className='formField'>
                         <div className='label'>Data Type: </div> 
                         <CustomDropdown
                             className='input'
@@ -336,6 +319,15 @@ const BiomarkerEvaluationRequest = () => {
                             checkbox={true}
                             placeholder='Select...'
                             disabled={dataTypeOptions.disabled}
+                        />
+                    </div>
+                    <div className='formField'>
+                        <div className='label'>Search for Gene(s): </div>
+                        <GeneSearch 
+                            className='input'
+                            datatype={parameters.dataType}
+                            selectedGenes={parameters.gene}
+                            onChange={(e) => {setParameters({...parameters, gene: e.value})}}
                         />
                     </div>
                     <div className='formField'>
@@ -413,7 +405,7 @@ const BiomarkerEvaluationRequest = () => {
                     </div>
                     <div className='formField buttonField'>
                         <ActionButton
-                            onClick={(e) => {setParameters({...parameters, gene: [], email: ''})}}
+                            onClick={(e) => {setParameters({...parameters, dataType: '', email: ''})}}
                             text='Reset'
                             type='reset'
                             style={{width: '90px', height: '34px', fontSize: '14px', marginRight: '10px'}}
