@@ -110,6 +110,7 @@ def seed():
         sig_ind_data = pd.read_csv(sig_ind_file, sep='\t')
         sig_ind_data = pd.DataFrame(sig_ind_data, columns= [
             'signature',
+            'signatureType',
             'outcome',
             'model',
             'study',
@@ -130,6 +131,7 @@ def seed():
         sig_meta_data = pd.read_csv(sig_meta_file, sep='\t')
         sig_meta_data = pd.DataFrame(sig_meta_data, columns= [
             'signature',
+            'signatureType',
             'outcome',
             'model',
             'Subgroup',
@@ -149,25 +151,25 @@ def seed():
         # populating dataset table
         dataset_file = os.path.join(dir_path, 'seedfiles/dataset.csv')
         dataset_data = pd.read_csv(
-            dataset_file, quotechar=''', skipinitialspace=True)
+            dataset_file, quotechar='\"', skipinitialspace=True)
         Add_Records(dataset_data, 'dataset')
         
         # populating gene table
         gene_file = os.path.join(dir_path, 'seedfiles/gene.csv')
         gene_data = pd.read_csv(
-            gene_file, quotechar=''', skipinitialspace=True, keep_default_na=False)
+            gene_file, quotechar='\"', skipinitialspace=True, keep_default_na=False)
         Add_Records(gene_data, 'gene')
         
         # populating dataset_gene table
         dataset_gene_file = os.path.join(dir_path, 'seedfiles/dataset_gene.csv')
         dataset_gene_data = pd.read_csv(
-            dataset_gene_file, quotechar=''', skipinitialspace=True)
+            dataset_gene_file, quotechar='\"', skipinitialspace=True)
         Add_Records(dataset_gene_data, 'dataset_gene')
         
         # populating patient table
         patient_file = os.path.join(dir_path, 'seedfiles/patient.csv')
         patient_data = pd.read_csv(
-            patient_file, quotechar=''', skipinitialspace=True, keep_default_na=False)
+            patient_file, quotechar='\"', skipinitialspace=True, keep_default_na=False)
         Add_Records(patient_data, 'patient')
 
         db.session.commit()  # Attempt to commit all the records
@@ -189,3 +191,22 @@ def create_table():
         print(traceback.format_exc())
     finally:
         print('Done')    
+        db.session.close() 
+
+# used to delete all rows from db tables.
+def delete_table_rows():
+    try:
+        signature_individual.Individual.query.delete()
+        signature_meta.Meta.query.delete()
+        dataset_gene.DatasetGene.query.delete()
+        patient.Patient.query.delete()
+        gene.Gene.query.delete()
+        dataset.Dataset.query.delete()
+        db.session.commit()
+    except Exception as e:
+        print('Exception ', e)
+        print(traceback.format_exc())
+        db.session.rollback()
+    finally:
+        print('Done')
+        db.session.close()   
