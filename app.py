@@ -17,6 +17,7 @@ from db.seed_database import create_table
 # mail object
 from utils.mail import mail
 
+
 # modules used for routes in 'resources' directory
 from resources.test import Test
 from resources.plot_data import VolcanoPlot, ForestPlot
@@ -40,11 +41,12 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
     "pool_pre_ping": True,
     "pool_recycle": 300,
 }
+app.app_context().push()
 db.init_app(app)
 
 CORS(app)
 
-# initialize mail object 
+# initialize mail object
 # comment this code out for Azure deployment
 app.config['MAIL_SERVER'] = config('MAIL_SERVER')
 app.config['MAIL_PORT'] = 587
@@ -72,11 +74,15 @@ api.add_resource(SearchGene, '/api/search_gene')
 
 api.add_resource(ForestPlot, '/api/explore/forest_plot')
 api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
-api.add_resource(BiomarkerEvaluationQuery, '/api/explore/biomarker/query/<dropdown_type>')
+api.add_resource(BiomarkerEvaluationQuery,
+                 '/api/explore/biomarker/query/<dropdown_type>')
 api.add_resource(BiomarkerEvaluationRequest, '/api/explore/biomarker/request')
-api.add_resource(BiomarkerEvaluationResult, '/api/explore/biomarker/result/<analysis_id>')
-api.add_resource(BiomarkerEvaluationVolcanoPlot, '/api/explore/biomarker/result/volcano_plot/<analysis_id>')
-api.add_resource(BiomarkerEvaluationForestPlot, '/api/explore/biomarker/result/forest_plot/<analysis_id>')
+api.add_resource(BiomarkerEvaluationResult,
+                 '/api/explore/biomarker/result/<analysis_id>')
+api.add_resource(BiomarkerEvaluationVolcanoPlot,
+                 '/api/explore/biomarker/result/volcano_plot/<analysis_id>')
+api.add_resource(BiomarkerEvaluationForestPlot,
+                 '/api/explore/biomarker/result/forest_plot/<analysis_id>')
 
 api.add_resource(DescriptionModal, '/api/explore/description_modal')
 api.add_resource(ITNTVisualization, '/api/explore/itnt_data')
@@ -94,12 +100,16 @@ def serve(path):
     else:
         return send_from_directory(os.path.join(path_dir), 'index.html')
 
+
 '''
 flask cli command to seed database
 '''
+
+
 @app.cli.command("seed-database")
 def seed_database():
     seed()
+
 
 @app.cli.command("create-table")
 def create_single_table():
