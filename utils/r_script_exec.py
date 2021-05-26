@@ -51,14 +51,13 @@ def execute_script(parameters):
 
     # converts output to json (dictionary)
     output = json.loads(out)
-    print("error is ", output)
     email = ''
     try:
+        # Add data to signature_user_requested table and update analysis request with finished date and time
         analysis_id = output['analysis_id'][0]
         analysis_request = AnalysisRequest.query.filter(
             AnalysisRequest.analysis_id == analysis_id).first()
         email = analysis_request.email
-        # Add data to signature_user_requested table and update analysis request with finished date and time
         if not output['error'][0]:
             for row in output['data']:
                 meta_analysis = int(row['Meta_Analysis'])

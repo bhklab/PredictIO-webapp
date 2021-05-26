@@ -1,6 +1,8 @@
 """
 Module for the on the fly gene signature meta analysis feature
 """
+from rq import Queue
+import redis
 import threading
 import uuid
 import traceback
@@ -11,21 +13,27 @@ from utils.r_script_exec import execute_script
 from db.db import db
 from db.models.analysis_request import AnalysisRequest
 from datetime import datetime
-
+"""
+Task queue
+"""
+r = redis.Redis()
+q = Queue(connection=r)
 """
 GeneSignatureReauest Route class.
 """
+
+
 class BiomarkerEvaluationRequest(Resource):
     def get(self):
         return "Only post method is allowed", 400
-    
+
     def post(self):
         status = 200
         res = {
             "error": 0,
             "data": []
         }
-        
+
         try:
             # parse request
             query = request.get_json()
@@ -33,10 +41,10 @@ class BiomarkerEvaluationRequest(Resource):
                 'analysis_id': str(uuid.uuid4()),
                 'study': ",".join(query['study']),
                 'sex': ",".join(query['sex']),
-                'primary': ",".join(query['primary']), 
-                'drugType': ",".join(query['drugType']), 
+                'primary': ",".join(query['primary']),
+                'drugType': ",".join(query['drugType']),
                 'dataType': query['dataType'],
-                'sequencingType': ",".join(query['sequencingType']), 
+                'sequencingType': ",".join(query['sequencingType']),
                 'gene': ",".join(query['gene'])
             }
             print(datetime.now())
