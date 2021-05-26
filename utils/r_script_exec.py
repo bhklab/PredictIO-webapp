@@ -17,7 +17,8 @@ def execute_script(parameters):
     cwd = os.path.abspath(os.getcwd())
     r_path = os.path.join(cwd, 'r-scripts', 'io_meta', 'Run_Compute_Result.R')
     r_wd = os.path.join(cwd, 'r-scripts', 'io_meta')
-
+    print('Running analysis')
+    print(parameters)
     # command to be executed
     cmd = [
         'Rscript',
@@ -98,6 +99,7 @@ def execute_script(parameters):
         db.session.rollback()
     finally:
         db.session.close()
+        return 'Done'
 
     # send notification email
     send_mail(email, output)

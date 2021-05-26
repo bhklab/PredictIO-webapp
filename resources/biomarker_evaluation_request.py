@@ -1,23 +1,27 @@
 """
 Module for the on the fly gene signature meta analysis feature
 """
+from worker import conn
+from rq.job import Job
 from rq import Queue
-import redis
+from redis import Redis
 import threading
 import uuid
 import traceback
 from flask import request
 from flask import copy_current_request_context
-from flask_restful import Resource
 from utils.r_script_exec import execute_script
+from flask_restful import Resource
 from db.db import db
 from db.models.analysis_request import AnalysisRequest
 from datetime import datetime
+
+import time
 """
 Task queue
 """
-r = redis.Redis()
-q = Queue(connection=r)
+q = Queue(connection=conn)
+
 """
 GeneSignatureReauest Route class.
 """
@@ -73,13 +77,18 @@ class BiomarkerEvaluationRequest(Resource):
             Function to be executed in a separate thread.
             Add @copy_current_request_context decorator so that Flask_Mail module can access the app's request context.
             """
-            @copy_current_request_context
-            def run_async(parameters):
-                execute_script(parameters)
+            # @copy_current_request_context
+            # result = q.enqueue_call(
+            #     func=execute_script, args=(parameters,)
+            # )
 
-            thread = threading.Thread(target=run_async, args=(parameters,))
-            thread.start()
-            print('thread started')
+            # q.enqueue(run_async, parameters)
+            q.enqueue(execute_script, parameters)
+            print('Request enqueued')
+
+            # thread = threading.Thread(target=run_async, args=(parameters,))
+            # thread.start()
+            # print('thread started')
         except Exception as e:
             print('Exception ', e)
             print(traceback.format_exc())
