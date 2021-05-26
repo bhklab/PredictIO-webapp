@@ -13,6 +13,7 @@ from decouple import config
 from db.db import db
 from db.seed_database import seed
 from db.seed_database import create_table
+from db.seed_database import delete_table_rows
 
 # mail object
 from utils.mail import mail
@@ -23,9 +24,8 @@ from resources.plot_data import VolcanoPlot, ForestPlot
 from resources.modal_data import DescriptionModal
 # from resources.dropdown_option import DropdownOption
 from resources.dropdown_explore import ExploreDropdownOption
-from resources.dropdown_clinical_data import ClinicalDataDropdown
-from resources.search_gene import SearchGene
 from resources.biomarker_evaluation_query import BiomarkerEvaluationQuery
+from resources.search_gene import SearchGene
 from resources.biomarker_evaluation_request import BiomarkerEvaluationRequest
 from resources.biomarker_evaluation_result import BiomarkerEvaluationResult, BiomarkerEvaluationVolcanoPlot, BiomarkerEvaluationForestPlot
 from resources.itnt_visualization import ITNTVisualization
@@ -69,7 +69,6 @@ app.config['APP_DOMAIN'] = config('APP_DOMAIN')
 api.add_resource(Test, '/api/test')
 
 api.add_resource(ExploreDropdownOption, '/api/dropdown_option/explore')
-api.add_resource(ClinicalDataDropdown, '/api/dropdown_option/clinical_data/<dropdown_type>')
 api.add_resource(SearchGene, '/api/search_gene/<datatype>')
 
 api.add_resource(ForestPlot, '/api/explore/forest_plot')
@@ -106,3 +105,7 @@ def seed_database():
 @app.cli.command("create-table")
 def create_single_table():
     create_table()
+
+@app.cli.command("delete-table-rows")
+def delete_rows():
+    delete_table_rows()
