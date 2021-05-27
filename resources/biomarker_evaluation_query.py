@@ -11,8 +11,8 @@ class BiomarkerEvaluationQuery(Resource):
         status = 200
 
         query = {
-            'genes': request.args.getlist('gene'),
             'datatype': request.args.get('datatype'),
+            'genes': request.args.getlist('gene'),
             'sex': request.args.getlist('sex'),
             'primary': request.args.getlist('primary'),
             'drugtype': request.args.getlist('drugtype'),
@@ -20,11 +20,7 @@ class BiomarkerEvaluationQuery(Resource):
         }
         print(query)
         try:
-            if(dropdown_type == 'datatype'):
-                genes = request.args.getlist('gene')
-                result = get_available_datatype(genes)
-            else:
-                result = get_downstream_dropdowns(query)
+            result = get_downstream_dropdowns(query)
         except Exception as e:
             print('Exception ', e)
             print(traceback.format_exc())
@@ -36,29 +32,22 @@ class BiomarkerEvaluationQuery(Resource):
     def post(self): 
         return  'Only post method is allowed', 400
 
-def get_available_datatype(genes):
-    # get joined database table to extract data from
-    patient_list = DatasetGene.query\
-        .join(Patient, DatasetGene.dataset_id == Patient.dataset_id)\
-        .add_columns(Patient.expression, Patient.cna, Patient.snv)
-    filtered = filter_by_genes(patient_list, genes)
-    filtered = filtered.all()
+# def get_available_datatype():
+#     dropdown = [
+#         {"label": "Expression", "value": "expression", "disabled": False},
+#         {"label": "CNA", "value": "cna", "disabled": False},
+#         {"label": "SNV", "value": "snv", "disabled": False}
+#     ]
 
-    dropdown = [
-        {"label": "Expression", "value": "expression", "disabled": not any(item.expression == 1 for item in filtered)},
-        {"label": "CNA", "value": "cna", "disabled": not any(item.cna == 1 for item in filtered)},
-        {"label": "SNV", "value": "snv", "disabled": not any(item.snv == 1 for item in filtered)}
-    ]
-
-    return sorted(dropdown, key=lambda k: k["label"])
+#     return sorted(dropdown, key=lambda k: k["label"])
 
 def get_downstream_dropdowns(query):
     # get joined database table to extract data from
-    patient_list = get_joined_clinical_table()
+    joined_table = get_joined_clinical_table()
     
     # perform filtering by selected genes and datatype
-    filtered = filter_by_genes(patient_list, query['genes'])
-    filtered = filter_by_datatype(filtered, query['datatype'])
+    filtered = filter_by_datatype(joined_table, query['datatype'])
+    filtered = filter_by_genes(filtered, query['genes'])
 
     if(len(query['sex']) > 0):
         filtered = filter_by_sex(filtered, query['sex'])
@@ -131,7 +120,7 @@ def filter_by_datatype(filtered, datatype):
         return filtered.filter(Patient.expression == 1)
     elif(datatype == 'cna'):
         return filtered.filter(Patient.cna == 1)
-    elif(datatype == 'snp'):
+    elif(datatype == 'snv'):
         return filtered.filter(Patient.snv == 1)
 
 def filter_by_sex(filtered, sex):

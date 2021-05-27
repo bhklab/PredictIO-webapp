@@ -24,12 +24,13 @@ const CustomAutoComplete = styled(AutoComplete)`
 
 const GeneSearch = (props) => {
 
-    const {className, selectedGenes, onChange} = props;
+    const {className, datatype, selectedGenes, onChange} = props;
 
     const [suggestions, setSuggestions] = useState([]);
 
     const searchGene = async (e) => {
-        const res = await axios.get(`/api/search_gene?query=${e.query}`);
+        const res = await axios.get(`/api/search_gene/${datatype}?query=${e.query}`);
+        // console.log(res.data)
         setSuggestions(res.data.map(gene => ({
             name: gene.gene_name, 
             value: gene.gene_id
@@ -46,6 +47,7 @@ const GeneSearch = (props) => {
             multiple={true}
             onChange={onChange}
             placeholder='ex. B2M, CD8A, GZMA'
+            disabled={typeof datatype === 'undefined' || datatype.length === 0}
         />
     );
 }
