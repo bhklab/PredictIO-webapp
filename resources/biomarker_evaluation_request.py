@@ -2,15 +2,11 @@
 Module for the on the fly gene signature meta analysis feature
 """
 from worker import conn
-from rq.job import Job
 from rq import Queue
-from redis import Redis
-import threading
 import uuid
 import traceback
 from flask import request
 from flask import copy_current_request_context
-from utils.r_script_exec import execute_script
 from flask_restful import Resource
 from db.db import db
 from db.models.analysis_request import AnalysisRequest
@@ -52,7 +48,6 @@ class BiomarkerEvaluationRequest(Resource):
                 'gene': ",".join(query['gene'])
             }
             print(datetime.now())
-
             analysis = AnalysisRequest(**{
                 'analysis_id': parameters['analysis_id'],
                 'email': query['email'],
@@ -72,23 +67,9 @@ class BiomarkerEvaluationRequest(Resource):
             # Insert analysis request into database.
             db.session.add(analysis)
             db.session.commit()
-
-            """
-            Function to be executed in a separate thread.
-            Add @copy_current_request_context decorator so that Flask_Mail module can access the app's request context.
-            """
-            # @copy_current_request_context
-            # result = q.enqueue_call(
-            #     func=execute_script, args=(parameters,)
-            # )
-
-            # q.enqueue(run_async, parameters)
-            q.enqueue(execute_script, parameters)
+            # adds a new job to redis queue to be executed with current parameters
+            q.enqueue('utils.r_script_exec.execute_script', parameters)
             print('Request enqueued')
-
-            # thread = threading.Thread(target=run_async, args=(parameters,))
-            # thread.start()
-            # print('thread started')
         except Exception as e:
             print('Exception ', e)
             print(traceback.format_exc())
