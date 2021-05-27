@@ -124,7 +124,10 @@ def filter_by_datatype(filtered, datatype):
         return filtered.filter(Patient.snv == 1)
 
 def filter_by_sex(filtered, sex):
-    return filtered.filter(Patient.sex.in_(sex))
+    if(len(sex) == 2):
+        return filtered
+    else:
+        return filtered.filter(Patient.sex.in_(sex))
 
 def filter_by_primary(filtered, primary):
     return filtered.filter(Patient.primary_tissue.in_(primary))
