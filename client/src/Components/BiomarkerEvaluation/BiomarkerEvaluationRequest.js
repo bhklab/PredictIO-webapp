@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Loader from 'react-loader-spinner';
 import axios from 'axios';
 import { Messages } from 'primereact/messages';
+import { usePromiseTracker, trackPromise } from "react-promise-tracker";
 
 import colors from '../../styles/colors';
 import Layout from '../UtilComponents/Layout';
@@ -16,6 +17,20 @@ import GeneSearch from './GeneSearch';
 const Container = styled.div`
     width: 80%;
     height: calc(100vh + 50px);
+`;
+
+const LoaderOverlay = styled.div`
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 9999;
+    background-color: #cccccc;
+    opacity: 0.6;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 const StyledMessages = styled(Messages)`
@@ -33,8 +48,15 @@ const StyledMessages = styled(Messages)`
     }
 `;
 
+const dataTypeOptions = [
+    {label: 'CNA', value: 'cna'},
+    {label: 'Expression', value: 'expression'},
+    {label: 'SNV', value: 'snv'}
+];
+
 const BiomarkerEvaluationRequest = () => {
     const messages = useRef(null);
+    const { promiseInProgress } = usePromiseTracker();
 
     const [parameters, setParameters] = useState({
         dataType: '',
@@ -48,10 +70,6 @@ const BiomarkerEvaluationRequest = () => {
         submitting: false
     });
 
-    const [dataTypeOptions, setDataTypeOptions] = useState({
-        options: [{label: 'CNA', value: 'cna'}, {label: 'Expression', value: 'expression'}, {label: 'SNV', value: 'snv'}], 
-        disabled: false
-    });
     const [sexOptions, setSexOptions] = useState({options: [], disabled: true});
     const [primaryOptions, setPrimaryOptions] = useState({options: [], disabled: true});
     const [drugTypeOptions, setDrugTypeOptions] = useState({options: [], disabled: true});
@@ -122,7 +140,7 @@ const BiomarkerEvaluationRequest = () => {
     const getDropdownOptions = async (dropdownName, paramStr) => {
         let uri = `/api/explore/biomarker/query/${dropdownName}?${paramStr}`;
         console.log(uri);
-        const res = await axios.get(uri);
+        const res = await trackPromise(axios.get(uri));
         console.log(res.data);
 
         switch(dropdownName){
@@ -175,6 +193,7 @@ const BiomarkerEvaluationRequest = () => {
         setDrugTypeOptions({options: [], disabled: true});
         setSequencingOptions({options: [], disabled: true});
         setStudyOptions({options: [], disabled: true});
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [parameters.dataType]);
 
     useEffect(() => {
@@ -202,6 +221,7 @@ const BiomarkerEvaluationRequest = () => {
             }
         }
         getDownstreamOptions();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [parameters.gene]);
 
     const getDownstreamSex = async (sex) => {
@@ -304,6 +324,12 @@ const BiomarkerEvaluationRequest = () => {
 
     return(
         <Layout>
+            {
+                promiseInProgress && 
+                <LoaderOverlay>
+                    <Loader type="Oval" color={colors.blue} height={150} width={150}/>
+                </LoaderOverlay>
+            }
             <Container>
                 <h4>Biomarker Evaluation</h4>
                 <StyledMessages ref={messages} />
@@ -313,12 +339,12 @@ const BiomarkerEvaluationRequest = () => {
                         <CustomDropdown
                             className='input'
                             value={parameters.dataType}
-                            options={dataTypeOptions.options} 
+                            options={dataTypeOptions} 
                             onChange={(e) => {setParameters({...parameters, dataType: e.value})}} 
                             filter={true}
                             checkbox={true}
                             placeholder='Select...'
-                            disabled={dataTypeOptions.disabled}
+                            disabled={false}
                         />
                     </div>
                     <div className='formField'>
