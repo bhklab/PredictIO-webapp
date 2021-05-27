@@ -10,6 +10,7 @@ package-lock.json
 # python
 venv/
 __pycache__/
+dump.rdb
 
 #misc
 raw_data/datasets
