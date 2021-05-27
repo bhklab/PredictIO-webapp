@@ -10,52 +10,59 @@ from .mail import send_mail
 from db.db import db
 from db.models.signature_user_requested import UserRequested
 from db.models.analysis_request import AnalysisRequest
+from resources import create_app
+# gets application context
+app = create_app()
+app.app_context().push()
+
 
 def execute_script(parameters):
     """function used to call R script in subprocess"""
     cwd = os.path.abspath(os.getcwd())
     r_path = os.path.join(cwd, 'r-scripts', 'io_meta', 'Run_Compute_Result.R')
     r_wd = os.path.join(cwd, 'r-scripts', 'io_meta')
-
+    print('Running analysis')
+    print(parameters)
     # command to be executed
     cmd = [
-        'Rscript', 
-        r_path, 
-        r_wd, 
-        parameters['analysis_id'], # analysis id 
-        parameters['study'], 
-        parameters['sex'], 
-        parameters['primary'], 
-        parameters['drugType'], 
+        'Rscript',
+        r_path,
+        r_wd,
+        parameters['analysis_id'],  # analysis id
+        parameters['study'],
+        parameters['sex'],
+        parameters['primary'],
+        parameters['drugType'],
         parameters['dataType'],
-        parameters['sequencingType'], 
+        parameters['sequencingType'],
         parameters['gene']
     ]
 
     # variable to store results
     out = None
 
-    r_process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    
+    r_process = subprocess.Popen(
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
     while True:
 
         line = r_process.stdout.readline()
-
         if not line:
             break
         else:
             out = line.rstrip().decode("utf-8")
-    
+
     print('execution complete')
-    
+
     # converts output to json (dictionary)
     output = json.loads(out)
     email = ''
     try:
-        analysis_id = output['analysis_id'][0]
-        analysis_request = AnalysisRequest.query.filter(AnalysisRequest.analysis_id == analysis_id).first()
-        email = analysis_request.email
         # Add data to signature_user_requested table and update analysis request with finished date and time
+        analysis_id = output['analysis_id'][0]
+        analysis_request = AnalysisRequest.query.filter(
+            AnalysisRequest.analysis_id == analysis_id).first()
+        email = analysis_request.email
         if not output['error'][0]:
             for row in output['data']:
                 meta_analysis = int(row['Meta_Analysis'])
@@ -87,7 +94,7 @@ def execute_script(parameters):
             print(output["message"][0])
             analysis_request.error = True
             analysis_request.error_message = output["message"][0]
-       
+
         db.session.commit()
         print('data inserted/updated')
     except Exception as e:
@@ -96,6 +103,6 @@ def execute_script(parameters):
         db.session.rollback()
     finally:
         db.session.close()
-
-    # send notification email
-    send_mail(email, output)
+        # send notification email
+        send_mail(email, output)
+        return 'Done'

@@ -1,31 +1,39 @@
 """
 Module for the on the fly gene signature meta analysis feature
 """
-import threading
+from worker import conn
+from rq import Queue
 import uuid
 import traceback
 from flask import request
 from flask import copy_current_request_context
 from flask_restful import Resource
-from utils.r_script_exec import execute_script
 from db.db import db
 from db.models.analysis_request import AnalysisRequest
 from datetime import datetime
 
+import time
+"""
+Task queue
+"""
+q = Queue(connection=conn)
+
 """
 GeneSignatureReauest Route class.
 """
+
+
 class BiomarkerEvaluationRequest(Resource):
     def get(self):
         return "Only post method is allowed", 400
-    
+
     def post(self):
         status = 200
         res = {
             "error": 0,
             "data": []
         }
-        
+
         try:
             # parse request
             query = request.get_json()
@@ -33,14 +41,13 @@ class BiomarkerEvaluationRequest(Resource):
                 'analysis_id': str(uuid.uuid4()),
                 'study': ",".join(query['study']),
                 'sex': ",".join(query['sex']),
-                'primary': ",".join(query['primary']), 
-                'drugType': ",".join(query['drugType']), 
+                'primary': ",".join(query['primary']),
+                'drugType': ",".join(query['drugType']),
                 'dataType': query['dataType'],
-                'sequencingType': ",".join(query['sequencingType']), 
+                'sequencingType': ",".join(query['sequencingType']),
                 'gene': ",".join(query['gene'])
             }
             print(datetime.now())
-
             analysis = AnalysisRequest(**{
                 'analysis_id': parameters['analysis_id'],
                 'email': query['email'],
@@ -60,18 +67,9 @@ class BiomarkerEvaluationRequest(Resource):
             # Insert analysis request into database.
             db.session.add(analysis)
             db.session.commit()
-
-            """
-            Function to be executed in a separate thread.
-            Add @copy_current_request_context decorator so that Flask_Mail module can access the app's request context.
-            """
-            @copy_current_request_context
-            def run_async(parameters):
-                execute_script(parameters)
-
-            thread = threading.Thread(target=run_async, args=(parameters,))
-            thread.start()
-            print('thread started')
+            # adds a new job to redis queue to be executed with current parameters
+            q.enqueue('utils.r_script_exec.execute_script', parameters)
+            print('Request enqueued')
         except Exception as e:
             print('Exception ', e)
             print(traceback.format_exc())
