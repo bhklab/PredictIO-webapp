@@ -10,6 +10,10 @@ from .mail import send_mail
 from db.db import db
 from db.models.signature_user_requested import UserRequested
 from db.models.analysis_request import AnalysisRequest
+from resources import create_app
+# gets application context
+app = create_app()
+app.app_context().push()
 
 
 def execute_script(parameters):
@@ -99,7 +103,6 @@ def execute_script(parameters):
         db.session.rollback()
     finally:
         db.session.close()
+        # send notification email
+        send_mail(email, output)
         return 'Done'
-
-    # send notification email
-    send_mail(email, output)
