@@ -72,7 +72,7 @@ def create_app():
     api.add_resource(Test, '/api/test')
 
     api.add_resource(ExploreDropdownOption, '/api/dropdown_option/explore')
-    api.add_resource(SearchGene, '/api/search_gene')
+    api.add_resource(SearchGene, '/api/search_gene/<datatype>')
 
     api.add_resource(ForestPlot, '/api/explore/forest_plot')
     api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
