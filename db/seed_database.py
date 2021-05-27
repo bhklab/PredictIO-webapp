@@ -209,4 +209,8 @@ def delete_table_rows():
         db.session.rollback()
     finally:
         print('Done')
+<<<<<<< HEAD
         db.session.close()
+=======
+        db.session.close()   
+>>>>>>> mn-development
