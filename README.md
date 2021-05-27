@@ -1,13 +1,15 @@
-# IOdb
+# PredictIO Webapp
 
-IO.db is an web application that allows users to explore gene signatures in 19 immunotherapy studies of ICB-treated patients, and to obtain gene signature predictions using molecular data of their own studies of ICB-treated patients.
+PredictIO is an web application that allows users to explore gene signatures in 19 immunotherapy studies of ICB-treated patients, and to obtain gene signature predictions using molecular data of their own studies of ICB-treated patients.
+
+The latest version can be found at https://predictio.ca/
 
 ## Setup Instructions
 
 - Clone the repo
   
 ```bash
-git clone git@github.com:bhklab/IOdb.git
+git clone https://github.com/bhklab/PredictIO-webapp.git
 cd IOdb
 ```
 
@@ -39,8 +41,9 @@ python scripts/generate_seed_files.py
 - To create tables and seed the database, run the following command:
 
 ```bash
-python db/seed_database.py
+flask seed-database
 ```
+This command will run db/seed_database.py with app context. Modify the file if necessary.
 
 ## Build Instructions
 

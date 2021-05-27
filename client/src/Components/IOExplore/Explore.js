@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import Loader from 'react-loader-spinner';
 
+import Layout from '../UtilComponents/Layout';
 import VolcanoPlotInput from './VolcanoPlotInput';
 import VolcanoPlotContainer from './VolcanoPlotContainer';
 import ForestPlotContainer from './ForestPlotContainer';
@@ -14,19 +15,17 @@ const ExploreContainer = styled.div`
     width: 100%;
 `;
 
-const Explore = (props) => {
-
-    const {parameters, setParameters} = props;
-    
-    const [volcanoPlotData, setVolcanoPlotData] = useState({data: {}, ready: false});
+const Explore = ({ location }) => {
+    const [parameters, setParameters] = useState({signatures: ['ALL'], outcome: '', model: ''});
+    const [volcanoPlotData, setVolcanoPlotData] = useState({data: {}, loading: false, ready: false});
     const [forestPlotData, setForestPlotData] = useState({data: {}, loading: false, ready: false});
     const [modalData, setModalData]=useState({data: {}, ready: false});
 
-    const getVolcanoPlotData = async () => {
-        setVolcanoPlotData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
+    const getVolcanoPlotData = async (presetParams = null) => {
+        setVolcanoPlotData({data: {}, loading: true, ready: false}); // reset the data object so that the plot is redrawn.
         setForestPlotData({data: {}, loading: false, ready: false}); 
-        const res = await axios.post('/api/explore/volcano_plot', parameters);
-        setVolcanoPlotData({data: res.data, ready: true});
+        const res = await axios.post('/api/explore/volcano_plot', presetParams ? presetParams : parameters);
+        setVolcanoPlotData({data: res.data, loading: false, ready: true});
     };
 
     const getForestPlotData = async (params) => {
@@ -47,70 +46,90 @@ const Explore = (props) => {
         setModalData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
     };
 
+    const resetData = () => {
+        setParameters({signatures: ['ALL'], outcome: '', model: ''});
+        setVolcanoPlotData({data: {}, loading: false, ready: false});
+        setForestPlotData({data: {}, loading: false, ready: false});
+    }
+
     useEffect(() => {
-        getVolcanoPlotData();
+        if(location.state){
+            getVolcanoPlotData(location.state.preset);
+            setParameters(location.state.preset);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return(
-        <ExploreContainer>
-            <h3>Explore pre-computed signature data</h3>
-            <VolcanoPlotInput 
-                parameters={parameters} 
-                setParameters={setParameters} 
-                onSubmit={getVolcanoPlotData} 
-                flexDirection='row' 
-                resetButton={true} 
-                onReset={() => {window.location.reload()}} />
-            <PlotContainer>
-                <StyledPlotArea width='40%'>
-                {
-                    volcanoPlotData.ready ?
-                    <VolcanoPlotContainer 
-                        parameters={parameters} 
-                        setParameters={setParameters} 
-                        volcanoPlotData={volcanoPlotData} 
-                        getForestPlotData={getForestPlotData} 
-                    />
-                    :
-                    <LoaderContainer>
-                        <Loader type="Oval" color={colors.blue} height={80} width={80}/>
-                    </LoaderContainer>
-                }
-                </StyledPlotArea>
-                <StyledPlotArea width='60%'>
-                {
-                    forestPlotData.ready ?
-                    <ForestPlotContainer 
-                        parameters={parameters}
-                        forestPlotData={forestPlotData}
-                        getModalData={getModalData}
-                    />
-                    :
-                    forestPlotData.loading ?
-                        <LoaderContainer>
-                            <Loader type="Oval" color={colors.blue} height={80} width={80}/>
-                        </LoaderContainer>
+        <Layout>
+            <ExploreContainer>
+                <h3>Explore pre-computed signature data</h3>
+                <VolcanoPlotInput 
+                    parameters={parameters} 
+                    setParameters={setParameters} 
+                    onSubmit={getVolcanoPlotData} 
+                    onReset={resetData}
+                    flexDirection='row' 
+                />
+                <PlotContainer>
+                    <StyledPlotArea width='40%'>
+                    {
+                        volcanoPlotData.ready ?
+                        <VolcanoPlotContainer 
+                            parameters={parameters} 
+                            setParameters={setParameters} 
+                            volcanoPlotData={volcanoPlotData} 
+                            getForestPlotData={getForestPlotData} 
+                        />
                         :
-                        <div>
-                            <h3>Forest Plot</h3>
-                            <div className='forestPlotMessage'>
-                                Click on a signature point on the volcano plot to display a corresponding forest plot.
+                        volcanoPlotData.loading ?
+                            <LoaderContainer>
+                                <Loader type="Oval" color={colors.blue} height={80} width={80}/>
+                            </LoaderContainer>
+                            :
+                            <div>
+                                <h3>Volcano Plot</h3>
+                                <div className='forestPlotMessage'>
+                                    Select outcome and model to display a volcano plot.
+                                </div>
                             </div>
-                        </div>
-                }
-                </StyledPlotArea>
-            </PlotContainer>
-            <PlotContainer>
-                {
-                    modalData.ready ?
-                        <ModalContainer
-                            modalData={modalData}
-                            removeModalData = {removeModalData}
-                        /> :
-                        <StyledPlotArea/>
-                }
-            </PlotContainer>
-        </ExploreContainer>
+                    }
+                    </StyledPlotArea>
+                    <StyledPlotArea width='60%'>
+                    {
+                        forestPlotData.ready ?
+                        <ForestPlotContainer 
+                            parameters={parameters}
+                            forestPlotData={forestPlotData}
+                            getModalData={getModalData}
+                        />
+                        :
+                        forestPlotData.loading ?
+                            <LoaderContainer>
+                                <Loader type="Oval" color={colors.blue} height={80} width={80}/>
+                            </LoaderContainer>
+                            :
+                            <div>
+                                <h3>Forest Plot</h3>
+                                <div className='forestPlotMessage'>
+                                    Click on a signature point on the volcano plot to display a corresponding forest plot.
+                                </div>
+                            </div>
+                    }
+                    </StyledPlotArea>
+                </PlotContainer>
+                <PlotContainer>
+                    {
+                        modalData.ready ?
+                            <ModalContainer
+                                modalData={modalData}
+                                removeModalData = {removeModalData}
+                            /> :
+                            <StyledPlotArea/>
+                    }
+                </PlotContainer>
+            </ExploreContainer>
+        </Layout>
     );
 }
 

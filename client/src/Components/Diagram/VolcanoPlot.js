@@ -41,6 +41,7 @@ const VolcanoPlot = (props) => {
             pointSize: getPointSize(data),
             pointLine: getPointOutline(data)
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -54,6 +55,7 @@ const VolcanoPlot = (props) => {
                 pointLine: pointLine
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedPointIndex]);
 
     const onClick = (data) => {

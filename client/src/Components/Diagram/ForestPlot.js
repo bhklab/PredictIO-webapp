@@ -1,10 +1,10 @@
 import React from "react";
-import Layout from '../UtilComponents/Layout';
+// import Layout from '../UtilComponents/Layout';
 import styled from 'styled-components';
 import studies from "../../example_output/sample-output.js";
 import * as d3 from 'd3';
-import Tooltip from "react-bootstrap/Tooltip";
-import Button from "react-bootstrap/Button";
+// import Tooltip from "react-bootstrap/Tooltip";
+// import Button from "react-bootstrap/Button";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 
 
@@ -38,7 +38,7 @@ const dataset = studies
 
 const data = () => {
   return dataset.filter((element) => {
-    return element.study != "Meta-analysis";
+    return element.study !== "Meta-analysis";
   })
 }
 
@@ -252,7 +252,7 @@ const ForestPlot = () => {
   <g
     id = {"datapoint-" +index}
     onClick = {() => console.log(index)}>
-    /*Tags*/
+    {/* Tags */}
   <text
     id = {"tag-"+index}
     key = {key}
@@ -264,8 +264,7 @@ const ForestPlot = () => {
       >
       {dataset[key].study}({dataset[key].Primary}, {dataset[key].Sequencing})
       </text>
-
-      /* Intervals */
+      {/* Intervals */}
       < line
     id = {"interval-"+index}
     x1 = {xScale(Number(dataset[key]["95CI_low"])
@@ -285,7 +284,7 @@ const ForestPlot = () => {
     </title>
     </line>
 
-    /*Data point marks*/
+    {/* Data point marks */}
     <rect
     id = {"datPoint-" +index}
     x = {xScale(Number(dataset[key]["coef"])

@@ -51,8 +51,8 @@ sudo apt install -y r-base r-base-core
 sudo apt install git
 
 # 4. Clone the IO.db repository
-git clone https://github.com/bhklab/IOdb.git 
-# after this, use SCP to transfer untracked files (.env and RData files) 
+git clone https://github.com/bhklab/PredictIO.git
+# after this, use SCP to transfer untracked files (.env and RData files in r-scripts/data/io_meta/) 
 scp -i <path to the key> <path to file or dir> <username>@<hostname>:/<path>
 
 # 5. Install Python dependencies
@@ -71,10 +71,10 @@ sudo apt-get install -y nginx
 # disable the default website
 sudo rm /etc/nginx/sites-enabled/default
 
-# create iodb.nginx file under /etc/nginx/sites-available directory, and add the following:
+# create predictio.nginx file under /etc/nginx/sites-available directory, and add the following:
     server {
         listen 80;
-        root /home/ubuntu/IOdb/client/build; # Sets the root directory to React's build file.
+        root /home/ubuntu/PredictIO/client/build; # Sets the root directory to React's build file.
         index index.html; # The index file in the build directory.
 
         location / {
@@ -101,12 +101,12 @@ pip install gunicorn
 
 # Add iodb.service file to /etc/systemd/system directory with the following content:
     # [Unit]
-    # Description=IO.db Flask API
+    # Description=PredictIO Flask API
     # After=network.target
 
     # [Service]
     # User=ubuntu
-    # WorkingDirectory=/home/ubuntu/IOdb # root of the web app
+    # WorkingDirectory=/home/ubuntu/PredictIO # root of the web app
     # ExecStart=/home/ubuntu/.pyenv/shims/gunicorn -b 127.0.0.1:5000 app:app 
         # /home/ubuntu/.pyenv/shims/gunicorn is the path to Gunicorn.
         # 127.0.0.1:5000 localhost IP and port to start the API service.
@@ -145,7 +145,7 @@ sudo ufw allow ssh http https
     server {
         server_name predictio.ca www.predictio.ca; # Domain name set as server name
         listen 443 ssl; # Port changed to 443
-        root /home/ubuntu/IOdb/client/build; # Sets the root directory to React's build file.
+        root /home/ubuntu/PredictIO/client/build; # Sets the root directory to React's build file.
         index index.html; # The index file in the build directory.
         
         # Location of the certificate files.
