@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 // individual page components
@@ -19,11 +19,13 @@ const App = () => {
       <GlobalStyles />
         <Router>
           <Switch>
-            <Route path='/' exact component={Home} />
-            <Route path='/explore/precomputed' exact component={Explore} />
-            <Route path='/explore/biomarker/request' exact component={BiomarkerEvaluationRequest} />
-            <Route path='/explore/biomarker/result/:id' exact component={BiomarkerEvaluationResult} />
-            <Route path='/test' exact component={Test} />
+            <Suspense fallback={<div />}>
+              <Route path='/' exact component={Home} />
+              <Route path='/explore/precomputed' exact component={Explore} />
+              <Route path='/explore/biomarker/request' exact component={BiomarkerEvaluationRequest} />
+              <Route path='/explore/biomarker/result/:id' exact component={BiomarkerEvaluationResult} />
+              <Route path='/test' exact component={Test} />
+            </Suspense>
           </Switch>
         </Router>
     </React.Fragment>
