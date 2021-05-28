@@ -47,6 +47,7 @@ class BiomarkerEvaluationRequest(Resource):
                 'sequencingType': ",".join(query['sequencingType']),
                 'gene': ",".join(query['gene'])
             }
+            print(parameters)
             print(datetime.now())
             analysis = AnalysisRequest(**{
                 'analysis_id': parameters['analysis_id'],
@@ -65,10 +66,10 @@ class BiomarkerEvaluationRequest(Resource):
             })
 
             # Insert analysis request into database.
-            db.session.add(analysis)
-            db.session.commit()
+            # db.session.add(analysis)
+            # db.session.commit()
             # adds a new job to redis queue to be executed with current parameters
-            q.enqueue('utils.r_script_exec.execute_script', parameters)
+            # q.enqueue('utils.r_script_exec.execute_script', parameters)
             print('Request enqueued')
         except Exception as e:
             print('Exception ', e)

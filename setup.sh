@@ -119,11 +119,11 @@ pip install gunicorn
 # Reload systemd to reflect that change.
 sudo systemctl daemon-reload
 
-# Start the iodb API
-sudo systemctl start iodb # name of the .service file.
+# Start the predictio API
+sudo systemctl start predictio # name of the .service file.
 
 # Ensure that the API is running 
-sudo systemctl status iodb # you should see "Active: active (running)" you can find around the third line of the output.
+sudo systemctl status predictio # you should see "Active: active (running)" you can find around the third line of the output.
 
 # 10. Set firewall with Uncomplicated Firewall (ufw) to allow only ssh, http and https connections to the server.
 sudo ufw allow ssh http https
