@@ -27,6 +27,12 @@ const GlobalStyles = createGlobalStyle`
     a:hover {
         transition: all 0.25s ease-out 0s;
     }
+
+    .p-tooltip {
+        .p-tooltip-text {
+            font-size: 12px;
+        }
+    }
 `;
 
 export default GlobalStyles;

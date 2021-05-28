@@ -353,7 +353,14 @@ const BiomarkerEvaluationRequest = () => {
                             className='input'
                             datatype={parameters.dataType}
                             selectedGenes={parameters.gene}
-                            onChange={(e) => {setParameters({...parameters, gene: e.value})}}
+                            onChange={(e) => {
+                                if(parameters.dataType === 'cna'){
+                                    let selected = e.value.length ? [e.value[e.value.length - 1]] : [];
+                                    setParameters({...parameters, gene: selected});
+                                }else{
+                                    setParameters({...parameters, gene: e.value});
+                                }
+                            }}
                         />
                     </div>
                     <div className='formField'>

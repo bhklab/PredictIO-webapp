@@ -47,6 +47,13 @@ const GeneSearch = (props) => {
         })));
     }
 
+    const getTooltipText = () => {
+        if(datatype === 'cna'){
+            return 'Only one gene can be selected for CNA.'
+        }
+        return '';
+    }
+
     return(
         <React.Fragment>
             <CustomAutoComplete 
@@ -59,6 +66,7 @@ const GeneSearch = (props) => {
                 onChange={onChange}
                 placeholder='ex. B2M, CD8A, GZMA'
                 disabled={typeof datatype === 'undefined' || datatype.length === 0}
+                tooltip={getTooltipText()}
             />
             <CustomToast ref={toast}></CustomToast>
         </React.Fragment>
