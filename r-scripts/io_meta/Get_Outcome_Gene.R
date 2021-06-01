@@ -32,7 +32,7 @@ Get_Outcome_CNA_Gene = function( sex , primary , drug_type , sequencing_type , g
 	source( 'Get_DI.R' )
 	source( 'Meta_Analysis.R' )
 
-	load( "../data/ICB_cna_filtered.RData" )
+	load( "../data/io_meta/ICB_cna_filtered.RData" )
 	cna
 
 	study = names(cna)
@@ -155,7 +155,7 @@ Get_Outcome_SNV_Gene = function( sex , primary , drug_type , sequencing_type , g
 	source( 'Get_DI.R' )
 	source( 'Meta_Analysis.R' )
 
-	load( "../data/ICB_snv_filtered.RData" )
+	load( "../data/io_meta/ICB_snv_filtered.RData" )
 	snv
 
 	study = names(snv)
@@ -266,7 +266,7 @@ Get_Outcome_EXP_Gene = function( sex , primary , drug_type , sequencing_type , g
 	source( 'Get_DI.R' )
 	source( 'Meta_Analysis.R' )
 
-	load( "../data/ICB_exp_filtered.RData" )
+	load( "../data/io_meta/ICB_exp_filtered.RData" )
 	expr
 
 	study = names(expr)

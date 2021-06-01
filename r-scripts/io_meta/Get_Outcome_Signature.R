@@ -144,7 +144,7 @@ Get_Outcome_SNV_Signature = function( sex , primary , drug_type , sequencing_typ
 	source( 'Get_DI.R' )
 	source( 'Meta_Analysis.R' )
 
-	load( "../data/ICB_snv_filtered.RData" )
+	load( "../data/io_meta/ICB_snv_filtered.RData" )
 	snv
 
 	study = names(snv)
@@ -258,7 +258,7 @@ Get_Outcome_EXP_Signature = function( sex , primary , drug_type , sequencing_typ
 	source( 'Meta_Analysis.R' )
 	require(GSVA)
 
-	load( "../data/ICB_exp_filtered.RData" )
+	load( "../data/io_meta/ICB_exp_filtered.RData" )
 	expr
 
 	study = names(expr)
