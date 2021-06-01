@@ -122,7 +122,7 @@ const BiomarkerEvaluationRequest = () => {
                     severity: 'error', 
                     summary: 'Unable to submit request', 
                     detail: 'Please try again, or contact support@predictio.ca.', 
-                    sticky: true 
+                    sticky: true
                 }
             ]);
         }else{
@@ -131,7 +131,8 @@ const BiomarkerEvaluationRequest = () => {
                     severity: 'success', 
                     summary: 'Request has been submitted', 
                     detail: 'You will receive an email notification once your request is processed.', 
-                    sticky: true 
+                    sticky: false,
+                    life: 3000
                 }
             ]);
         }

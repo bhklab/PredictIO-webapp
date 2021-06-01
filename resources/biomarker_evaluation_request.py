@@ -66,11 +66,11 @@ class BiomarkerEvaluationRequest(Resource):
             })
 
             # Insert analysis request into database.
-            db.session.add(analysis)
-            db.session.commit()
+            # db.session.add(analysis)
+            # db.session.commit()
             # adds a new job to redis queue to be executed with current parameters
-            q.enqueue('utils.r_script_exec.execute_script',
-                      job_timeout=3600, args=(parameters,))
+            # q.enqueue('utils.r_script_exec.execute_script',
+            #           job_timeout=3600, args=(parameters,))
             print('Request enqueued')
         except Exception as e:
             print('Exception ', e)

@@ -32,7 +32,7 @@ Get_Outcome_CNA_Gene = function( sex , primary , drug_type , sequencing_type , g
 	source( 'Get_DI.R' )
 	source( 'Meta_Analysis.R' )
 
-	load( "../data/io_meta/ICB_cna_filtered.RData" )
+	load( "../data/ICB_cna_filtered.RData" )
 	cna
 
 	study = names(cna)
@@ -67,79 +67,82 @@ Get_Outcome_CNA_Gene = function( sex , primary , drug_type , sequencing_type , g
 						data = NULL
 					}
 
-				
-					if( length( data[ !is.na( os ) ]  ) >= 20 ){
+					if( !is.null( data ) ){
+						if( sum( abs( data ) , na.rm= TRUE ) / length( data[ !is.na( data ) ] ) >= .10 & length( data[ !is.na( os ) ]  ) >= 20 ){
 
-						hr = Get_HR_continous( surv= os , time= t.os , time_censor=36 , variable= data )
-						output = rbind( output , 
-								c( 	study[i] , tumor[j] , 
-									"OS" , "COX" , unique( toupper( phenoData( cna[[i]] )$dna ) ) , 
-									0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
-									NA , NA ) )
+							hr = Get_HR_continous( surv= os , time= t.os , time_censor=36 , variable= data )
+							output = rbind( output , 
+									c( 	study[i] , tumor[j] , 
+										"OS" , "COX" , unique( toupper( phenoData( cna[[i]] )$dna ) ) , 
+										0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
+										NA , NA ) )
 
-						hr = Get_DI_continous( surv= os , time= t.os , time_censor=36 , variable= data )
-						output = rbind( output , 
-								c( 	study[i] , tumor[j] , 
-									"OS" , "DI" , unique( toupper( phenoData( cna[[i]] )$dna ) ) , 
-									0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
-									NA , NA ) )
+							hr = Get_DI_continous( surv= os , time= t.os , time_censor=36 , variable= data )
+							output = rbind( output , 
+									c( 	study[i] , tumor[j] , 
+										"OS" , "DI" , unique( toupper( phenoData( cna[[i]] )$dna ) ) , 
+										0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
+										NA , NA ) )
 
-					}
-					if( length( data[ !is.na( pfs ) ]  ) >= 20 ){
+						}
+						if( sum( abs( data ) , na.rm= TRUE ) / length( data[ !is.na( data ) ] ) >= .10 & length( data[ !is.na( pfs ) ]  ) >= 20 ){
 
-						hr = Get_HR_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
-						output = rbind( output , 
-								c( 	study[i] , tumor[j] , 
-									"PFS" , "COX" , unique( toupper( phenoData( cna[[i]] )$dna ) ) , 
-									0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr ,
-									NA , NA ) )
+							hr = Get_HR_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
+							output = rbind( output , 
+									c( 	study[i] , tumor[j] , 
+										"PFS" , "COX" , unique( toupper( phenoData( cna[[i]] )$dna ) ) , 
+										0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr ,
+										NA , NA ) )
 
-						hr = Get_DI_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
-						output = rbind( output , 
-								c( 	study[i] , tumor[j] , 
-									"PFS" , "DI" , unique( toupper( phenoData( cna[[i]] )$dna ) ) , 
-									0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr ,
-									NA , NA ) )
-							
-					}
-					if( length( data[ !is.na( response ) ]  ) >= 20 ){
+							hr = Get_DI_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
+							output = rbind( output , 
+									c( 	study[i] , tumor[j] , 
+										"PFS" , "DI" , unique( toupper( phenoData( cna[[i]] )$dna ) ) , 
+										0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr ,
+										NA , NA ) )
+								
+						}
+						if( sum( abs( data ) , na.rm= TRUE ) / length( data[ !is.na( data ) ] ) >= .10 & length( data[ !is.na( response ) ]  ) >= 20 ){
 
-						x = ifelse( response %in% "R" , 0 , ifelse( response %in% "NR" , 1 , NA ) )
-						fit = glm( x ~ data , family=binomial( link="logit" ) )
+							x = ifelse( response %in% "R" , 0 , ifelse( response %in% "NR" , 1 , NA ) )
+							fit = glm( x ~ data , family=binomial( link="logit" ) )
 
-						output = rbind( output , 
-								c( study[i] , tumor[j] , 
-									"Response" , "LogReg" , unique( toupper( phenoData( cna[[i]] )$dna ) ) , 
-									0 , NA , NA , length( data[ !is.na( response ) ]  ) , 
-									round( summary(fit)$coefficients[ 2 , c( 1 , 2 ) ] , 2 ) , 
-									round( confint(fit)[ 2 , ] , 2 ) , 
-									summary(fit)$coefficients[ 2 , 4 ] ,
-									NA , NA ) )			
+							output = rbind( output , 
+									c( study[i] , tumor[j] , 
+										"Response" , "LogReg" , unique( toupper( phenoData( cna[[i]] )$dna ) ) , 
+										0 , NA , NA , length( data[ !is.na( response ) ]  ) , 
+										round( summary(fit)$coefficients[ 2 , c( 1 , 2 ) ] , 2 ) , 
+										round( confint(fit)[ 2 , ] , 2 ) , 
+										summary(fit)$coefficients[ 2 , 4 ] ,
+										NA , NA ) )			
+						}
 					}
 				}
 			}
 		}
 	}
 
-	colnames(output) = c( "study" , "Primary" , "Outcome" , "Model" , "Sequencing" , "Meta_Analysis" , "Subgroup" , "Type" , "N" , "Effect_size" , "SE" , "CI95_low" , "CI95_high"  , "Pval" , "I2" , "Pval_I2" )
-	output = as.data.frame( output )
-	output$study = as.character( output$study )
-	output$Primary = as.character( output$Primary )
-	output$Outcome = as.character( output$Outcome )
-	output$Model = as.character( output$Model )
-	output$Sequencing = as.character( output$Sequencing )
-	output$Meta_Analysis = as.character( output$Meta_Analysis )
-	output$Subgroup = as.character( output$Subgroup )
-	output$Type = as.character( output$Type )
-	output$N = as.numeric( as.character( output$N ) )
-	output$Effect_size = as.numeric( as.character( output$Effect_size ) )
-	output$SE = as.numeric( as.character( output$SE ) )
-	output$CI95_low = as.numeric( as.character( output$CI95_low ) )
-	output$CI95_high = as.numeric( as.character( output$CI95_high ) )
-	output$I2 = as.numeric( as.character( output$I2 ) )
-	output$Pval_I2 = as.numeric( as.character( output$Pval_I2 ) )
+	if( !is.null( output ) ){
+		colnames(output) = c( "study" , "Primary" , "Outcome" , "Model" , "Sequencing" , "Meta_Analysis" , "Subgroup" , "Type" , "N" , "Effect_size" , "SE" , "CI95_low" , "CI95_high"  , "Pval" , "I2" , "Pval_I2" )
+		output = as.data.frame( output )
+		output$study = as.character( output$study )
+		output$Primary = as.character( output$Primary )
+		output$Outcome = as.character( output$Outcome )
+		output$Model = as.character( output$Model )
+		output$Sequencing = as.character( output$Sequencing )
+		output$Meta_Analysis = as.character( output$Meta_Analysis )
+		output$Subgroup = as.character( output$Subgroup )
+		output$Type = as.character( output$Type )
+		output$N = as.numeric( as.character( output$N ) )
+		output$Effect_size = as.numeric( as.character( output$Effect_size ) )
+		output$SE = as.numeric( as.character( output$SE ) )
+		output$CI95_low = as.numeric( as.character( output$CI95_low ) )
+		output$CI95_high = as.numeric( as.character( output$CI95_high ) )
+		output$I2 = as.numeric( as.character( output$I2 ) )
+		output$Pval_I2 = as.numeric( as.character( output$Pval_I2 ) )
 
-	output = get_Meta_Output( input = output )		
+		output = get_Meta_Output( input = output )		
+	}
 	output
 }
 
@@ -152,7 +155,7 @@ Get_Outcome_SNV_Gene = function( sex , primary , drug_type , sequencing_type , g
 	source( 'Get_DI.R' )
 	source( 'Meta_Analysis.R' )
 
-	load( "../data/io_meta/ICB_snv_filtered.RData" )
+	load( "../data/ICB_snv_filtered.RData" )
 	snv
 
 	study = names(snv)
@@ -189,64 +192,68 @@ Get_Outcome_SNV_Gene = function( sex , primary , drug_type , sequencing_type , g
 					}
 
 				
-					if( length( data[ !is.na( os ) ]  ) >= 20 ){
+					if( !is.null( data ) ){
+						if( sum( data , na.rm= TRUE ) / length( data[ !is.na( data ) ] ) >= .10 & length( data[ !is.na( os ) ]  ) >= 20 ){
 
-						hr = Get_HR_continous( surv= os , time= t.os , time_censor=36 , variable= data )
-						output = rbind( output , 
-								c( 	study[i] , tumor[j] , 
-									"OS" , "COX" , unique( toupper( phenoData( snv[[i]] )$dna ) ) , 
-									0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
-									NA , NA ) )
+							hr = Get_HR_continous( surv= os , time= t.os , time_censor=36 , variable= data )
+							output = rbind( output , 
+									c( 	study[i] , tumor[j] , 
+										"OS" , "COX" , unique( toupper( phenoData( snv[[i]] )$dna ) ) , 
+										0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
+										NA , NA ) )
 
-					}
-					if( length( data[ !is.na( pfs ) ]  ) >= 20 ){
+						}
+						if( sum( data , na.rm= TRUE ) / length( data[ !is.na( data ) ] ) >= .10 & length( data[ !is.na( pfs ) ]  ) >= 20 ){
 
-						hr = Get_HR_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
-						output = rbind( output , 
-								c( 	study[i] , tumor[j] , 
-									"PFS" , "COX" , unique( toupper( phenoData( snv[[i]] )$dna ) ) , 
-									0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr ,
-									NA , NA ) )
-							
-					}
-					if( sum( data , na.rm= TRUE ) / length( data[ !is.na( data ) ] ) >= .10 & length( data[ !is.na( response ) ]  ) >= 20 ){
+							hr = Get_HR_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
+							output = rbind( output , 
+									c( 	study[i] , tumor[j] , 
+										"PFS" , "COX" , unique( toupper( phenoData( snv[[i]] )$dna ) ) , 
+										0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr ,
+										NA , NA ) )
+								
+						}
+						if( sum( data , na.rm= TRUE ) / length( data[ !is.na( data ) ] ) >= .10 & length( data[ !is.na( response ) ]  ) >= 20 ){
 
-						x = ifelse( response %in% "R" , 0 , ifelse( response %in% "NR" , 1 , NA ) )
-						fit = glm( x ~ data , family=binomial( link="logit" ) )
+							x = ifelse( response %in% "R" , 0 , ifelse( response %in% "NR" , 1 , NA ) )
+							fit = glm( x ~ data , family=binomial( link="logit" ) )
 
-						output = rbind( output , 
-								c( study[i] , tumor[j] , 
-									"Response" , "LogReg" , unique( toupper( phenoData( snv[[i]] )$dna ) ) , 
-									0 , NA , NA , length( data[ !is.na( response ) ]  ) , 
-									round( summary(fit)$coefficients[ 2 , c( 1 , 2 ) ] , 2 ) , 
-									round( confint(fit)[ 2 , ] , 2 ) , 
-									summary(fit)$coefficients[ 2 , 4 ] ,
-									NA , NA ) )			
+							output = rbind( output , 
+									c( study[i] , tumor[j] , 
+										"Response" , "LogReg" , unique( toupper( phenoData( snv[[i]] )$dna ) ) , 
+										0 , NA , NA , length( data[ !is.na( response ) ]  ) , 
+										round( summary(fit)$coefficients[ 2 , c( 1 , 2 ) ] , 2 ) , 
+										round( confint(fit)[ 2 , ] , 2 ) , 
+										summary(fit)$coefficients[ 2 , 4 ] ,
+										NA , NA ) )			
+						}
 					}
 				}
 			}
 		}
 	}
 
-	colnames(output) = c( "study" , "Primary" , "Outcome" , "Model" , "Sequencing" , "Meta_Analysis" , "Subgroup" , "Type" , "N" , "Effect_size" , "SE" , "CI95_low" , "CI95_high"  , "Pval" , "I2" , "Pval_I2" )
-	output = as.data.frame( output )
-	output$study = as.character( output$study )
-	output$Primary = as.character( output$Primary )
-	output$Outcome = as.character( output$Outcome )
-	output$Model = as.character( output$Model )
-	output$Sequencing = as.character( output$Sequencing )
-	output$Meta_Analysis = as.character( output$Meta_Analysis )
-	output$Subgroup = as.character( output$Subgroup )
-	output$Type = as.character( output$Type )
-	output$N = as.numeric( as.character( output$N ) )
-	output$Effect_size = as.numeric( as.character( output$Effect_size ) )
-	output$SE = as.numeric( as.character( output$SE ) )
-	output$CI95_low = as.numeric( as.character( output$CI95_low ) )
-	output$CI95_high = as.numeric( as.character( output$CI95_high ) )
-	output$I2 = as.numeric( as.character( output$I2 ) )
-	output$Pval_I2 = as.numeric( as.character( output$Pval_I2 ) )
+	if( !is.null( output ) ){
+		colnames(output) = c( "study" , "Primary" , "Outcome" , "Model" , "Sequencing" , "Meta_Analysis" , "Subgroup" , "Type" , "N" , "Effect_size" , "SE" , "CI95_low" , "CI95_high"  , "Pval" , "I2" , "Pval_I2" )
+		output = as.data.frame( output )
+		output$study = as.character( output$study )
+		output$Primary = as.character( output$Primary )
+		output$Outcome = as.character( output$Outcome )
+		output$Model = as.character( output$Model )
+		output$Sequencing = as.character( output$Sequencing )
+		output$Meta_Analysis = as.character( output$Meta_Analysis )
+		output$Subgroup = as.character( output$Subgroup )
+		output$Type = as.character( output$Type )
+		output$N = as.numeric( as.character( output$N ) )
+		output$Effect_size = as.numeric( as.character( output$Effect_size ) )
+		output$SE = as.numeric( as.character( output$SE ) )
+		output$CI95_low = as.numeric( as.character( output$CI95_low ) )
+		output$CI95_high = as.numeric( as.character( output$CI95_high ) )
+		output$I2 = as.numeric( as.character( output$I2 ) )
+		output$Pval_I2 = as.numeric( as.character( output$Pval_I2 ) )
 
-	output = get_Meta_Output( input = output )		
+		output = get_Meta_Output( input = output )		
+	}
 	output
 }
 
@@ -259,7 +266,7 @@ Get_Outcome_EXP_Gene = function( sex , primary , drug_type , sequencing_type , g
 	source( 'Get_DI.R' )
 	source( 'Meta_Analysis.R' )
 
-	load( "../data/io_meta/ICB_exp_filtered.RData" )
+	load( "../data/ICB_exp_filtered.RData" )
 	expr
 
 	study = names(expr)
@@ -295,79 +302,83 @@ Get_Outcome_EXP_Gene = function( sex , primary , drug_type , sequencing_type , g
 					}
 
 
-					if( length( data[ !is.na( os ) ]  ) >= 20 ){
+					if( !is.null( data ) ){
+						if( length( data[ !is.na( os ) ]  ) >= 20 ){
 
-						hr = Get_HR_continous( surv= os , time= t.os , time_censor=36 , variable= data ) 
-						output = rbind( output , 
-								c( 	study[i] , tumor[j] , 
-									"OS" , "COX" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
-									0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
-									NA , NA ) )
+							hr = Get_HR_continous( surv= os , time= t.os , time_censor=36 , variable= data ) 
+							output = rbind( output , 
+									c( 	study[i] , tumor[j] , 
+										"OS" , "COX" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
+										0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
+										NA , NA ) )
 
 
-						hr = Get_DI_continous( surv= os , time= t.os , time_censor=36 , variable= data )
-						output = rbind( output , 
-								c( 	study[i] , tumor[j] , 
-									"OS" , "DI" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
-									0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
-									NA , NA ) )
+							hr = Get_DI_continous( surv= os , time= t.os , time_censor=36 , variable= data )
+							output = rbind( output , 
+									c( 	study[i] , tumor[j] , 
+										"OS" , "DI" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
+										0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
+										NA , NA ) )
 
-					}
-					if( length( data[ !is.na( pfs ) ]  ) >= 20 ){
+						}
+						if( length( data[ !is.na( pfs ) ]  ) >= 20 ){
 
-						hr = Get_HR_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
-						output = rbind( output , 
-								c( 	study[i] , tumor[j] , 
-									"PFS" , "COX" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
-									0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr  ,
-									NA , NA ) )
+							hr = Get_HR_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
+							output = rbind( output , 
+									c( 	study[i] , tumor[j] , 
+										"PFS" , "COX" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
+										0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr  ,
+										NA , NA ) )
 
-						hr = Get_DI_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
-						output = rbind( output , 
-								c( 	study[i] , tumor[j] , 
-									"PFS" , "DI" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
-									0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr ,
-									NA , NA ) )
-							
-					}
-					if( length( data[ !is.na( response ) ]  ) >= 20 ){
+							hr = Get_DI_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
+							output = rbind( output , 
+									c( 	study[i] , tumor[j] , 
+										"PFS" , "DI" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
+										0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr ,
+										NA , NA ) )
+								
+						}
+						if( length( data[ !is.na( response ) ]  ) >= 20 ){
 
-						x = ifelse( response %in% "R" , 0 , ifelse( response %in% "NR" , 1 , NA ) )
-						fit = glm( x ~ data , family=binomial( link="logit" ) )
+							x = ifelse( response %in% "R" , 0 , ifelse( response %in% "NR" , 1 , NA ) )
+							fit = glm( x ~ data , family=binomial( link="logit" ) )
 
-						output = rbind( output , 
-								c( study[i] , tumor[j] , 
-									"Response" , "LogReg" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
-									0 , NA , NA , length( data[ !is.na( response ) ]  ) , 
-									round( summary(fit)$coefficients[ 2 , c( 1 , 2 ) ] , 2 ) , 
-									round( confint(fit)[ 2 , ] , 2 ) , 
-									summary(fit)$coefficients[ 2 , 4 ] ,
-									NA , NA ) )			
+							output = rbind( output , 
+									c( study[i] , tumor[j] , 
+										"Response" , "LogReg" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
+										0 , NA , NA , length( data[ !is.na( response ) ]  ) , 
+										round( summary(fit)$coefficients[ 2 , c( 1 , 2 ) ] , 2 ) , 
+										round( confint(fit)[ 2 , ] , 2 ) , 
+										summary(fit)$coefficients[ 2 , 4 ] ,
+										NA , NA ) )			
+						}
 					}
 				}
 			}
 		}
 	}
 
-	colnames(output) = c( "study" , "Primary" , "Outcome" , "Model" , "Sequencing" , "Meta_Analysis" , "Subgroup" , "Type" , "N" , "Effect_size" , "SE" , "CI95_low" , "CI95_high"  , "Pval" , "I2" , "Pval_I2" )
-	output = as.data.frame( output )
-	output$study = as.character( output$study )
-	output$Primary = as.character( output$Primary )
-	output$Outcome = as.character( output$Outcome )
-	output$Model = as.character( output$Model )
-	output$Sequencing = as.character( output$Sequencing )
-	output$Meta_Analysis = as.character( output$Meta_Analysis )
-	output$Subgroup = as.character( output$Subgroup )
-	output$Type = as.character( output$Type )
-	output$N = as.numeric( as.character( output$N ) )
-	output$Effect_size = as.numeric( as.character( output$Effect_size ) )
-	output$SE = as.numeric( as.character( output$SE ) )
-	output$CI95_low = as.numeric( as.character( output$CI95_low ) )
-	output$CI95_high = as.numeric( as.character( output$CI95_high ) )
-	output$I2 = as.numeric( as.character( output$I2 ) )
-	output$Pval_I2 = as.numeric( as.character( output$Pval_I2 ) )
+	if( !is.null( output ) ){
+		colnames(output) = c( "study" , "Primary" , "Outcome" , "Model" , "Sequencing" , "Meta_Analysis" , "Subgroup" , "Type" , "N" , "Effect_size" , "SE" , "CI95_low" , "CI95_high"  , "Pval" , "I2" , "Pval_I2" )
+		output = as.data.frame( output )
+		output$study = as.character( output$study )
+		output$Primary = as.character( output$Primary )
+		output$Outcome = as.character( output$Outcome )
+		output$Model = as.character( output$Model )
+		output$Sequencing = as.character( output$Sequencing )
+		output$Meta_Analysis = as.character( output$Meta_Analysis )
+		output$Subgroup = as.character( output$Subgroup )
+		output$Type = as.character( output$Type )
+		output$N = as.numeric( as.character( output$N ) )
+		output$Effect_size = as.numeric( as.character( output$Effect_size ) )
+		output$SE = as.numeric( as.character( output$SE ) )
+		output$CI95_low = as.numeric( as.character( output$CI95_low ) )
+		output$CI95_high = as.numeric( as.character( output$CI95_high ) )
+		output$I2 = as.numeric( as.character( output$I2 ) )
+		output$Pval_I2 = as.numeric( as.character( output$Pval_I2 ) )
 
-	output = get_Meta_Output( input = output )		
-	output	
+		output = get_Meta_Output( input = output )		
+	}
+	output
 }
 
