@@ -177,4 +177,27 @@ sudo ufw allow ssh http https
         }
     }
 
+# 13. Install Redis to run task queue
+sudo apt update
+sudo apt install redis-server 
+# 14. Check if redis server is running properly by running 
+sudo systemctl status redis # Status should show active(running)
+# 15. Setup supervisor to persistently run RQ worker to establish communication between tha app and Redis
+sudo apt-get install supervisor
+# 16. Create supervisor configuration file for supervisor. Those directory for that is /etc/supervisor/conf.d
+touch /etc/supervisor/conf.d/predictio.conf
+# 17. Add following to the configuration file (predictio.conf):
+    [program:rq-worker]
+    directory=/home/ubuntu/PredictIO-webapp/
+    command=/home/ubuntu/.pyenv/versions/3.8.0/bin/python worker.py
+    stderr_logfile=/var/log/Predictio-worker.log
+    stdout_logfile=/var/log/Predictio-worker.log
+    autostart=true
+    autorestart=true
+# 16. Load configuration file for your RQ worker into supervisor
+sudo supervisorctl reread
+# 17. Enable execution of the supervisor process
+sudo supervisorctl update
+
+
 
