@@ -2,7 +2,7 @@
 
 PredictIO is an web application that allows users to explore gene signatures in 19 immunotherapy studies of ICB-treated patients, and to obtain gene signature predictions using molecular data of their own studies of ICB-treated patients.
 
-The latest version can be found at https://predictio.ca/
+The latest version can be found at <https://predictio.ca/>
 
 ## Setup Instructions
 
@@ -14,9 +14,11 @@ cd IOdb
 ```
 
 - In the project directory, install all the server dependencies using `pip install -r requirements.txt
-- To start the server run this command `flask run`
 - In the project directory, install all client dependencies `npm i`
-- Start the client (development mode) by running `npm start`
+- Install Redis in your local environment (`brew install redis` for Homebrew installation)
+- Start Redis server by running `redis-server`
+- Start Flask backend by running `flask run`
+- Navigate to client directory (`cd client`) and start the client by running `npm start` (development mode)
 - Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Dependencies
