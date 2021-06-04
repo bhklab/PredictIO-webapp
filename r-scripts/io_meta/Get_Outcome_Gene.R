@@ -61,7 +61,7 @@ Get_Outcome_CNA_Gene = function( sex , primary , drug_type , sequencing_type , g
 					t.pfs = phenoData( cna[[i]] )$t.pfs[ patient_ID ]													
 					response = phenoData( cna[[i]] )$response[ patient_ID ]
 
-					if( gene %in% rownames( data ) ){
+					if( !is.null( data ) & gene %in% rownames( data ) ){
 						data = data[ gene , ]
 					} else{
 						data = NULL
@@ -184,7 +184,7 @@ Get_Outcome_SNV_Gene = function( sex , primary , drug_type , sequencing_type , g
 					t.pfs = phenoData( snv[[i]] )$t.pfs[ patient_ID ]													
 					response = phenoData( snv[[i]] )$response[ patient_ID ]
 
-					if( gene %in% rownames( data ) ){
+					if( !is.null( data ) & gene %in% rownames( data ) ){
 						data = data[ gene , ]
 						data = ifelse( is.na( data ) , 0 , 1 )
 					} else{
@@ -295,7 +295,7 @@ Get_Outcome_EXP_Gene = function( sex , primary , drug_type , sequencing_type , g
 					t.pfs = phenoData( expr[[i]] )$t.pfs[ patient_ID ]													
 					response = phenoData( expr[[i]] )$response[ patient_ID ]
 
-					if( gene %in% rownames( data ) ){
+					if( !is.null( data ) & gene %in% rownames( data ) ){
 						data = as.numeric( scale( data[ gene , ] ) )
 					} else{
 						data = NULL

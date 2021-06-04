@@ -62,7 +62,7 @@ get_Scale = function( x ){
 # 					t.pfs = phenoData( cna[[i]] )$t.pfs[ patient_ID ]													
 # 					response = phenoData( cna[[i]] )$response[ patient_ID ]
 
-# 					if( length( gene[ gene %in% rownames( data ) ] ) / length( gene ) > .7 ){
+# 					if( !is.null( data ) & length( gene[ gene %in% rownames( data ) ] ) / length( gene ) > .7 ){
 # 						data = data[ rownames( data ) %in% gene , ]
 # 						data = colSums( ifelse( is.na( data ) , 0 , 1 ) )
 # 						data[ data > 0 ] = 1
@@ -174,7 +174,7 @@ Get_Outcome_SNV_Signature = function( sex , primary , drug_type , sequencing_typ
 					t.pfs = phenoData( snv[[i]] )$t.pfs[ patient_ID ]													
 					response = phenoData( snv[[i]] )$response[ patient_ID ]
 
-					if( length( gene[ gene %in% rownames( data ) ] ) / length( gene ) > .7 ){
+					if( !is.null( data ) & length( gene[ gene %in% rownames( data ) ] ) / length( gene ) > .7 ){
 						data = data[ rownames( data ) %in% gene , ]
 						data = colSums( ifelse( is.na( data ) , 0 , 1 ) )
 						data[ data > 0 ] = 1
@@ -256,7 +256,7 @@ Get_Outcome_EXP_Signature = function( sex , primary , drug_type , sequencing_typ
 	source( 'Get_HR.R' )
 	source( 'Get_DI.R' )
 	source( 'Meta_Analysis.R' )
-	require(GSVA)
+	library(GSVA)
 
 	load( "../data/io_meta/ICB_exp_filtered.RData" )
 	expr
@@ -287,7 +287,7 @@ Get_Outcome_EXP_Signature = function( sex , primary , drug_type , sequencing_typ
 					t.pfs = phenoData( expr[[i]] )$t.pfs[ patient_ID ]													
 					response = phenoData( expr[[i]] )$response[ patient_ID ]
 
-					if( length( gene[ gene %in% rownames( data ) ] ) / length( gene ) > .7 ){
+					if( !is.null( data ) & length( gene[ gene %in% rownames( data ) ] ) / length( gene ) > .7 ){
 						geneSig <- as.numeric( gsva( get_Scale( x= data ) , list( gene ) , verbose=FALSE ) )
 						names( geneSig ) = colnames(data)
 						data = geneSig
