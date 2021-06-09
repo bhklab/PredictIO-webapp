@@ -112,15 +112,20 @@ const ForestPlot = (props) => {
         }
 
         /***
-         * Set a threshold for labels on x line- to ignore values too close to base line
+         * Set a threshold for labels on x line- to ignore values too close to one another
+         * priority is based on the order of values in list: based> values in studyParam (effect_size>max_high>min_high)
          ***/
         const xAxeLabels= () => {
             const threshold = 18
-            let studyValues = [min_low(), Math.round(overall.effect_size * 100) / 100 , max_high()];
+            let studyParam = [Math.round(overall.effect_size * 100) / 100 , max_high(), min_low()];
             let list= [base()]
-            for (let i = 0;i < studyValues.length ; i++)
-                if (Math.abs(xScale(studyValues[i])- xScale(base()))> threshold)
-                    list.push(studyValues[i])
+            let flag = true
+            for (let i = 0;i < studyParam.length ; i++){
+                for (let j = 0; j < list.length ; j++)
+                    if (Math.abs(xScale(studyParam[i])- xScale(list[j]))< threshold) flag = false
+                if (flag) list.push(studyParam[i])
+                flag = true
+            }
             return list
         }
 
