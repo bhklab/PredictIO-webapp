@@ -116,7 +116,7 @@ const ForestPlot = (props) => {
          * priority is based on the order of values in list: based> values in studyParam (effect_size>max_high>min_high)
          ***/
         const xAxeLabels= () => {
-            const threshold = 18
+            const threshold = 22
             let studyParam = [Math.round(overall.effect_size * 100) / 100 , max_high(), min_low()];
             let list= [base()]
             let flag = true
