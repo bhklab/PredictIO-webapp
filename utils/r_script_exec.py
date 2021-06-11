@@ -19,6 +19,7 @@ app.app_context().push()
 def execute_script(parameters):
     """function used to call R script in subprocess"""
     cwd = os.path.abspath(os.getcwd())
+    print(cwd)
     r_path = os.path.join(cwd, 'r-scripts', 'io_meta', 'Run_Compute_Result.R')
     r_wd = os.path.join(cwd, 'r-scripts', 'io_meta')
     print('Running analysis')
@@ -59,8 +60,8 @@ def execute_script(parameters):
     email = ''
     try:
         # Add data to signature_user_requested table and update analysis request with finished date and time
-        analysis_id = output['analysis_id'][0]
         print(output)
+        analysis_id = output['analysis_id'][0]
         analysis_request = AnalysisRequest.query.filter(
             AnalysisRequest.analysis_id == analysis_id).first()
         email = analysis_request.email
