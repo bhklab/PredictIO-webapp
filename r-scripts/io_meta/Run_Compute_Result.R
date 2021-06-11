@@ -109,6 +109,7 @@ tryCatch({
 	
 }, error=function(c){
     errorOut <- list(
+		"analysis_id"=args[2],
         "error"=TRUE,
         "message"=c$message
     )
