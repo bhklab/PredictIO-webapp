@@ -14,6 +14,7 @@ from decouple import config
 from db.db import db
 from db.seed_database import seed
 from db.seed_database import create_table
+from db.seed_database import delete_table_rows
 
 # mail object
 from utils.mail import mail
@@ -112,5 +113,9 @@ def create_app():
     @app.cli.command("create-table")
     def create_single_table():
         create_table()
+    
+    @app.cli.command("delete-table-rows")
+    def delete_table():
+        delete_table_rows()
 
     return app

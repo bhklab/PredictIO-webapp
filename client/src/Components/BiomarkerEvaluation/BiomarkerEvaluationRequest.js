@@ -100,8 +100,8 @@ const BiomarkerEvaluationRequest = () => {
             case 'expression':
                 dataType = 'EXP';
                 break;
-            case 'snp':
-                dataType = 'SNP';
+            case 'snv':
+                dataType = 'SNV';
                 break;
             case 'cna':
                 dataType = 'CNA';

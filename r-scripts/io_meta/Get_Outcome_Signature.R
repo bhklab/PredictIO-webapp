@@ -61,6 +61,7 @@ get_Scale = function( x ){
 # 					pfs = phenoData( cna[[i]] )$pfs[ patient_ID ]
 # 					t.pfs = phenoData( cna[[i]] )$t.pfs[ patient_ID ]													
 # 					response = phenoData( cna[[i]] )$response[ patient_ID ]
+#					sequencing = toupper( phenoData( cna[[i]] )$dna )[ patient_ID ]
 
 # 					if( !is.null( data ) & length( gene[ gene %in% rownames( data ) ] ) / length( gene ) > .7 ){
 # 						data = data[ rownames( data ) %in% gene , ]
@@ -77,7 +78,7 @@ get_Scale = function( x ){
 					# 		hr = Get_HR_continous( surv= os , time= t.os , time_censor=36 , variable= data )
 					# 		output = rbind( output , 
 					# 				c( 	study[i] , tumor[j] , 
-					# 					"OS" , "COX" , unique( toupper( phenoData( cna[[i]] )$dna ) ) , 
+					# 					"OS" , "COX" , unique( sequencing ) , 
 					# 					0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
 					# 					NA , NA ) )
 
@@ -87,7 +88,7 @@ get_Scale = function( x ){
 					# 		hr = Get_HR_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
 					# 		output = rbind( output , 
 					# 				c( 	study[i] , tumor[j] , 
-					# 					"PFS" , "COX" , unique( toupper( phenoData( cna[[i]] )$dna ) ) , 
+					# 					"PFS" , "COX" , unique( sequencing ) , 
 					# 					0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr ,
 					# 					NA , NA ) )
 								
@@ -99,7 +100,7 @@ get_Scale = function( x ){
 
 					# 		output = rbind( output , 
 					# 				c( study[i] , tumor[j] , 
-					# 					"Response" , "LogReg" , unique( toupper( phenoData( cna[[i]] )$dna ) ) , 
+					# 					"Response" , "LogReg" , unique( sequencing ) , 
 					# 					0 , NA , NA , length( data[ !is.na( response ) ]  ) , 
 					# 					round( summary(fit)$coefficients[ 2 , c( 1 , 2 ) ] , 2 ) , 
 					# 					round( confint(fit)[ 2 , ] , 2 ) , 
@@ -173,6 +174,7 @@ Get_Outcome_SNV_Signature = function( sex , primary , drug_type , sequencing_typ
 					pfs = phenoData( snv[[i]] )$pfs[ patient_ID ]
 					t.pfs = phenoData( snv[[i]] )$t.pfs[ patient_ID ]													
 					response = phenoData( snv[[i]] )$response[ patient_ID ]
+					sequencing = toupper( phenoData( snv[[i]] )$dna )[ patient_ID ]
 
 					if( !is.null( data ) & length( gene[ gene %in% rownames( data ) ] ) / length( gene ) > .7 ){
 						data = data[ rownames( data ) %in% gene , ]
@@ -189,7 +191,7 @@ Get_Outcome_SNV_Signature = function( sex , primary , drug_type , sequencing_typ
 							hr = Get_HR_continous( surv= os , time= t.os , time_censor=36 , variable= data )
 							output = rbind( output , 
 									c( 	study[i] , tumor[j] , 
-										"OS" , "COX" , unique( toupper( phenoData( snv[[i]] )$dna ) ) , 
+										"OS" , "COX" , unique( sequencing ) , 
 										0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
 										NA , NA ) )
 
@@ -199,7 +201,7 @@ Get_Outcome_SNV_Signature = function( sex , primary , drug_type , sequencing_typ
 							hr = Get_HR_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
 							output = rbind( output , 
 									c( 	study[i] , tumor[j] , 
-										"PFS" , "COX" , unique( toupper( phenoData( snv[[i]] )$dna ) ) , 
+										"PFS" , "COX" , unique( sequencing ) , 
 										0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr ,
 										NA , NA ) )
 								
@@ -211,7 +213,7 @@ Get_Outcome_SNV_Signature = function( sex , primary , drug_type , sequencing_typ
 
 							output = rbind( output , 
 									c( study[i] , tumor[j] , 
-										"Response" , "LogReg" , unique( toupper( phenoData( snv[[i]] )$dna ) ) , 
+										"Response" , "LogReg" , unique( sequencing ) , 
 										0 , NA , NA , length( data[ !is.na( response ) ]  ) , 
 										round( summary(fit)$coefficients[ 2 , c( 1 , 2 ) ] , 2 ) , 
 										round( confint(fit)[ 2 , ] , 2 ) , 
@@ -286,6 +288,7 @@ Get_Outcome_EXP_Signature = function( sex , primary , drug_type , sequencing_typ
 					pfs = phenoData( expr[[i]] )$pfs[ patient_ID ]
 					t.pfs = phenoData( expr[[i]] )$t.pfs[ patient_ID ]													
 					response = phenoData( expr[[i]] )$response[ patient_ID ]
+					sequencing = toupper( phenoData( expr[[i]] )$rna )[ patient_ID ]
 
 					if( !is.null( data ) & length( gene[ gene %in% rownames( data ) ] ) / length( gene ) > .7 ){
 						geneSig <- as.numeric( gsva( get_Scale( x= data ) , list( gene ) , verbose=FALSE ) )
@@ -302,7 +305,7 @@ Get_Outcome_EXP_Signature = function( sex , primary , drug_type , sequencing_typ
 							hr = Get_HR_continous( surv= os , time= t.os , time_censor=36 , variable= data )
 							output = rbind( output , 
 									c( 	study[i] , tumor[j] , 
-										"OS" , "COX" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
+										"OS" , "COX" , unique( sequencing ) , 
 										0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
 										NA , NA ) )
 
@@ -310,7 +313,7 @@ Get_Outcome_EXP_Signature = function( sex , primary , drug_type , sequencing_typ
 							hr = Get_DI_continous( surv= os , time= t.os , time_censor=36 , variable= data )
 							output = rbind( output , 
 									c( 	study[i] , tumor[j] , 
-										"OS" , "DI" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
+										"OS" , "DI" , unique( sequencing ) , 
 										0 , NA , NA , length( data[ !is.na( os ) ] ) , hr ,
 										NA , NA ) )
 
@@ -320,14 +323,14 @@ Get_Outcome_EXP_Signature = function( sex , primary , drug_type , sequencing_typ
 							hr = Get_HR_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
 							output = rbind( output , 
 									c( 	study[i] , tumor[j] , 
-										"PFS" , "COX" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
+										"PFS" , "COX" , unique( sequencing  ) , 
 										0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr ,
 										NA , NA ) )
 
 							hr = Get_DI_continous( surv= pfs , time= t.pfs , time_censor=24 , variable= data )
 							output = rbind( output , 
 									c( 	study[i] , tumor[j] , 
-										"PFS" , "DI" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
+										"PFS" , "DI" , unique( sequencing  ) , 
 										0 , NA , NA , length( data[ !is.na( pfs ) ] ) , hr ,
 										NA , NA ) )
 								
@@ -339,7 +342,7 @@ Get_Outcome_EXP_Signature = function( sex , primary , drug_type , sequencing_typ
 
 							output = rbind( output , 
 									c( study[i] , tumor[j] , 
-										"Response" , "LogReg" , unique( toupper( phenoData( expr[[i]] )$rna ) ) , 
+										"Response" , "LogReg" , unique( sequencing  ) , 
 										0 , NA , NA , length( data[ !is.na( response ) ]  ) , 
 										round( summary(fit)$coefficients[ 2 , c( 1 , 2 ) ] , 2 ) , 
 										round( confint(fit)[ 2 , ] , 2 ) , 

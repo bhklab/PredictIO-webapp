@@ -42,13 +42,14 @@ class BiomarkerEvaluationResult(Resource):
 
 class BiomarkerEvaluationVolcanoPlot(Resource):
     def get(self, analysis_id):
-
+        outcome = request.args.get('outcome')
+        model = request.args.get('model')
         # get user requested data
         user_requested = UserRequested.query.filter(
             UserRequested.analysis_id == analysis_id,
             UserRequested.meta_analysis == 1,
-            UserRequested.outcome == request.args.get('outcome'),
-            UserRequested.model == request.args.get('model'),
+            UserRequested.outcome == outcome,
+            UserRequested.model == model,
             UserRequested.subgroup == 'All',
             UserRequested.n >= 3
         ).all()
@@ -58,14 +59,17 @@ class BiomarkerEvaluationVolcanoPlot(Resource):
             row['signature'] = 'Custom'
 
         # get pre-computed data
+        if model == 'LogReg':
+            model = 'Log_regression'
+            
         precomputed = Meta.query.filter(
-            Meta.outcome == request.args.get('outcome'),
-            Meta.model == request.args.get('model'),
+            Meta.outcome == outcome,
+            Meta.model == model,
             Meta.subgroup == 'ALL',
             Meta.n >= 3
         )
         precomputed = Meta.serialize_list(precomputed)
-
+        print(precomputed)
         volcano = user_requested + precomputed
         for row in volcano:
             row['logPval'] = -math.log10(row['pval'])

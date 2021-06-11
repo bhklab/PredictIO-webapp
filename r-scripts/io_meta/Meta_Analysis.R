@@ -2,9 +2,11 @@
 ########################################################################################################################
 
 
+library(Cairo)
 library(meta)
 library(metafor)
 library(genefu)
+library(forestplot)
 library(dmetar)
 
 

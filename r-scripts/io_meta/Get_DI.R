@@ -14,7 +14,11 @@ Get_DI_continous = function( surv , time , time_censor , variable ){
   	}
 
 	d_i = D.index( x=data$variable , surv.time=data$time , surv.event=data$surv , na.rm=TRUE )
-	c( round( d_i$coef , 2 ) ,round( d_i$se , 2 ) , round( d_i$lower , 2 ) , round( d_i$upper , 2 ) , d_i$p.value )
+
+	coef = d_i$coef
+	se = d_i$se 
+
+	c( round( coef , 2 ) , round( se , 2 ) , round( coef - (1.96 * se ) , 2 ) , round( coef + (1.96 * se ) , 2 ) , d_i$p.value )
 }
 
 
