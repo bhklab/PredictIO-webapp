@@ -14,5 +14,6 @@ BiocManager::install("genefu")
 BiocManager::install("survcomp")
 BiocManager::install("GSVA")
 devtools::install_github("MathiasHarrer/dmetar")
+install.packages("Cairo")
 
 install.packages("jsonlite")
