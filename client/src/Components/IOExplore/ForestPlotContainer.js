@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import CustomDropdown from '../UtilComponents/CustomDropdown';
 import { FaSortAmountDown, FaSortAmountUpAlt } from "react-icons/fa";
-import ForestPlot from '../Diagram/ForestPlot3';
+import ForestPlot from '../Diagram/ForestPlot';
 
 const Container = styled.div`
     width: 100%;
