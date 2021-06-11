@@ -17,7 +17,7 @@ import colors from '../../styles/colors';
 const BiomarkerEvaluationResult = () => {
 
     const { id } = useParams();
-    const [reqInfo, setReqInfo] = useState();
+    const [reqInfo, setReqInfo] = useState({data: {}, ready: false});
     const [parameters, setParameters] = useState({signatures: ['ALL'], outcome: '', model: ''});
     const [outcomeDropdown, setOutcomeDropdown] = useState([]);
     const [modelDropdown, setModelDropdown] = useState([]);
@@ -38,6 +38,7 @@ const BiomarkerEvaluationResult = () => {
 
     const getVolcanoPlotData = async (e) => {
         e.preventDefault();
+        setForestPlotData({data: {}, loading: false, ready: false});
         setVolcanoPlotData({data: {}, loading: true, ready: false}); // reset the data object so that the plot is drawn
         const res = await axios.get(`/api/explore/biomarker/result/volcano_plot/${id}?outcome=${parameters.outcome}&model=${parameters.model}`);
         console.log(res.data);
@@ -72,7 +73,7 @@ const BiomarkerEvaluationResult = () => {
             console.log(id);
             const res = await axios.get(`/api/explore/biomarker/result/${id}`);
             console.log(res.data);
-            setReqInfo(res.data.reqInfo);
+            setReqInfo({data: res.data.reqInfo, ready: true});
             setOutcomeDropdown(res.data.outcomeDropdown);
             setModelDropdown(res.data.modelDropdown);
         }
@@ -101,97 +102,116 @@ const BiomarkerEvaluationResult = () => {
         <Layout>
             <h3>Biomarker Evaluation Result</h3>
             {
-                typeof reqInfo !== 'undefined' && <ResultInfo reqInfo={reqInfo} />
+                
+                !reqInfo.ready &&
+                <React.Fragment>
+                    <h3>Loading...</h3>
+                    <LoaderContainer>
+                        <Loader type="Oval" color={colors.blue} height={80} width={80}/>
+                    </LoaderContainer>
+                </React.Fragment>
             }
-            <StyledForm flexDirection='row'>
-                <div className='formField'>
-                    <div className='label'>Outcome: </div>
-                    <CustomDropdown
-                        className='input'
-                        value={parameters.outcome}
-                        options={outcomeDropdown}
-                        onChange={(e) => {setParameters({...parameters, outcome: e.value})}}
-                        placeholder="Select..."
-                    />
-                </div>
-                <div className='formField'>
-                    <div className='label'>Model: </div>
-                    <CustomDropdown
-                        className='input'
-                        value={parameters.model}
-                        options={modelDropdown}
-                        onChange={(e) => {setParameters({...parameters, model: e.value})}}
-                        placeholder="Select..."
-                        disabled={parameters.outcome.length === 0}
-                    />
-                </div>
-                <div className='formField buttonField'>
-                    <ActionButton 
-                        className='left'
-                        onClick={getVolcanoPlotData} 
-                        text='Submit'
-                        disabled={disableSubmit()}
-                    />
-                    <ActionButton
-                        onClick={reset}
-                        text='Reset'
-                        type='reset'
-                    />
-                </div>
-            </StyledForm>
-            <PlotContainer>
-                <StyledPlotArea width='40%'>
-                {
-                    volcanoPlotData.ready ?
-                    <VolcanoPlotContainer 
-                        parameters={parameters} 
-                        setParameters={setParameters} 
-                        volcanoPlotData={volcanoPlotData} 
-                        getForestPlotData={getForestPlotData} 
-                        onthefly={true}
-                    />
-                    :
-                    volcanoPlotData.loading ?
-                        <LoaderContainer>
-                            <Loader type="Oval" color={colors.blue} height={80} width={80}/>
-                        </LoaderContainer>
-                        :
-                        <div>
-                            <h3>Volcano Plot</h3>
-                            <div className='forestPlotMessage'>
-                                Select outcome and model to view the volcano plot.
-                            </div>
-                        </div>
-                }
-                </StyledPlotArea>
-                <StyledPlotArea width='60%'>
-                {
-                    forestPlotData.ready ?
-                    <ForestPlotContainer parameters={parameters} forestPlotData={forestPlotData} getModalData={getModalData} />
-                    :
-                    forestPlotData.loading ?
-                        <LoaderContainer>
-                            <Loader type="Oval" color={colors.blue} height={80} width={80}/>
-                        </LoaderContainer>
-                        :
-                        <div>
-                            <h3>Forest Plot</h3>
-                            <div className='forestPlotMessage'>
-                                Click on a signature point on the volcano plot to display a corresponding forest plot.
-                            </div>
-                        </div>
-                }
-                </StyledPlotArea>
-            </PlotContainer>
-            <PlotContainer>
             {
-                modalData.ready &&
-                <ModalContainer
-                    modalData={modalData}
-                    removeModalData = {removeModalData}
-                /> 
+                reqInfo.ready && <ResultInfo reqInfo={reqInfo.data} />
             }
-            </PlotContainer>
+            {
+                reqInfo.ready && outcomeDropdown.length > 0 &&
+                <React.Fragment>
+                    <StyledForm flexDirection='row'>
+                        <div className='formField'>
+                            <div className='label'>Outcome: </div>
+                            <CustomDropdown
+                                className='input'
+                                value={parameters.outcome}
+                                options={outcomeDropdown}
+                                onChange={(e) => {setParameters({...parameters, outcome: e.value})}}
+                                placeholder="Select..."
+                            />
+                        </div>
+                        <div className='formField'>
+                            <div className='label'>Model: </div>
+                            <CustomDropdown
+                                className='input'
+                                value={parameters.model}
+                                options={modelDropdown}
+                                onChange={(e) => {setParameters({...parameters, model: e.value})}}
+                                placeholder="Select..."
+                                disabled={parameters.outcome.length === 0}
+                            />
+                        </div>
+                        <div className='formField buttonField'>
+                            <ActionButton 
+                                className='left'
+                                onClick={getVolcanoPlotData} 
+                                text='Submit'
+                                disabled={disableSubmit()}
+                            />
+                            <ActionButton
+                                onClick={reset}
+                                text='Reset'
+                                type='reset'
+                            />
+                        </div>
+                    </StyledForm>
+                    <PlotContainer>
+                        <StyledPlotArea width='40%'>
+                        {
+                            volcanoPlotData.ready ?
+                            <VolcanoPlotContainer 
+                                parameters={parameters} 
+                                setParameters={setParameters} 
+                                volcanoPlotData={volcanoPlotData} 
+                                getForestPlotData={getForestPlotData} 
+                                onthefly={true}
+                            />
+                            :
+                            volcanoPlotData.loading ?
+                                <LoaderContainer>
+                                    <Loader type="Oval" color={colors.blue} height={80} width={80}/>
+                                </LoaderContainer>
+                                :
+                                <div>
+                                    <h3>Volcano Plot</h3>
+                                    <div className='forestPlotMessage'>
+                                        Select outcome and model to view the volcano plot.
+                                    </div>
+                                </div>
+                        }
+                        </StyledPlotArea>
+                        <StyledPlotArea width='60%'>
+                        {
+                            forestPlotData.ready ?
+                            <ForestPlotContainer parameters={parameters} forestPlotData={forestPlotData} getModalData={getModalData} />
+                            :
+                            forestPlotData.loading ?
+                                <LoaderContainer>
+                                    <Loader type="Oval" color={colors.blue} height={80} width={80}/>
+                                </LoaderContainer>
+                                :
+                                <div>
+                                    <h3>Forest Plot</h3>
+                                    <div className='forestPlotMessage'>
+                                        Click on a signature point on the volcano plot to display a corresponding forest plot.
+                                    </div>
+                                </div>
+                        }
+                        </StyledPlotArea>
+                    </PlotContainer>
+                    <PlotContainer>
+                    {
+                        modalData.ready &&
+                        <ModalContainer
+                            modalData={modalData}
+                            removeModalData = {removeModalData}
+                        /> 
+                    }
+                    </PlotContainer>
+                </React.Fragment>
+            }
+            {
+                reqInfo.ready && outcomeDropdown.length === 0 &&
+                <h3>The analysis did not return any significant results with the given input.</h3>
+            }
         </Layout>
     );
 }
