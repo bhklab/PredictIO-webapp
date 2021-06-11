@@ -69,7 +69,6 @@ class BiomarkerEvaluationVolcanoPlot(Resource):
             Meta.n >= 3
         )
         precomputed = Meta.serialize_list(precomputed)
-        print(precomputed)
         volcano = user_requested + precomputed
         for row in volcano:
             row['logPval'] = -math.log10(row['pval'])

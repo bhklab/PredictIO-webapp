@@ -60,6 +60,7 @@ def execute_script(parameters):
     try:
         # Add data to signature_user_requested table and update analysis request with finished date and time
         analysis_id = output['analysis_id'][0]
+        print(output)
         analysis_request = AnalysisRequest.query.filter(
             AnalysisRequest.analysis_id == analysis_id).first()
         email = analysis_request.email
@@ -88,7 +89,7 @@ def execute_script(parameters):
                 })
                 db.session.add(result_row)
 
-                analysis_request.time_completed = datetime.now()
+            analysis_request.time_completed = datetime.now()
         else:
             print('error occurred')
             print(output["message"][0])
