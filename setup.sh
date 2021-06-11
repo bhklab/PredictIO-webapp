@@ -51,7 +51,7 @@ sudo apt install -y r-base r-base-core
 sudo apt install git
 
 # 4. Clone the IO.db repository
-git clone https://github.com/bhklab/PredictIO.git
+git clone https://github.com/bhklab/PredictIO-webapp.git
 # after this, use SCP to transfer untracked files (.env and RData files in r-scripts/data/io_meta/) 
 scp -i <path to the key> <path to file or dir> <username>@<hostname>:/<path>
 
