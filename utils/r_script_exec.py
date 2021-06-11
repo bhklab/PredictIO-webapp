@@ -60,7 +60,6 @@ def execute_script(parameters):
     email = ''
     try:
         # Add data to signature_user_requested table and update analysis request with finished date and time
-        print(output)
         analysis_id = output['analysis_id'][0]
         analysis_request = AnalysisRequest.query.filter(
             AnalysisRequest.analysis_id == analysis_id).first()
