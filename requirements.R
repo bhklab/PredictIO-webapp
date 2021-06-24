@@ -15,5 +15,8 @@ BiocManager::install("survcomp")
 BiocManager::install("GSVA")
 devtools::install_github("MathiasHarrer/dmetar")
 # install.packages("Cairo")
+install.packages("enrichR")
+install.packages("reshape2")
+install.packages("apcluster")
 
 install.packages("jsonlite")

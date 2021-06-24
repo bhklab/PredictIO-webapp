@@ -20,7 +20,7 @@ run <- function(input) {
 		gene = as.character( input[9] )
 	}
 
-	output = NULL
+	output = network = KEGG_network = NULL
 
 	if( length( gene ) %in% 1 ){
 
@@ -80,14 +80,17 @@ run <- function(input) {
 				sequencing_type = sequencing_type ,  
 				gene = gene
 			)
-
+			network = Get_Network( gene = gene )
+			KEGG_network = get_KEGG_network( network = network , gene = gene )
 		}
 	}
 
 	json <- list(
 		error=FALSE,
 		analysis_id=input[2],
-		data=output
+		data=output,
+		network=network,
+		kegg=KEGG_network
 	)
 
 	json <- jsonlite::toJSON(json)
@@ -104,6 +107,7 @@ tryCatch({
 	# import functions
 	source("Get_Outcome_Gene.R")
 	source("Get_Outcome_Signature.R")
+	source("Get_Signature_Network.R")
 
    	run(args)
 	

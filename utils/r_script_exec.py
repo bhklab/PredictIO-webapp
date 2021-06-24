@@ -9,6 +9,8 @@ from datetime import datetime
 from .mail import send_mail
 from db.db import db
 from db.models.signature_user_requested import UserRequested
+from db.models.signature_network import SignatureNetwork
+from db.models.signature_kegg_network import SignatureKeggNetwork
 from db.models.analysis_request import AnalysisRequest
 from resources import create_app
 # gets application context
@@ -65,6 +67,7 @@ def execute_script(parameters):
             AnalysisRequest.analysis_id == analysis_id).first()
         email = analysis_request.email
         if not output['error'][0]:
+            # insert on-the-fly gene signature data
             for row in output['data']:
                 meta_analysis = int(row['Meta_Analysis'])
                 n = row['N']
@@ -88,6 +91,30 @@ def execute_script(parameters):
                     'pval_i2': row['Pval_I2'] if meta_analysis == 1 and n >= 3 else None,
                 })
                 db.session.add(result_row)
+
+            if bool(output['network']) and bool(output['kegg']) :
+                # insert network data
+                for row in output['network']:
+                    network_row = SignatureNetwork(**{
+                        'analysis_id': analysis_id,
+                        'signature': row['_row'],
+                        'x': row['x'],
+                        'y': row['y'],
+                        'cluster': row['cluster']
+                    })
+                    db.session.add(network_row)
+
+                # insert KEGG network data
+                for row in output['kegg']:
+                    network_row = SignatureKeggNetwork(**{
+                        'analysis_id': analysis_id,
+                        'cluster': row['cluster'],
+                        'pathway': row['pathway']
+                    })
+                    db.session.add(network_row)
+                print('network data added')
+            else:
+                print('no network data')
 
             analysis_request.time_completed = datetime.now()
         else:

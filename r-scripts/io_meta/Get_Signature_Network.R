@@ -1,14 +1,15 @@
 
 library(reshape2)
 library(apcluster)
-library(RColorBrewer)
-library(ggfortify)
+# library(RColorBrewer)
+# library(ggfortify)
+library(enrichR)
 
 
 ##################################################################
 ##################################################################
 Get_Network = function( gene ){
-	signature = as.data.frame( t( read.csv( file= "../data/ALL_sig.csv" , sep=";" , header=FALSE , stringsAsFactor=FALSE) ) )
+	signature = as.data.frame( t( read.csv( file= "../data/io_meta/ALL_sig.csv" , sep=";" , header=FALSE , stringsAsFactor=FALSE) ) )
 	data = melt( signature, id.vars= "V1" )
 	data = as.data.frame( rbind( as.matrix( data[ !( data$value %in% "" ) , ][ , -2 ] ) , cbind( "custom" , gene ) ) )
 	colnames( data ) = c( "signature" , "value" )
@@ -74,7 +75,7 @@ Get_Network = function( gene ){
 
 get_KEGG_network = function( network , gene ){
 
-	signature = as.data.frame( t( read.csv( file= "../data/ALL_sig.csv" , sep=";" , header=FALSE , stringsAsFactor=FALSE) ) )
+	signature = as.data.frame( t( read.csv( file= "../data/io_meta/ALL_sig.csv" , sep=";" , header=FALSE , stringsAsFactor=FALSE) ) )
 
 	data = melt( signature, id.vars= "V1" )
 	data = as.data.frame( rbind( as.matrix( data[ !( data$value %in% "" ) , ][ , -2 ] ) , cbind( "custom" , gene ) ) )
@@ -87,7 +88,6 @@ get_KEGG_network = function( network , gene ){
 
 	######################################################
 	######################################################
-	library(enrichR)
 	setEnrichrSite("Enrichr") # Human genes
 	dbs <- c( "KEGG_2016" )
 	
