@@ -10,6 +10,8 @@ from .models import patient
 from .models import signature_individual
 from .models import signature_meta
 from .models import signature_user_requested
+from .models import signature_network
+from .models import signature_kegg_network
 from .models import analysis_request
 
 # processes dataframes and creates respective table instances
@@ -186,14 +188,13 @@ def seed():
         print('Done')
         db.session.close()  # Close the connection
 
-# used to create a single table
-
-
+# used to create specific tables only
 def create_table():
     try:
-        analysis_request.AnalysisRequest.__table__.create(db.session.bind)
-        signature_user_requested.UserRequested.__table__.create(
-            db.session.bind)
+        # analysis_request.AnalysisRequest.__table__.create(db.session.bind)
+        # signature_user_requested.UserRequested.__table__.create(db.session.bind)
+        signature_network.SignatureNetwork.__table__.create(db.session.bind)
+        signature_kegg_network.SignatureKeggNetwork.__table__.create(db.session.bind)
     except Exception as e:
         print('Exception ', e)
         print(traceback.format_exc())
@@ -202,8 +203,6 @@ def create_table():
         db.session.close()
 
 # used to delete all rows from db tables.
-
-
 def delete_table_rows():
     try:
         signature_individual.Individual.query.delete()

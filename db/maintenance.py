@@ -6,6 +6,7 @@ from .db import db
 from .models.signature_user_requested import UserRequested
 from .models.analysis_request import AnalysisRequest
 
+# used to delete old on-the-fly gene signature data requested by users
 def delete_old_requests():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     old_data_ids = pd.read_csv(os.path.join(dir_path, 'data/old_data.csv'), sep='\t')
