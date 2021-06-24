@@ -15,6 +15,7 @@ from db.db import db
 from db.seed_database import seed
 from db.seed_database import create_table
 from db.seed_database import delete_table_rows
+from db.maintenance import delete_old_requests
 
 # mail object
 from utils.mail import mail
@@ -117,5 +118,9 @@ def create_app():
     @app.cli.command("delete-table-rows")
     def delete_table():
         delete_table_rows()
+    
+    @app.cli.command("delete-old-requests")
+    def delete_data():
+        delete_old_requests()
 
     return app
