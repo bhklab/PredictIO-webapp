@@ -1,8 +1,11 @@
 import math
+from os import set_blocking
 from flask import request
 from flask_restful import Resource
 from db.models.analysis_request import AnalysisRequest
 from db.models.signature_user_requested import UserRequested
+from db.models.signature_network import SignatureNetwork
+from db.models.signature_kegg_network import SignatureKeggNetwork
 from db.models.signature_meta import Meta
 
 class BiomarkerEvaluationResult(Resource):
@@ -34,6 +37,23 @@ class BiomarkerEvaluationResult(Resource):
             list(map((lambda item: {'label': item, 'value': item}), model)), 
             key=lambda k: k["label"]
         )
+
+        # Get network data
+        network_data = SignatureNetwork.query.filter(
+            SignatureNetwork.analysis_id == analysis_id
+        ).all()
+        network_data = SignatureNetwork.serialize_list(network_data)
+
+        # Get kegg network data
+        kegg_data = SignatureKeggNetwork.query.filter(
+            SignatureKeggNetwork.analysis_id == analysis_id
+        ).all()
+        kegg_data = SignatureKeggNetwork.serialize_list(kegg_data)
+
+        result['network'] = {
+            'network': network_data,
+            'kegg': kegg_data
+        }
 
         return result, 200
 
