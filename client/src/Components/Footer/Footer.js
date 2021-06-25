@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import colors from '../../styles/colors';
+import { colors } from '../../styles/colors';
 
 const StyledFooter = styled.div`
     position relative;
@@ -12,7 +12,7 @@ const StyledFooter = styled.div`
 `
 
 const FooterContent = styled.div`
-    width: 85%;
+    width: 90%;
     height: 100%;
     max-width: 1500px;
     margin-left: auto;

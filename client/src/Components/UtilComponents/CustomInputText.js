@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { InputText } from 'primereact/inputtext';
-import colors from '../../styles/colors';
+import { colors } from '../../styles/colors';
 
 const StyledInputText = styled(InputText)`
     font-size: 12px;

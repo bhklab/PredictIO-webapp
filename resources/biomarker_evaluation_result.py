@@ -1,4 +1,5 @@
 import math
+import pandas as pd
 from os import set_blocking
 from flask import request
 from flask_restful import Resource
@@ -38,22 +39,45 @@ class BiomarkerEvaluationResult(Resource):
             key=lambda k: k["label"]
         )
 
-        # Get network data
-        network_data = SignatureNetwork.query.filter(
+        # Format network data
+        network_clusters = []
+        network = SignatureNetwork.query.filter(
             SignatureNetwork.analysis_id == analysis_id
         ).all()
-        network_data = SignatureNetwork.serialize_list(network_data)
+        network = SignatureNetwork.serialize_list(network)
 
-        # Get kegg network data
-        kegg_data = SignatureKeggNetwork.query.filter(
-            SignatureKeggNetwork.analysis_id == analysis_id
-        ).all()
-        kegg_data = SignatureKeggNetwork.serialize_list(kegg_data)
+        if len(network) > 0:
+            kegg = SignatureKeggNetwork.query.filter(
+                SignatureKeggNetwork.analysis_id == analysis_id
+            ).all()
+            kegg = SignatureKeggNetwork.serialize_list(kegg)
 
-        result['network'] = {
-            'network': network_data,
-            'kegg': kegg_data
-        }
+            clusters = list(map((lambda x: x['cluster']), network))
+            clusters = set(clusters)
+            
+            for cluster in clusters:
+                filtered = list(filter((lambda x: x['cluster'] == cluster), network))
+                x = list(map((lambda x: x['x']), filtered))
+                y = list(map((lambda x: x['y']), filtered))
+                
+                # Use df to find the nearest point to the cluster center
+                df = pd.DataFrame(
+                    {'x': x, 'y': y},
+                    pd.Index(list(range(len(x))), name='id')
+                )
+                network_cluster = {
+                    'cluster': cluster,
+                    'points': {
+                        'center': int(df.sub(df.mean()).pow(2).sum(1).idxmin()),
+                        'signature': list(map((lambda x: x['signature']), filtered)),
+                        'x': x,
+                        'y': y
+                    },
+                    'kegg': list(filter((lambda x: x['cluster'] == cluster), kegg))
+                }
+                network_clusters.append(network_cluster)
+
+        result['network'] = network_clusters
 
         return result, 200
 

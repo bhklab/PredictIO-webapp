@@ -8,16 +8,18 @@ import ResultInfo from './ResultInfo';
 import StyledForm from '../UtilComponents/StyledForm';
 import CustomDropdown from '../UtilComponents/CustomDropdown';
 import ActionButton from '../UtilComponents/ActionButton';
+import NetworkPlot from '../Diagram/NetworkPlot';
 import VolcanoPlotContainer from '../IOExplore/VolcanoPlotContainer';
 import ForestPlotContainer from '../IOExplore/ForestPlotContainer';
-import { PlotContainer, StyledPlotArea, LoaderContainer } from '../../styles/PlotStyles';
 import ModalContainer from "../IOExplore/ModalContainer";
-import colors from '../../styles/colors';
+import { PlotContainer, StyledPlotArea, LoaderContainer } from '../../styles/PlotStyles';
+import { colors } from '../../styles/colors';
 
 const BiomarkerEvaluationResult = () => {
 
     const { id } = useParams();
     const [reqInfo, setReqInfo] = useState({data: {}, ready: false});
+    const [networkData, setNetworkData] = useState({data: {}, ready: false});
     const [parameters, setParameters] = useState({signatures: ['ALL'], outcome: '', model: ''});
     const [outcomeDropdown, setOutcomeDropdown] = useState([]);
     const [modelDropdown, setModelDropdown] = useState([]);
@@ -74,6 +76,7 @@ const BiomarkerEvaluationResult = () => {
             const res = await axios.get(`/api/explore/biomarker/result/${id}`);
             console.log(res.data);
             setReqInfo({data: res.data.reqInfo, ready: true});
+            setNetworkData({data: res.data.network, ready: true});
             setOutcomeDropdown(res.data.outcomeDropdown);
             setModelDropdown(res.data.modelDropdown);
         }
@@ -113,6 +116,15 @@ const BiomarkerEvaluationResult = () => {
             }
             {
                 reqInfo.ready && <ResultInfo reqInfo={reqInfo.data} />
+            }
+            {
+                networkData.ready && networkData.data.length > 0 &&
+                <PlotContainer>
+                    <StyledPlotArea width='50%'>
+                        <h3>Signature Clusters</h3>
+                        <NetworkPlot data={networkData.data} plotId='network-diagram' />
+                    </StyledPlotArea>
+                </PlotContainer>  
             }
             {
                 reqInfo.ready && outcomeDropdown.length > 0 &&

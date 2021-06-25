@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Messages } from 'primereact/messages';
 import { usePromiseTracker, trackPromise } from "react-promise-tracker";
 
-import colors from '../../styles/colors';
+import { colors } from '../../styles/colors';
 import Layout from '../UtilComponents/Layout';
 import StyledForm from '../UtilComponents/StyledForm';
 import ActionButton from '../UtilComponents/ActionButton';

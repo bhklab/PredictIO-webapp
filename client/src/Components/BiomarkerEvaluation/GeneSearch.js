@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { AutoComplete } from 'primereact/autocomplete';
 import { Toast } from 'primereact/toast';
 import axios from 'axios';
-import colors from '../../styles/colors';
+import { colors } from '../../styles/colors';
 
 const CustomAutoComplete = styled(AutoComplete)`
     width: 100%;

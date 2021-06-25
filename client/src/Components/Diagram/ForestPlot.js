@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import * as d3 from 'd3';
 import {withSize} from 'react-sizeme';
 import styled from 'styled-components';
-import colors from '../../styles/colors';
+import { colors } from '../../styles/colors';
 
 /**
  * A responsive version of forest plot.

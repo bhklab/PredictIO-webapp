@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown } from 'primereact/dropdown';
 import styled from 'styled-components';
-import colors from '../../styles/colors';
+import { colors } from '../../styles/colors';
 
 const StyledDropdown = styled(Dropdown)`
     .pi {

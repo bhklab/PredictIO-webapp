@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import Plotly from 'plotly.js-dist';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import {withSize} from 'react-sizeme';
-import colors from '../../styles/colors';
+import { colors } from '../../styles/colors';
 import * as d3 from 'd3';
 
 const Plot = createPlotlyComponent(Plotly);

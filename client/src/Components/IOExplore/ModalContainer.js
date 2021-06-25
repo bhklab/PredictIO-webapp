@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Modal from "../Modal/DescriptionModal";
-import colors from "../../styles/colors";
+import { colors } from "../../styles/colors";
 
 
 const ModalWrapper = styled.div`

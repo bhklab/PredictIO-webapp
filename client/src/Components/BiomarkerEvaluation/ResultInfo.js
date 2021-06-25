@@ -2,19 +2,35 @@ import React from 'react';
 import styled from 'styled-components';
 
 const StyledResultInfo = styled.div`
+    
+`;
+
+const StyledRow = styled.div`
     display: flex;
+    margin-bottom: 5px;
+`;
+
+const StyledDataLine = styled.div`
     font-size: 12px;
-    .left {
-        margin-right: 30px;
-    }
-    td {
-        padding-bottom: 10px;
-    }
+    margin-right: 20px;
     .title {
         font-weight: bold;
-        padding-right: 10px;
+        margin-right: 10px;
+    }
+    .value {
+
     }
 `;
+
+const DataLine = (props) => {
+    const { title, value } = props;
+    return(
+        <StyledDataLine>
+            <span className='title'>{title}:</span>
+            <span className='value'>{value}</span>
+        </StyledDataLine>
+    );
+}
 
 const ResultInfo = (props) => {
 
@@ -22,54 +38,23 @@ const ResultInfo = (props) => {
 
     return(
         <StyledResultInfo>
-            <table className='left'>
-                <tbody>
-                    <tr>
-                        <td className='title'>Analysis ID: </td>
-                        <td>{reqInfo.analysis_id}</td>
-                    </tr>
-                    <tr>
-                        <td className='title'>Time Submitted: </td>
-                        <td>{reqInfo.time_submitted}</td>
-                    </tr>
-                    <tr>
-                        <td className='title'>Time Completed: </td>
-                        <td>{reqInfo.time_completed}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <table className='left'>
-                <tbody>
-                    <tr>
-                        <td className='title'>Genes: </td>
-                        <td>{reqInfo.input_genes.join(', ')}</td>
-                    </tr>
-                    <tr>
-                        <td className='title'>Datatype: </td>
-                        <td>{reqInfo.input_datatype}</td>
-                    </tr>
-                    <tr>
-                        <td className='title'>Sex: </td>
-                        <td>{reqInfo.input_sex.map(s => s === 'M' ? 'Male' : 'Female').join(', ')}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <table>
-                <tbody>
-                    <tr>
-                        <td className='title'>Primary: </td>
-                        <td>{reqInfo.input_primary.join(', ')}</td>
-                    </tr>
-                    <tr>
-                        <td className='title'>Drug Type: </td>
-                        <td>{reqInfo.input_drug_type.join(', ')}</td>
-                    </tr>
-                    <tr>
-                        <td className='title'>Sequencing Type: </td>
-                        <td>{reqInfo.input_sequencing.join(', ')}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <StyledRow>
+                <DataLine title='Analysis ID' value={reqInfo.analysis_id} />
+                <DataLine title='Time Submitted' value={reqInfo.time_submitted} />
+                <DataLine title='Time Completed' value={reqInfo.time_completed} />
+            </StyledRow>
+            <StyledRow>
+                <DataLine title='Data Type' value={reqInfo.input_datatype} />
+                <DataLine title='Sequencing Type' value={reqInfo.input_sequencing.join(', ')} />
+                <DataLine title='Drug Type' value={reqInfo.input_drug_type.join(', ')} />
+                <DataLine title='Sex' value={reqInfo.input_sex.map(s => s === 'M' ? 'Male' : 'Female').join(', ')} />
+            </StyledRow>
+            <StyledRow>
+                <DataLine title='Gene(s)' value={reqInfo.input_genes.join(', ')} />
+            </StyledRow>
+            <StyledRow>
+                <DataLine title='Primary' value={reqInfo.input_primary.join(', ')} />
+            </StyledRow>
         </StyledResultInfo>
     );
 }

@@ -14,10 +14,11 @@ export const PlotContainer = styled.div`
 
 export const StyledPlotArea = styled.div`
     width: ${props => props.width};
+    max-width: ${props => props.maxWidth};
     .forestPlotMessage {
         font-size: 12px;
     }
-    padding 10px;
+    // padding 10px;
 `;
 
 export const LoaderContainer = styled.div`

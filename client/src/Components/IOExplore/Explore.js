@@ -9,7 +9,7 @@ import VolcanoPlotContainer from './VolcanoPlotContainer';
 import ForestPlotContainer from './ForestPlotContainer';
 import { PlotContainer, StyledPlotArea, LoaderContainer } from '../../styles/PlotStyles';
 import ModalContainer from "./ModalContainer";
-import colors from '../../styles/colors';
+import { colors } from '../../styles/colors';
 
 const ExploreContainer = styled.div`
     width: 100%;
