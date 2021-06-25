@@ -17,9 +17,6 @@ const StyledDataLine = styled.div`
         font-weight: bold;
         margin-right: 10px;
     }
-    .value {
-
-    }
 `;
 
 const DataLine = (props) => {
