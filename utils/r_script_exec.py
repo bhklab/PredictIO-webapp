@@ -71,7 +71,7 @@ def execute_script(parameters):
             for row in output['data']:
                 print(row)
                 meta_analysis = int(row['Meta_Analysis'])
-                n = row['N']
+                n = row['N'] if 'N' in row else None
                 result_row = UserRequested(**{
                     'analysis_id': analysis_id,
                     'study': row['study'] if meta_analysis != 1 else None,
@@ -83,7 +83,7 @@ def execute_script(parameters):
                     'subgroup': row['Subgroup'] if meta_analysis == 1 else None,
                     'tissue_type': row['Type'] if meta_analysis == 1 else None,
                     'n': n,
-                    'effect_size': row['Effect_size'] if n >= 3 else None,
+                    'effect_size': row['Effect_size'] if 'Effect_size' in row and n >= 3 else None,
                     'se': row['SE'] if 'SE' in row and n >= 3 else None,
                     '_95ci_low': row['CI95_low'] if 'CI95_low' in row and n >= 3 else None,
                     '_95ci_high': row['CI95_high'] if 'CI95_high' in row and n >= 3 else None,
