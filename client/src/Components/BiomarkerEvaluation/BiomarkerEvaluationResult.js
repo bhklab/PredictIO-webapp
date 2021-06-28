@@ -8,7 +8,7 @@ import ResultInfo from './ResultInfo';
 import StyledForm from '../UtilComponents/StyledForm';
 import CustomDropdown from '../UtilComponents/CustomDropdown';
 import ActionButton from '../UtilComponents/ActionButton';
-import NetworkPlot from '../Diagram/NetworkPlot';
+import NetworkPlotContainer from './NetworkPlotContainer';
 import VolcanoPlotContainer from '../IOExplore/VolcanoPlotContainer';
 import ForestPlotContainer from '../IOExplore/ForestPlotContainer';
 import ModalContainer from "../IOExplore/ModalContainer";
@@ -120,9 +120,8 @@ const BiomarkerEvaluationResult = () => {
             {
                 networkData.ready && networkData.data.length > 0 &&
                 <PlotContainer>
-                    <StyledPlotArea width='50%'>
-                        <h3>Signature Clusters</h3>
-                        <NetworkPlot data={networkData.data} plotId='network-diagram' />
+                    <StyledPlotArea width='100%'>
+                        <NetworkPlotContainer data={networkData.data} />
                     </StyledPlotArea>
                 </PlotContainer>  
             }

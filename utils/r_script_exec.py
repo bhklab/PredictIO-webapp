@@ -69,7 +69,6 @@ def execute_script(parameters):
         if not output['error'][0]:
             # insert on-the-fly gene signature data
             for row in output['data']:
-                print(row)
                 meta_analysis = int(row['Meta_Analysis'])
                 n = row['N'] if 'N' in row else None
                 result_row = UserRequested(**{
