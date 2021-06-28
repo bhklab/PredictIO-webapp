@@ -69,6 +69,7 @@ def execute_script(parameters):
         if not output['error'][0]:
             # insert on-the-fly gene signature data
             for row in output['data']:
+                print(row)
                 meta_analysis = int(row['Meta_Analysis'])
                 n = row['N']
                 result_row = UserRequested(**{
@@ -83,12 +84,12 @@ def execute_script(parameters):
                     'tissue_type': row['Type'] if meta_analysis == 1 else None,
                     'n': n,
                     'effect_size': row['Effect_size'] if n >= 3 else None,
-                    'se': row['SE'] if n >= 3 else None,
-                    '_95ci_low': row['CI95_low'] if n >= 3 else None,
-                    '_95ci_high': row['CI95_high'] if n >= 3 else None,
-                    'pval': row['Pval'] if n >= 3 else None,
-                    'i2': row['I2'] if meta_analysis == 1 and n >= 3 else None,
-                    'pval_i2': row['Pval_I2'] if meta_analysis == 1 and n >= 3 else None,
+                    'se': row['SE'] if 'SE' in row and n >= 3 else None,
+                    '_95ci_low': row['CI95_low'] if 'CI95_low' in row and n >= 3 else None,
+                    '_95ci_high': row['CI95_high'] if 'CI95_high' in row and n >= 3 else None,
+                    'pval': row['Pval'] if 'Pval' in row and n >= 3 else None,
+                    'i2': row['I2'] if 'I2' in row and meta_analysis == 1 and n >= 3 else None,
+                    'pval_i2': row['Pval_I2'] if 'Pval_I2' in row and meta_analysis == 1 and n >= 3 else None,
                 })
                 db.session.add(result_row)
 
