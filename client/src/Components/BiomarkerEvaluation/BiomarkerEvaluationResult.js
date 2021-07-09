@@ -153,7 +153,13 @@ const BiomarkerEvaluationResult = () => {
                         <div className='formField buttonField'>
                             <ActionButton 
                                 className='left'
-                                onClick={getVolcanoPlotData} 
+                                onClick={(e) => {
+                                    if(reqInfo.data.input_datatype === 'EXP'){
+                                        getVolcanoPlotData(e);
+                                    }else{
+                                        getForestPlotData({...parameters, signature: 'Custom'});
+                                    }
+                                }} 
                                 text='Submit'
                                 disabled={disableSubmit()}
                             />
@@ -165,30 +171,33 @@ const BiomarkerEvaluationResult = () => {
                         </div>
                     </StyledForm>
                     <PlotContainer>
-                        <StyledPlotArea width='40%'>
                         {
-                            volcanoPlotData.ready ?
-                            <VolcanoPlotContainer 
-                                parameters={parameters} 
-                                setParameters={setParameters} 
-                                volcanoPlotData={volcanoPlotData} 
-                                getForestPlotData={getForestPlotData} 
-                                onthefly={true}
-                            />
-                            :
-                            volcanoPlotData.loading ?
-                                <LoaderContainer>
-                                    <Loader type="Oval" color={colors.blue} height={80} width={80}/>
-                                </LoaderContainer>
-                                :
-                                <div>
-                                    <h3>Volcano Plot</h3>
-                                    <div className='forestPlotMessage'>
-                                        Select outcome and model to view the volcano plot.
-                                    </div>
-                                </div>
+                            reqInfo.data.input_datatype === 'EXP' &&
+                            <StyledPlotArea width='40%'>
+                                {
+                                    volcanoPlotData.ready ?
+                                    <VolcanoPlotContainer 
+                                        parameters={parameters} 
+                                        setParameters={setParameters} 
+                                        volcanoPlotData={volcanoPlotData} 
+                                        getForestPlotData={getForestPlotData} 
+                                        onthefly={true}
+                                    />
+                                    :
+                                    volcanoPlotData.loading ?
+                                        <LoaderContainer>
+                                            <Loader type="Oval" color={colors.blue} height={80} width={80}/>
+                                        </LoaderContainer>
+                                        :
+                                        <div>
+                                            <h3>Volcano Plot</h3>
+                                            <div className='forestPlotMessage'>
+                                                Select outcome and model to view the volcano plot.
+                                            </div>
+                                        </div>
+                                }
+                            </StyledPlotArea>
                         }
-                        </StyledPlotArea>
                         <StyledPlotArea width='60%'>
                         {
                             forestPlotData.ready ?
@@ -202,7 +211,13 @@ const BiomarkerEvaluationResult = () => {
                                 <div>
                                     <h3>Forest Plot</h3>
                                     <div className='forestPlotMessage'>
-                                        Click on a signature point on the volcano plot to display a corresponding forest plot.
+                                        {
+                                            reqInfo.data.input_datatype === 'EXP' ?
+                                            'Click on a signature point on the volcano plot to display a corresponding forest plot.'
+                                            :
+                                            'Select outcome and model to view the forest plot.'
+                                        }
+                                        
                                     </div>
                                 </div>
                         }
