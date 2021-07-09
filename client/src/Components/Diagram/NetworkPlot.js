@@ -63,7 +63,7 @@ const NetworkPlot = (props) => {
                 data={plotData}
                 layout={{
                     width: size.width,
-                    height: size.width * 0.6,
+                    height: size.width * 0.6 < 350 ? size.width * 0.6 : 350,
                     autosize: true,
                     paper_bgcolor: 'white',
                     plot_bgcolor: 'white',
