@@ -31,7 +31,6 @@ const VolcanoPlot = (props) => {
     const [selectedPointIndex, setSelectedPointIndex] = useState(undefined);
 
     useEffect(() => {
-        console.log(data);
         setPlotData({
             x: data.map(item => (item.effect_size)),
             y: data.map(item => (item.logPval)),
@@ -46,7 +45,6 @@ const VolcanoPlot = (props) => {
 
     useEffect(() => {
         if(typeof selectedPointIndex !== 'undefined'){
-            console.log(selectedPointIndex);
             let pointColor = getPointColor(data, selectedPointIndex);
             let pointLine = getPointOutline(data, selectedPointIndex);
             setPlotData({
@@ -161,6 +159,7 @@ const VolcanoPlot = (props) => {
     return(
         <div>
             <Plot
+                divId={plotId}
                 data={[
                     {
                         showlegend: false,
@@ -229,7 +228,6 @@ const VolcanoPlot = (props) => {
                         }
                     ]
                 }}
-                graphDiv={plotId}
                 config={{
                     responsive: true,
                     displayModeBar: false,

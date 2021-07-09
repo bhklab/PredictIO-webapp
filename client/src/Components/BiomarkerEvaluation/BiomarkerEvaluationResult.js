@@ -43,7 +43,6 @@ const BiomarkerEvaluationResult = () => {
         setForestPlotData({data: {}, loading: false, ready: false});
         setVolcanoPlotData({data: {}, loading: true, ready: false}); // reset the data object so that the plot is drawn
         const res = await axios.get(`/api/explore/biomarker/result/volcano_plot/${id}?outcome=${parameters.outcome}&model=${parameters.model}`);
-        console.log(res.data);
         setVolcanoPlotData({data: res.data, loading: false, ready: true});
     }
 

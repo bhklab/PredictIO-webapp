@@ -3,9 +3,19 @@ import styled from 'styled-components';
 import CustomDropdown from '../UtilComponents/CustomDropdown';
 import { FaSortAmountDown, FaSortAmountUpAlt } from "react-icons/fa";
 import ForestPlot from '../Diagram/ForestPlot';
+import FileSaver from 'file-saver';
+import DownloadButton from '../UtilComponents/DownloadButton';
+import * as saveSvg from 'save-svg-as-png';
 
 const Container = styled.div`
     width: 100%;
+    .heading {
+        display: flex;
+        align-items: center;
+    }
+    .left {
+        margin-right: 10px;
+    }
 `;
 
 const PlotHeader = styled.div`
@@ -75,7 +85,6 @@ const ForestPlotContainer = (props) => {
     ];
 
     useEffect(() => {
-
         // const getModalData = props
         let tmp = forestPlotData.data.meta.filter(item => item.subgroup === 'Tumor' && item.n >= 3);
         tmp = tmp.map(item => ({value: item.tissue_type, label: item.tissue_type})).sort((a, b) => (a.label.localeCompare(b.label)));
@@ -132,12 +141,65 @@ const ForestPlotContainer = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sort, tissueValue, sequenceValue]);
 
+    const downloadPlotImage = (e) => {
+        e.preventDefault();
+        const imageOptions = {
+            scale: 2,
+            encoderOptions: 1,
+            backgroundColor: 'white'
+        }
+        saveSvg.saveSvgAsPng(document.getElementById('forest-plot'), 'forest-plot.png', imageOptions);
+    }
+
+    const downloadCSV = (e) => {
+        e.preventDefault();
+        console.log(forestPlotData);
+        let data = forestPlotData.data.individuals.map(item => ({
+            signature: parameters.signature ? parameters.signature : 'Custom',
+            outcome: item.outcome,
+            model: item.model,
+            study: item.study,
+            primary_tissue: item.primary_tissue,
+            sequencing: item.sequencing,
+            n: item.n,
+            effect_size: item.effect_size,
+            se: item.se,
+            _95ci_low: item._95ci_low,
+            _95ci_high: item._95ci_high,
+            pval: item.pval
+        }));
+        let csv = [
+            [...Object.keys(data[0])],
+            ...data.map(item =>[
+                item.signature,
+                item.outcome,
+                item.model,
+                item.study,
+                item.primary_tissue,
+                item.sequencing,
+                item.n,
+                item.effect_size,
+                item.se,
+                item._95ci_low,
+                item._95ci_high,
+                item.pval
+            ])
+        ];
+        csv = csv.map(item => item.join(',')).join('\n');
+        const csvData = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+        FileSaver.saveAs(csvData, 'forest-plot.csv');
+    }
+
     return(
         <div>
             {
                 plotData.ready &&
                 <Container>
-                    <h3>Forest Plot</h3>
+                    <div className='heading'>
+                        <h3 className='left'>Forest Plot</h3>
+                        <DownloadButton className='left' onClick={downloadPlotImage} text='Image' />
+                        <DownloadButton onClick={downloadCSV} text='CSV' />
+                    </div>
                     <PlotHeader>
                         <div className='parameterLine'>
                             Signature: <span className='value'>{parameters.signature ? parameters.signature : 'Custom'}</span>
@@ -200,7 +262,7 @@ const ForestPlotContainer = (props) => {
                             <div className='valueLine'>I2 Pval: <span className='value'>{Number(plotData.meta[0].pval_i2).toFixed(3)}</span></div>
                         </div>
                     </PlotHeader>
-                    <ForestPlot id='forestplot' individuals={plotData.individuals} meta={plotData.meta} getModalData={getModalData}/>
+                    <ForestPlot id='forest-plot' individuals={plotData.individuals} meta={plotData.meta} getModalData={getModalData}/>
                 </Container>
             }
         </div>

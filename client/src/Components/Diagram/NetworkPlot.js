@@ -59,7 +59,7 @@ const NetworkPlot = (props) => {
     return(
         <div className={className}>
             <Plot 
-                graphDiv={plotId}
+                divId={plotId}
                 data={plotData}
                 layout={{
                     width: size.width,

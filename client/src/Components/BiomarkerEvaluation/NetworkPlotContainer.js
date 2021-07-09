@@ -1,12 +1,23 @@
 import React, { useEffect } from 'react';
+import Plotly from 'plotly.js-dist';
+import FileSaver from 'file-saver';
 import styled from 'styled-components';
 import { colors, plotColors } from '../../styles/colors';
 import NetworkPlot from '../Diagram/NetworkPlot';
+import DownloadButton from '../UtilComponents/DownloadButton';
+
+const Heading = styled.div`
+    display: flex;
+    align-items: center;
+    .left {
+        margin-right: 10px;
+    }  
+`;
 
 const Container = styled.div`
     width: 100%;
     display: flex;
-    margin-bottom: 30px;  
+    margin-bottom: 30px;
     .network-plot {
         width: 60%;
     }
@@ -46,9 +57,26 @@ const NetworkPlotContainer = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const downloadPlotImage = (e) => {
+        e.preventDefault();
+        Plotly.downloadImage('network-diagram', {scale: 2, filename: 'network-diagram'});
+    }
+
+    const downloadCSV = (e) => {
+        e.preventDefault();
+        // let csv = '';
+        // csv = csv.map(item => item.join(',')).join('\n');
+        // const csvData = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
+        // FileSaver.saveAs(csvData, 'volcano-plot.csv');
+    }
+
     return(
         <React.Fragment>
-            <h3>Signature Clusters</h3>
+            <Heading>
+                <h3 className='left'>Signature Clusters</h3>
+                {/* <DownloadButton className='left' onClick={downloadPlotImage} text='Image' />
+                <DownloadButton onClick={downloadCSV} text='CSV' /> */}
+            </Heading>
             <Container>
                 <NetworkPlot className='network-plot' data={data} plotId='network-diagram' />
                 <div className='right-panel'>
