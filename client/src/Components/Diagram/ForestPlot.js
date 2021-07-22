@@ -153,13 +153,13 @@ const ForestPlot = (props) => {
                 tooltip.html(
                     point.study + " (" + point.primary_tissue + "; " + point.sequencing + ")" +
                     "<br />N=" + point.n +
-                    "<br />hazard ratio=" + Number(point.effect_size).toFixed(4) +
+                    `<br />${props.attributes.xAxis}=` + Number(point.effect_size).toFixed(4) +
                     "<br />P-value=" + Number(point.pval).toFixed(4));
             }else{
                 tooltip.html(
                     "Pooled Effect Size" +
                     "<br />N=" + point.n +
-                    "<br />hazard ratio=" + Number(point.effect_size).toFixed(4) +
+                    `<br />${props.attributes.xAxis}=` + Number(point.effect_size).toFixed(4) +
                     "<br />P-value=" + Number(point.pval).toFixed(4));
             }
         }
@@ -225,7 +225,7 @@ const ForestPlot = (props) => {
             .attr('font-weight', 'regular')
             .attr('fill', "#444444")
             .attr('text-anchor', 'middle')
-            .text('Hazard Ratio')
+            .text(props.attributes.xAxis)
 
         /*Creating Data Point*/
         Object.keys(props.individuals).forEach((key, index) => {

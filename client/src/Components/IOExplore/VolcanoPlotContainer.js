@@ -4,6 +4,7 @@ import VolcanoPlot from '../Diagram/VolcanoPlot';
 import styled from 'styled-components';
 import FileSaver from 'file-saver';
 import DownloadButton from '../UtilComponents/DownloadButton';
+import { models } from '../../util/enum';
 
 const Container = styled.div`
     width: 100%;
@@ -103,6 +104,7 @@ const VolcanoPlotContainer = (props) => {
                 data={volcanoPlotData.data} 
                 getForestPlotData={getForestPlotData}
                 onthefly={onthefly}
+                attributes={{xAxis: models[parameters.model]}}
             />
         </Container>
     );

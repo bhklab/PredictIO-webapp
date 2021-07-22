@@ -18,7 +18,15 @@ const unhover = () => {
 };
 
 const VolcanoPlot = (props) => {
-    const {data, plotId, getForestPlotData, parameters, setParameters, onthefly} = props;
+    const {
+        data, 
+        plotId, 
+        getForestPlotData, 
+        parameters, 
+        setParameters, 
+        onthefly,
+        attributes
+    } = props;
 
     const [plotData, setPlotData] = useState({
         x: [], 
@@ -150,7 +158,7 @@ const VolcanoPlot = (props) => {
                 `Coef: ${Math.round(point.effect_size * 1000) / 1000}<br>` +
                 `P-value: ${Math.round(point.pval * 10000) / 10000}<br>` +
                 `I2: ${Math.round(point.i2 * 10000) / 10000}<br>` +
-                `P-value I2: ${Math.round(point.pval_i2 * 1000) / 1000}`
+                `Q P-value: ${Math.round(point.pval_i2 * 1000) / 1000}`
             )
         });
         return hoverText;
@@ -186,7 +194,7 @@ const VolcanoPlot = (props) => {
                     plot_bgcolor: 'white',
                     orientation: 'v',
                     yaxis: { ticklen: 0, title: '-log10(p value)','fixedrange':true },
-                    xaxis: { title: 'Hazard Ratio', zeroline: false,'fixedrange':true},
+                    xaxis: { title: attributes.xAxis, zeroline: false,'fixedrange':true},
                     hovermode: 'closest',
                     font: {
                         size: 11,
