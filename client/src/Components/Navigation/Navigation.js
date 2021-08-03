@@ -21,8 +21,8 @@ const Navigation = () => {
                     <Link to='/explore/precomputed'>Pre-computed Signatures</Link>
                     <Link to='/explore/biomarker/request'>Biomarker Evaluation</Link>
                     <Link to='/predict/main'>PredictIO</Link>
-                    <Link to='/'>Download</Link>
-                    <Link to='/'>About</Link>
+                    <Link to='/download'>Download</Link>
+                    <Link to='/about'>About</Link>
                     <Link to='/'>Contact</Link>
                 </StyledLinks>
             </NavigationContent>

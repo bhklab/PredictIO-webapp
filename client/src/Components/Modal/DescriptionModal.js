@@ -25,7 +25,7 @@ const StyledButton = styled.button`
 const StyledModal = styled.div`
   width: 80%;
   height: auto;
-  overflow-y: scroll;
+  overflow-y: auto;
   align-items: center;
   top: -25%;
   left: 0%;
@@ -54,10 +54,10 @@ const StyledModal = styled.div`
 
 export const Modal = (props) => {
     const {
-        dataset_name, 
-        title, 
-        // authors, 
-        summary, 
+        dataset_name,
+        title,
+        // authors,
+        summary,
         pmid
     } = props.modalData.data;
     const removeModalData = props.removeModalData

@@ -86,9 +86,9 @@ const NetworkPlotContainer = (props) => {
                         data.map((item, i) => (
                             <div className='legend' key={i}>
                                 <div className='title'>
-                                    <span style={{color: plotColors[i]}}>Cluster {item.cluster} </span> 
+                                    <span style={{color: plotColors[i]}}>Cluster {item.cluster} </span>
                                     {
-                                        item.points.signature.includes('custom') ? 
+                                        item.points.signature.includes('custom') ?
                                         <span style={{color: colors.purple}}>(Includes custom signature)</span> : ''
                                     }:
                                 </div>
