@@ -6,6 +6,7 @@ import ForestPlot from '../Diagram/ForestPlot';
 import FileSaver from 'file-saver';
 import DownloadButton from '../UtilComponents/DownloadButton';
 import * as saveSvg from 'save-svg-as-png';
+import { models } from '../../util/enum';
 
 const Container = styled.div`
     width: 100%;
@@ -80,7 +81,7 @@ const ForestPlotContainer = (props) => {
     const [tissueOptions, setTissueOptions] = useState([]);
     const [sequenceOptions, setSequenceOptions] = useState([]);
     const sortOptions = [
-        {value: 'effect_size', label: 'Hazard Ratio'},
+        {value: 'effect_size', label: models[parameters.model]},
         {value: 'study', label: 'Studies'},
     ];
 
@@ -249,7 +250,7 @@ const ForestPlotContainer = (props) => {
                         <div className='title'>Pooled Effect Sizes: </div>
                         <div className='effectSizeValues'>
                             <div className='valueLine'>
-                                Coef:
+                                {models[parameters.model]}:
                                 <span className='value'>{Number(plotData.meta[0].effect_size).toFixed(2)} </span>
                                 [95CI%:
                                 <span className='value'>{Number(plotData.meta[0]._95ci_low).toFixed(2)} </span>
@@ -259,10 +260,16 @@ const ForestPlotContainer = (props) => {
                             </div>
                             <div className='valueLine'>P-value: <span className='value'>{Number(plotData.meta[0].pval).toFixed(3)}</span></div>
                             <div className='valueLine'>Het. I2: <span className='value'>{Number(plotData.meta[0].i2).toFixed(3)}</span></div>
-                            <div className='valueLine'>I2 Pval: <span className='value'>{Number(plotData.meta[0].pval_i2).toFixed(3)}</span></div>
+                            <div className='valueLine'>Q Pval: <span className='value'>{Number(plotData.meta[0].pval_i2).toFixed(3)}</span></div>
                         </div>
                     </PlotHeader>
-                    <ForestPlot id='forest-plot' individuals={plotData.individuals} meta={plotData.meta} getModalData={getModalData}/>
+                    <ForestPlot 
+                        id='forest-plot' 
+                        individuals={plotData.individuals} 
+                        meta={plotData.meta} 
+                        getModalData={getModalData}
+                        attributes={{xAxis: models[parameters.model]}}
+                    />
                 </Container>
             }
         </div>
