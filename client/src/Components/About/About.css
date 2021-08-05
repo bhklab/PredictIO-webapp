@@ -1,0 +1,71 @@
+.documentationContent {
+    display: flex;
+    height: 100%;
+}
+
+.documentationNav {
+    width: 25%;
+    min-width: 280px;
+    margin-right: 1%;
+}
+
+.documentationNav ul {
+    list-style-type: none;
+}
+
+.documentationNav li {
+    width: 100%;
+    height: 55px;
+    border-left: 3px solid rgba(51, 117, 177, 0.75);
+    font-weight: bold;
+    padding-left: 0px;
+    margin-left: -40px;
+}
+
+.documentationNav button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    text-align: left;
+    padding-top: 12px;
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(102, 102, 102, 0.87);
+}
+
+.documentationNav li.selected {
+    border-left: 3px solid rgba(177, 51, 54, 0.94);
+}
+
+.documentation {
+    width: 100%;
+    margin-top: 25px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    padding: 5px 30px 30px 40px;
+    background-color: rgba(172, 202, 206, 0.12);
+    /*height: 630px;*/
+    height: 50%;
+}
+
+.documentation h1 {
+    width: fit-content;
+    padding-bottom: 10px;
+    border-bottom: 3px solid rgba(177, 51, 54, 0.94);
+    margin-bottom: 50px;
+}
+
+.documentation h2 {
+    width: fit-content;
+    padding-bottom: 10px;
+    border-bottom: 3px solid rgba(177, 51, 54, 0.94);
+    margin-bottom: 50px;
+}
+
+.documentation p{
+    color: #666666;
+    line-height: 30px;
+    font-size: 15px;
+}
