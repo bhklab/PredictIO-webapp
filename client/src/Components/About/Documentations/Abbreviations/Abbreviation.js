@@ -7,10 +7,12 @@ const COLUMNS = [
     {
         Header: 'Abbreviation',
         accessor: 'abbrv',
+        minWidth: 30,
     },
     {
         Header: 'Definition',
         accessor: 'definition',
+        minWidth: 100,
     },
 ]
 

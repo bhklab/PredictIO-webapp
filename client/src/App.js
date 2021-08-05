@@ -8,7 +8,6 @@ import {
   BiomarkerEvaluationRequest,
   BiomarkerEvaluationResult,
   PredictIO,
-  Download,
   About,
   Test,
 } from './Components/index';

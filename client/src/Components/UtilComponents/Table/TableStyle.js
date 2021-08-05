@@ -2,9 +2,21 @@ import {colors} from '../../../styles/colors';
 import styled from 'styled-components';
 
 const TableStyles = styled.div`
-  margin: 5% 10% 5% 10%;
-  margin: 20px 40px 20px 40px;
+  margin: 10%;
+  //margin: 20px 40px 20px 40px;
   overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  h1 {
+    color: #c61a1a;
+    font-family: 'Raleway', sans-serif;
+    font-size: calc(1em + 1vw);
+    text-align: center;
+    margin-bottom: 50px;
+  }
 
   table {
     border-spacing: 0;
@@ -21,11 +33,14 @@ const TableStyles = styled.div`
       padding: calc(0.3vw + 0.3em);
       border-bottom: 1px solid rgba(220, 221, 226, 0.24);
       border-right: 1px solid rgba(220, 221, 226, 0.55);
+
       :last-child {
         border-right: 0;
       }
+
       a {
         color: ${colors.blue};
+
         :hover {
           color: ${colors.hover_blue};
         }
