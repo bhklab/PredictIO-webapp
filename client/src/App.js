@@ -8,7 +8,9 @@ import {
   BiomarkerEvaluationRequest,
   BiomarkerEvaluationResult,
   PredictIO,
+  Datasets,
   About,
+  Contact,
   Test,
 } from './Components/index';
 
@@ -27,7 +29,9 @@ const App = () => {
               <Route path='/explore/biomarker/request' exact component={BiomarkerEvaluationRequest} />
               <Route path='/explore/biomarker/result/:id' exact component={BiomarkerEvaluationResult} />
               <Route path='/predict/main' exact component={PredictIO} />
+              <Route path='/datasets' exact component={Datasets} />
               <Route path='/about' exact component={About} />
+              <Route path='/contact' exact component={Contact} />
               <Route path='/download' exact component={Home} />
               <Route path='/test' exact component={Test} />
             </Suspense>

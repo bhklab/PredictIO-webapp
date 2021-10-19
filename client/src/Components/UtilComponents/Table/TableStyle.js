@@ -2,7 +2,7 @@ import {colors} from '../../../styles/colors';
 import styled from 'styled-components';
 
 const TableStyles = styled.div`
-  margin: 10%;
+  // margin: 10%;
   //margin: 20px 40px 20px 40px;
   overflow-x: auto;
   display: flex;
@@ -58,6 +58,34 @@ const TableStyles = styled.div`
   th {
     font-weight: 600;
     background-color: rgba(103, 147, 190, 0.13);
+  }
+
+  .top-settings {
+    width: 100%;
+    margin-bottom: 10px;
+    .search-container {
+      display: flex;
+      align-items: center;
+      input {
+        margin-left: 5px;
+      }
+      i {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 14px;
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+      outline: none;
+    }
   }
 `;
 

@@ -4,7 +4,9 @@ const Explore = lazy(() => import('./IOExplore/Explore'));
 const BiomarkerEvaluationRequest = lazy(() => import('./BiomarkerEvaluation/BiomarkerEvaluationRequest'));
 const BiomarkerEvaluationResult = lazy(() => import('./BiomarkerEvaluation/BiomarkerEvaluationResult'));
 const PredictIO = lazy(() => import('./PredictIO/PredictIO'));
+const Datasets = lazy(() => import('./Datasets/Datasets'));
 const About = lazy(() => import('./About/About'));
+const Contact = lazy(() => import('./Contact/Contact'));
 const Test = lazy(() => import('./Test/Test'));
 
 export {
@@ -13,6 +15,8 @@ export {
   BiomarkerEvaluationRequest,
   BiomarkerEvaluationResult,
   PredictIO,
+  Datasets,
   About,
+  Contact,
   Test
 };

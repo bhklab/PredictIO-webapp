@@ -34,7 +34,7 @@ const Abbreviations = () => {
             <DocHeader>
                 <h2>Abbreviations</h2>
                 <div>
-                    <Table columns={COLUMNS} data={abbrv} />
+                    <Table columns={COLUMNS} data={abbrv} disablePagination={true} pageRowNum={30} />
                 </div>
             </DocHeader>
         </div>

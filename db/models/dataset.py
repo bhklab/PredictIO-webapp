@@ -1,6 +1,5 @@
-from utils.serializer import Serializer
 from ..db import db
-
+from utils.serializer import Serializer
 
 class Dataset(db.Model, Serializer):
     __tablename__ = "dataset"

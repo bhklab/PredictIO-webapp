@@ -1,9 +1,36 @@
 import React from 'react';
 import {
-  useTable, useSortBy, usePagination, useGlobalFilter,
+  useTable, useSortBy, usePagination, useGlobalFilter, useAsyncDebounce
 } from 'react-table';
 import TableStyles from './TableStyle';
 import PropTypes from 'prop-types';
+
+/**
+ * Filter for global search of table
+ */
+ const GlobalFilter = ({ preGlobalFilteredRows, globalFilter, setGlobalFilter }) => {
+  const count = preGlobalFilteredRows.length;
+  const [value, setValue] = React.useState(globalFilter);
+  const onChange = useAsyncDebounce((value) => {
+    setGlobalFilter(value || undefined);
+  }, 200);
+
+  return (
+    <div className='search-container'>
+      <i className='pi pi-search'></i>
+      <input
+        className="search"
+        type="text"
+        value={value || ''}
+        onChange={(e) => {
+          setValue(e.target.value);
+          onChange(e.target.value);
+        }}
+        placeholder={`Search ${count} rows...`}
+      />
+    </div>
+  );
+};
 
 /**
  *
@@ -11,7 +38,7 @@ import PropTypes from 'prop-types';
  * @param {Array} data - an array of data for the table.
  * @param {boolean} disablePagination - a boolean value to whether disable the pagination or not.
  */
-const Table = ({ columns, data, disablePagination = false }) => {
+const Table = ({ columns, data, disablePagination = false, pageRowNum = 10 }) => {
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -19,10 +46,19 @@ const Table = ({ columns, data, disablePagination = false }) => {
     headerGroups,
     prepareRow,
     page,
+    canPreviousPage,
+    canNextPage,
+    gotoPage,
+    nextPage,
+    previousPage,
+    pageOptions,
+    preGlobalFilteredRows,
+    setGlobalFilter,
+    state: { pageIndex, pageSize, globalFilter },
   } = useTable({
     columns,
     data,
-    initialState: { pageIndex: 0 },
+    initialState: { pageIndex: 0, pageSize: pageRowNum },
   },
     useGlobalFilter,
     useSortBy,
@@ -94,6 +130,13 @@ const Table = ({ columns, data, disablePagination = false }) => {
   // Render the UI for your table
   return (
     <TableStyles>
+      <div className="top-settings">
+        <GlobalFilter
+          preGlobalFilteredRows={preGlobalFilteredRows}
+          globalFilter={globalFilter}
+          setGlobalFilter={setGlobalFilter}
+        />
+      </div>
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (
@@ -114,6 +157,37 @@ const Table = ({ columns, data, disablePagination = false }) => {
           }
         </tbody>
       </table>
+      {
+        !disablePagination &&
+        <div className="pagination">
+          <button className="prev" onClick={() => previousPage()} disabled={!canPreviousPage}>
+            <i className='pi pi-angle-left'></i>
+          </button>
+          <span>
+            Page
+            {' '}
+            <strong>
+              <input
+                type="number"
+                value={pageIndex + 1}
+                onChange={(e) => {
+                  const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                  gotoPage(page);
+                }}
+                style={{ width: '40px' }}
+              />
+              {' '}
+              of
+              {' '}
+              {pageOptions.length}
+            </strong>
+            {' '}
+          </span>
+          <button className="next" onClick={() => nextPage()} disabled={!canNextPage}>
+            <i className='pi pi-angle-right'></i>
+          </button>
+        </div>
+      }
     </TableStyles>
   );
 };

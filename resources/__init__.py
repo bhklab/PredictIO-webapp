@@ -20,7 +20,6 @@ from db.maintenance import delete_old_requests
 # mail object
 from utils.mail import mail
 
-
 # modules used for routes in 'resources' directory
 from resources.test import Test
 from resources.plot_data import VolcanoPlot, ForestPlot
@@ -31,6 +30,7 @@ from resources.biomarker_evaluation_query import BiomarkerEvaluationQuery
 from resources.search_gene import SearchGene
 from resources.biomarker_evaluation_request import BiomarkerEvaluationRequest
 from resources.biomarker_evaluation_result import BiomarkerEvaluationResult, BiomarkerEvaluationVolcanoPlot, BiomarkerEvaluationForestPlot
+from resources.datasets import Datasets
 from resources.itnt_visualization import ITNTVisualization
 
 
@@ -90,6 +90,8 @@ def create_app():
                      '/api/explore/biomarker/result/forest_plot/<analysis_id>')
 
     api.add_resource(DescriptionModal, '/api/explore/description_modal')
+    api.add_resource(Datasets, '/api/datasets')
+
     api.add_resource(ITNTVisualization, '/api/explore/itnt_data')
 
     # Setup that enables react routing when serving static files

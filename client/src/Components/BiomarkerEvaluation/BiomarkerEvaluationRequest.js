@@ -13,11 +13,7 @@ import CustomMultiSelect from '../UtilComponents/CustomMultiSelect';
 import CustomInputText from '../UtilComponents/CustomInputText';
 import CustomDropdown from '../UtilComponents/CustomDropdown';
 import GeneSearch from './GeneSearch';
-
-const Container = styled.div`
-    width: 80%;
-    height: calc(100vh + 50px);
-`;
+import { Container } from '../../styles/StyledComponents';
 
 const LoaderOverlay = styled.div`
     position: absolute;
