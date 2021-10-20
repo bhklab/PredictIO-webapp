@@ -14,6 +14,12 @@ dataset_dict = {
     'summary': [],
     'authors': []
 }
+dataset_identifier_dict = {
+    'id': [],
+    'dataset_id': [],
+    'identifier': [],
+    'link': []
+}
 
 # reads dataset description from a separate file
 with open('./raw_data/description.json') as f:
@@ -28,7 +34,7 @@ for index, dataset in enumerate(dataset_list):
     # checks if there is any description information for the dataset
     description_match_found = False
     for description_index, dataset_description in enumerate(dataset_metadata):
-        if dataset_description['study'] == dataset:
+        if dataset_description['dataset_name'] == dataset:
             description_match_found = True
             dataset_dict['pmid'].append(dataset_description['pmid'])
             dataset_dict['title'].append(dataset_description['title'])
@@ -87,14 +93,30 @@ gene_table = pd.DataFrame(gene_list, columns=['gene_name'])
 # creates data rows from dataset_gene_dict lists and converts gene_names there to respective gene_ids
 dataset_gene_table = pd.DataFrame([(key, gene_dict[var]) for (key, L) in dataset_gene_dict.items() for var in L],
                                   columns=['dataset_id', 'gene_id'])
+
 # adds primary key column to table dataframes
 dataset_table.insert(0, 'dataset_id', dataset_table.index + 1)
 patient_table.insert(0, 'patient_id', patient_table.index + 1)
 gene_table.insert(0, 'gene_id', gene_table.index + 1)
 dataset_gene_table.insert(0, 'id', dataset_gene_table.index + 1)
+
+# parse dataset identifier data from the dataset description
+dataset_table.set_index("dataset_name", inplace=True)
+identifier_id = 1
+for dataset in dataset_metadata:
+    found = datasets.loc[dataset["dataset_name"]]
+    for identifier in dataset["identifiers"]:
+        dataset_identifier_dict['id'].append(identifier_id)
+        dataset_identifier_dict['dataset_id'].append(found["dataset_id"])
+        dataset_identifier_dict['identifier'].append(identifier["identifier"])
+        dataset_identifier_dict['link'].append(identifier["link"])
+        identifier_id+=1
+dataset_identifier_table = pd.DataFrame(dataset_identifier_dict)
+
 # creates csv files for the database
 os.makedirs('./db/seedfiles', exist_ok=True)
 dataset_table.to_csv('./db/seedfiles/dataset.csv', sep=',', index=False)
+dataset_identifier_table.to_csv('./db/seedfiles/dataset_identifier.csv', sep=',', index=False)
 patient_table.to_csv('./db/seedfiles/patient.csv', sep=',', index=False)
 gene_table.to_csv('./db/seedfiles/gene.csv', sep=',', index=False)
 dataset_gene_table.to_csv(

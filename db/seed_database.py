@@ -6,6 +6,7 @@ from .db import db
 from .models import dataset_gene
 from .models import gene
 from .models import dataset
+from .models import dataset_identifier
 from .models import patient
 from .models import signature_individual
 from .models import signature_meta
@@ -29,6 +30,14 @@ def Add_Records(df, table):
                 'authors': row['authors'] if str(row['authors']) != 'nan' else ''
             })
             print('Adding Dataset record ', index)
+        elif table == 'dataset_identifier':
+            record = dataset_identifier.DatasetIdentifier(**{
+                'id': int(row['id']),
+                'dataset_id': int(row['dataset_id']),
+                'identifier': row['identifier'] if str(row['identifier']) != 'nan' else '',
+                'link': row['link'] if str(row['link']) != 'nan' else ''
+            })
+            print('Adding DatasetIdentifier record ', index)
         elif table == 'dataset_gene':
             record = dataset_gene.DatasetGene(**{
                 'id': int(row['id']),
@@ -160,6 +169,11 @@ def seed():
             dataset_file, quotechar='\"', skipinitialspace=True)
         Add_Records(dataset_data, 'dataset')
 
+        # populating dataset_identifier table
+        dataset_identifier_file = os.path.join(dir_path, 'seedfiles/dataset_identifier.csv')
+        dataset_identifier_data = pd.read_csv(dataset_identifier_file, quotechar='\"', skipinitialspace=True)
+        Add_Records(dataset_identifier_data, 'dataset_identifier')
+
         # populating gene table
         gene_file = os.path.join(dir_path, 'seedfiles/gene.csv')
         gene_data = pd.read_csv(
@@ -191,10 +205,16 @@ def seed():
 # used to create specific tables only
 def create_table():
     try:
-        # analysis_request.AnalysisRequest.__table__.create(db.session.bind)
-        # signature_user_requested.UserRequested.__table__.create(db.session.bind)
+        analysis_request.AnalysisRequest.__table__.create(db.session.bind)
+        signature_user_requested.UserRequested.__table__.create(db.session.bind)
         signature_network.SignatureNetwork.__table__.create(db.session.bind)
         signature_kegg_network.SignatureKeggNetwork.__table__.create(db.session.bind)
+        dataset_identifier.DatasetIdentifier.__table__.create(db.session.bind)
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        dataset_identifier_file = os.path.join(dir_path, 'seedfiles/dataset_identifier.csv')
+        dataset_identifier_data = pd.read_csv(dataset_identifier_file, quotechar='\"', skipinitialspace=True)
+        Add_Records(dataset_identifier_data, 'dataset_identifier')
+        db.session.commit()
     except Exception as e:
         print('Exception ', e)
         print(traceback.format_exc())

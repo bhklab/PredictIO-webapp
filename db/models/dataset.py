@@ -13,6 +13,7 @@ class Dataset(db.Model, Serializer):
     # relationships to other tables
     clinical_infos = db.relationship("Patient", backref="dataset")
     dataset_genes = db.relationship("DatasetGene", backref="dataset")
+    dataset_identifier = db.relationship("DatasetIdentifier", backref="dataset")
 
     def serialize(self):
         serialized = {
