@@ -31,10 +31,10 @@ const Datasets = () => {
                         <span>
                             {
                                 item.value.map((link, i) => (
-                                    <span>
+                                    <span key={i}>
                                         {
                                             link.link.length > 0 ?
-                                            <a key={i} href={link.link} target="_blank" rel="noopener noreferrer">{link.identifier}</a>
+                                            <a href={link.link} target="_blank" rel="noopener noreferrer">{link.identifier}</a>
                                             :
                                             link.identifier
                                         }
@@ -68,7 +68,7 @@ const Datasets = () => {
             <Container>
                 <h3>Datasets</h3>
                 <div>
-                    <Table columns={columns} data={datasets} />
+                    <Table columns={columns} data={datasets} pageRowNum={25} />
                 </div>
             </Container>
         </Layout>

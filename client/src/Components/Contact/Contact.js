@@ -42,6 +42,8 @@ const Contact = () => {
                                 {' '}
                                 <br />
                                 TMDT RM 11-310
+                                <br /><br />
+                                <b>Email:</b> support@predictio.ca
                             </div>
                         </div> 
                         <div className='section'>
