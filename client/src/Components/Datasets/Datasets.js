@@ -55,9 +55,6 @@ const Datasets = () => {
         const getData = async () => {
             const res = await axios.get('/api/datasets')
             res.data.sort((a, b) => a.dataset_name.localeCompare(b.dataset_name));
-            res.data.forEach(item => {
-                console.log(item.pmid.split('.gov/')[1].replace(/\D/g, ''));
-            });
             setDatasets(res.data);
         }   
         getData();
