@@ -14,16 +14,50 @@ const Datasets = () => {
             accessor: 'dataset_name'
         },
         {
-            Header: 'Identifier',
-            accessor: 'pmid'
+            Header: 'Source',
+            accessor: 'pmid',
+            Cell: (item) => (
+                <a href={item.value} target="_blank" rel="noopener noreferrer">
+                    {`PMID: ${item.value.split('.gov/')[1].replace(/\D/g, '')}`}
+                </a>
+            )
         },
-        
+        {
+            Header: 'Identifier',
+            accessor: 'identifiers',
+            Cell: (item) => {
+                if(item.value.length > 0){
+                    return(
+                        <span>
+                            {
+                                item.value.map((link, i) => (
+                                    <span>
+                                        {
+                                            link.link.length > 0 ?
+                                            <a key={i} href={link.link} target="_blank" rel="noopener noreferrer">{link.identifier}</a>
+                                            :
+                                            link.identifier
+                                        }
+                                        {(i + 1) < item.value.length ? ', ' : ''}
+                                    </span>
+                                ))
+                            }
+                        </span>
+                    );
+                }else{
+                    return 'Currently unavailable'
+                }
+            }
+        }
     ];
 
     useEffect(() => {
         const getData = async () => {
             const res = await axios.get('/api/datasets')
             res.data.sort((a, b) => a.dataset_name.localeCompare(b.dataset_name));
+            res.data.forEach(item => {
+                console.log(item.pmid.split('.gov/')[1].replace(/\D/g, ''));
+            });
             setDatasets(res.data);
         }   
         getData();

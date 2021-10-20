@@ -2,7 +2,6 @@ from flask import request
 from flask_restful import Resource
 from db.models.dataset import Dataset
 from db.models.dataset_identifier import DatasetIdentifier
-from utils.serializer import Serializer
 
 class Datasets(Resource): 
     def get(self):
