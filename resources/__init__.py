@@ -6,6 +6,7 @@ import os
 from flask import Flask, send_from_directory
 from flask_restful import Api
 from flask_cors import CORS
+from urllib.parse import quote 
 
 # used to get values from .env file
 from decouple import config
@@ -41,7 +42,7 @@ def create_app():
 
     # initialize flask_sqlalchemy
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = config('CONN_STR')
+    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://" + config('DB_USER') + ":" + quote(config('DB_PWD')) + "@" + config('DB_HOST') + "/" + config('DB_NAME')
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
         "pool_pre_ping": True,
         "pool_recycle": 300,

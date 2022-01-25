@@ -1,3 +1,9 @@
 from resources import create_app
+import traceback
 
-app = create_app()
+try:
+    app = create_app()
+except Exception as e:
+    print('Exception ', e)
+    print(traceback.format_exc())
+
