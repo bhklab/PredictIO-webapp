@@ -61,6 +61,10 @@ pip install -r requirements.txt
 # 6. Install R dependencies
 sudo Rscript requirements.R # this takes a while
 
+# 7. Create front-end build
+cd client
+sudo npm run build
+
 # set up Nginx and Gunicorn to run the app (Reference: https://blog.miguelgrinberg.com/post/how-to-deploy-a-react--flask-project)
 
 # 8. Install and configure nginx to serve react front end
