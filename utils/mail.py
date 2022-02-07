@@ -11,10 +11,8 @@ def send_mail(email, output):
 
     header = "Your analysis is ready"
 
-    content = '''<div style='font-size:14px;'>\
-        Your requested analysis is ready and available at:<br />\
-        <a href={0}{1}{2}>{0}{1}{2}</a>\
-    </div>'''\
+    content = '''<div style='font-size:14px;'>Your requested analysis is ready and available at:<br /><a href={0}{1}{2}>{0}{1}{2}</a></div>\
+        <div style='font-size:14px; font-weight:bold;'>Please note that the analyses that are more than 30 days old may be deleted at any time.</div>'''\
     .format(current_app.config['APP_DOMAIN'], '/explore/biomarker/result/', output['analysis_id'][0])
 
     footer = '''<div style='font-size:12px;'>\

@@ -7,11 +7,14 @@ from rq import Queue
 import uuid
 import traceback
 from flask import request
-from flask import copy_current_request_context
+# from flask import copy_current_request_context
 from flask_restful import Resource
 from db.db import db
 from db.models.analysis_request import AnalysisRequest
 from datetime import datetime
+
+# dev code
+# from utils import r_script_exec
 
 import time
 """
@@ -72,6 +75,8 @@ class BiomarkerEvaluationRequest(Resource):
             # adds a new job to redis queue to be executed with current parameters
             q.enqueue('utils.r_script_exec.execute_script',
                       job_timeout=3600, args=(parameters,))
+            # development code. executes the analysis script without enqueing to redis server
+            # r_script_exec.execute_script(parameters)
 
             print('Request enqueued')
         except Exception as e:

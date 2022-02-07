@@ -1,6 +1,6 @@
 import math
 import pandas as pd
-from os import set_blocking
+# from os import set_blocking
 from flask import request
 from flask_restful import Resource
 from db.models.analysis_request import AnalysisRequest
