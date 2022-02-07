@@ -103,18 +103,27 @@ const BiomarkerEvaluationResult = () => {
     }, [parameters.outcome]);
 
     const renderContent = () => {
-        if(reqInfo.ready && !reqInfo.found){
+        if(!reqInfo.found){
             return(
                 <h3>The analysis has been deleted since it was more than 30 days old.</h3>
             );
         }
-        if(reqInfo.ready && outcomeDropdown.length === 0){
+        if(outcomeDropdown.length === 0){
             return(
                 <h3>The analysis did not return any significant results with the given input.</h3>
             );
         }
         return(
             <React.Fragment>
+                <ResultInfo reqInfo={reqInfo.data} />
+                {
+                    networkData.ready && networkData.data.length > 0 &&
+                    <PlotContainer>
+                        <StyledPlotArea width='100%'>
+                            <NetworkPlotContainer data={networkData.data} />
+                        </StyledPlotArea>
+                    </PlotContainer>  
+                }
                 <StyledForm flexDirection='row'>
                     <div className='formField'>
                         <div className='label'>Outcome: </div>
@@ -232,27 +241,14 @@ const BiomarkerEvaluationResult = () => {
             <h3>Biomarker Evaluation Result</h3>
             {
                 
-                !reqInfo.ready &&
+                !reqInfo.ready ?
                 <React.Fragment>
                     <h3>Loading...</h3>
                     <LoaderContainer>
                         <Loader type="Oval" color={colors.blue} height={80} width={80}/>
                     </LoaderContainer>
                 </React.Fragment>
-            }
-            {
-                reqInfo.ready && reqInfo.found &&
-                <ResultInfo reqInfo={reqInfo.data} />
-            }
-            {
-                networkData.ready && networkData.data.length > 0 &&
-                <PlotContainer>
-                    <StyledPlotArea width='100%'>
-                        <NetworkPlotContainer data={networkData.data} />
-                    </StyledPlotArea>
-                </PlotContainer>  
-            }
-            {
+                :
                 renderContent()
             }
         </Layout>
