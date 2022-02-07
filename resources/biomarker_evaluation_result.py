@@ -11,73 +11,76 @@ from db.models.signature_meta import Meta
 
 class BiomarkerEvaluationResult(Resource):
     def get(self, analysis_id):
-        print(analysis_id)
-        result = {}
+        result = {
+            'found': False
+        }
 
         # get analysis by id
         analysis = AnalysisRequest.query.filter(AnalysisRequest.analysis_id == analysis_id).first()
-        result['reqInfo'] = analysis.serialize()
-        
-        # get dropdown options for outcome and model that exist in the analysis
-        dropdown_values = UserRequested.query.with_entities(
-            UserRequested.model,
-            UserRequested.outcome
-        ).filter(
-            UserRequested.analysis_id == analysis_id,
-            UserRequested.meta_analysis == 1,
-            UserRequested.subgroup == 'All',
-            UserRequested.n >= 3
-        ).all()
-        model = list(set(map((lambda item: item[0]), dropdown_values)))
-        outcome = list(set(map((lambda item: item[1]), dropdown_values)))
-        result['outcomeDropdown'] = sorted(
-            list(map((lambda item: {'label': item, 'value': item}), outcome)), 
-            key=lambda k: k["label"]
-        )
-        result['modelDropdown'] = sorted(
-            list(map((lambda item: {'label': item, 'value': item}), model)), 
-            key=lambda k: k["label"]
-        )
-
-        # Format network data
-        network_clusters = []
-        network = SignatureNetwork.query.filter(
-            SignatureNetwork.analysis_id == analysis_id
-        ).all()
-        network = SignatureNetwork.serialize_list(network)
-
-        if len(network) > 0:
-            kegg = SignatureKeggNetwork.query.filter(
-                SignatureKeggNetwork.analysis_id == analysis_id
-            ).all()
-            kegg = SignatureKeggNetwork.serialize_list(kegg)
-
-            clusters = list(map((lambda x: x['cluster']), network))
-            clusters = set(clusters)
+        if analysis:
+            result['reqInfo'] = analysis.serialize()
             
-            for cluster in clusters:
-                filtered = list(filter((lambda x: x['cluster'] == cluster), network))
-                x = list(map((lambda x: x['x']), filtered))
-                y = list(map((lambda x: x['y']), filtered))
-                
-                # Use df to find the nearest point to the cluster center
-                df = pd.DataFrame(
-                    {'x': x, 'y': y},
-                    pd.Index(list(range(len(x))), name='id')
-                )
-                network_cluster = {
-                    'cluster': cluster,
-                    'points': {
-                        'center': int(df.sub(df.mean()).pow(2).sum(1).idxmin()),
-                        'signature': list(map((lambda x: x['signature']), filtered)),
-                        'x': x,
-                        'y': y
-                    },
-                    'kegg': list(filter((lambda x: x['cluster'] == cluster), kegg))
-                }
-                network_clusters.append(network_cluster)
+            # get dropdown options for outcome and model that exist in the analysis
+            dropdown_values = UserRequested.query.with_entities(
+                UserRequested.model,
+                UserRequested.outcome
+            ).filter(
+                UserRequested.analysis_id == analysis_id,
+                UserRequested.meta_analysis == 1,
+                UserRequested.subgroup == 'All',
+                UserRequested.n >= 3
+            ).all()
+            model = list(set(map((lambda item: item[0]), dropdown_values)))
+            outcome = list(set(map((lambda item: item[1]), dropdown_values)))
+            result['outcomeDropdown'] = sorted(
+                list(map((lambda item: {'label': item, 'value': item}), outcome)), 
+                key=lambda k: k["label"]
+            )
+            result['modelDropdown'] = sorted(
+                list(map((lambda item: {'label': item, 'value': item}), model)), 
+                key=lambda k: k["label"]
+            )
 
-        result['network'] = network_clusters
+            # Format network data
+            network_clusters = []
+            network = SignatureNetwork.query.filter(
+                SignatureNetwork.analysis_id == analysis_id
+            ).all()
+            network = SignatureNetwork.serialize_list(network)
+
+            if len(network) > 0:
+                kegg = SignatureKeggNetwork.query.filter(
+                    SignatureKeggNetwork.analysis_id == analysis_id
+                ).all()
+                kegg = SignatureKeggNetwork.serialize_list(kegg)
+
+                clusters = list(map((lambda x: x['cluster']), network))
+                clusters = set(clusters)
+                
+                for cluster in clusters:
+                    filtered = list(filter((lambda x: x['cluster'] == cluster), network))
+                    x = list(map((lambda x: x['x']), filtered))
+                    y = list(map((lambda x: x['y']), filtered))
+                    
+                    # Use df to find the nearest point to the cluster center
+                    df = pd.DataFrame(
+                        {'x': x, 'y': y},
+                        pd.Index(list(range(len(x))), name='id')
+                    )
+                    network_cluster = {
+                        'cluster': cluster,
+                        'points': {
+                            'center': int(df.sub(df.mean()).pow(2).sum(1).idxmin()),
+                            'signature': list(map((lambda x: x['signature']), filtered)),
+                            'x': x,
+                            'y': y
+                        },
+                        'kegg': list(filter((lambda x: x['cluster'] == cluster), kegg))
+                    }
+                    network_clusters.append(network_cluster)
+
+            result['network'] = network_clusters
+            result['found'] = True
 
         return result, 200
 

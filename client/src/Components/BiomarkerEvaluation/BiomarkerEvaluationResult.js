@@ -74,10 +74,12 @@ const BiomarkerEvaluationResult = () => {
             console.log(id);
             const res = await axios.get(`/api/explore/biomarker/result/${id}`);
             console.log(res.data);
-            setReqInfo({data: res.data.reqInfo, ready: true});
-            setNetworkData({data: res.data.network, ready: true});
-            setOutcomeDropdown(res.data.outcomeDropdown);
-            setModelDropdown(res.data.modelDropdown);
+            setReqInfo({data: res.data.reqInfo, found: res.data.found, ready: true});
+            if(res.data.found){
+                setNetworkData({data: res.data.network, ready: true});
+                setOutcomeDropdown(res.data.outcomeDropdown);
+                setModelDropdown(res.data.modelDropdown);
+            }
         }
         getData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -100,6 +102,131 @@ const BiomarkerEvaluationResult = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [parameters.outcome]);
 
+    const renderContent = () => {
+        if(reqInfo.ready && !reqInfo.found){
+            return(
+                <h3>The analysis has been deleted since it was more than 30 days old.</h3>
+            );
+        }
+        if(reqInfo.ready && outcomeDropdown.length === 0){
+            return(
+                <h3>The analysis did not return any significant results with the given input.</h3>
+            );
+        }
+        return(
+            <React.Fragment>
+                <StyledForm flexDirection='row'>
+                    <div className='formField'>
+                        <div className='label'>Outcome: </div>
+                        <CustomDropdown
+                            className='input'
+                            value={parameters.outcome}
+                            options={outcomeDropdown}
+                            onChange={(e) => {setParameters({...parameters, outcome: e.value})}}
+                            placeholder="Select..."
+                        />
+                    </div>
+                    <div className='formField'>
+                        <div className='label'>Model: </div>
+                        <CustomDropdown
+                            className='input'
+                            value={parameters.model}
+                            options={modelDropdown}
+                            onChange={(e) => {setParameters({...parameters, model: e.value})}}
+                            placeholder="Select..."
+                            disabled={parameters.outcome.length === 0}
+                        />
+                    </div>
+                    <div className='formField buttonField'>
+                        <ActionButton 
+                            className='left'
+                            onClick={(e) => {
+                                if(reqInfo.data.input_datatype === 'EXP'){
+                                    getVolcanoPlotData(e);
+                                }else{
+                                    getForestPlotData({...parameters, signature: 'Custom'});
+                                }
+                            }} 
+                            text='Submit'
+                            disabled={disableSubmit()}
+                        />
+                        <ActionButton
+                            onClick={reset}
+                            text='Reset'
+                            type='reset'
+                        />
+                    </div>
+                </StyledForm>
+                <PlotContainer>
+                    {
+                        reqInfo.data.input_datatype === 'EXP' &&
+                        <StyledPlotArea width='40%'>
+                            {
+                                volcanoPlotData.ready ?
+                                <VolcanoPlotContainer 
+                                    parameters={parameters} 
+                                    setParameters={setParameters} 
+                                    volcanoPlotData={volcanoPlotData} 
+                                    getForestPlotData={getForestPlotData} 
+                                    onthefly={true}
+                                />
+                                :
+                                volcanoPlotData.loading ?
+                                    <LoaderContainer>
+                                        <Loader type="Oval" color={colors.blue} height={80} width={80}/>
+                                    </LoaderContainer>
+                                    :
+                                    <div>
+                                        <h3>Volcano Plot</h3>
+                                        <div className='forestPlotMessage'>
+                                            Select outcome and model to view the volcano plot.
+                                        </div>
+                                    </div>
+                            }
+                        </StyledPlotArea>
+                    }
+                    <StyledPlotArea width='60%'>
+                    {
+                        forestPlotData.ready ?
+                        <ForestPlotContainer 
+                            parameters={parameters} 
+                            forestPlotData={forestPlotData} 
+                            getModalData={getModalData} 
+                        />
+                        :
+                        forestPlotData.loading ?
+                            <LoaderContainer>
+                                <Loader type="Oval" color={colors.blue} height={80} width={80}/>
+                            </LoaderContainer>
+                            :
+                            <div>
+                                <h3>Forest Plot</h3>
+                                <div className='forestPlotMessage'>
+                                    {
+                                        reqInfo.data.input_datatype === 'EXP' ?
+                                        'Click on a signature point on the volcano plot to display a corresponding forest plot.'
+                                        :
+                                        'Select outcome and model to view the forest plot.'
+                                    }
+                                    
+                                </div>
+                            </div>
+                    }
+                    </StyledPlotArea>
+                </PlotContainer>
+                <PlotContainer>
+                {
+                    modalData.ready &&
+                    <ModalContainer
+                        modalData={modalData}
+                        removeModalData = {removeModalData}
+                    /> 
+                }
+                </PlotContainer>
+            </React.Fragment>
+        );
+    }
+
     return(
         <Layout>
             <h3>Biomarker Evaluation Result</h3>
@@ -114,7 +241,8 @@ const BiomarkerEvaluationResult = () => {
                 </React.Fragment>
             }
             {
-                reqInfo.ready && <ResultInfo reqInfo={reqInfo.data} />
+                reqInfo.ready && reqInfo.found &&
+                <ResultInfo reqInfo={reqInfo.data} />
             }
             {
                 networkData.ready && networkData.data.length > 0 &&
@@ -125,121 +253,7 @@ const BiomarkerEvaluationResult = () => {
                 </PlotContainer>  
             }
             {
-                reqInfo.ready && outcomeDropdown.length > 0 &&
-                <React.Fragment>
-                    <StyledForm flexDirection='row'>
-                        <div className='formField'>
-                            <div className='label'>Outcome: </div>
-                            <CustomDropdown
-                                className='input'
-                                value={parameters.outcome}
-                                options={outcomeDropdown}
-                                onChange={(e) => {setParameters({...parameters, outcome: e.value})}}
-                                placeholder="Select..."
-                            />
-                        </div>
-                        <div className='formField'>
-                            <div className='label'>Model: </div>
-                            <CustomDropdown
-                                className='input'
-                                value={parameters.model}
-                                options={modelDropdown}
-                                onChange={(e) => {setParameters({...parameters, model: e.value})}}
-                                placeholder="Select..."
-                                disabled={parameters.outcome.length === 0}
-                            />
-                        </div>
-                        <div className='formField buttonField'>
-                            <ActionButton 
-                                className='left'
-                                onClick={(e) => {
-                                    if(reqInfo.data.input_datatype === 'EXP'){
-                                        getVolcanoPlotData(e);
-                                    }else{
-                                        getForestPlotData({...parameters, signature: 'Custom'});
-                                    }
-                                }} 
-                                text='Submit'
-                                disabled={disableSubmit()}
-                            />
-                            <ActionButton
-                                onClick={reset}
-                                text='Reset'
-                                type='reset'
-                            />
-                        </div>
-                    </StyledForm>
-                    <PlotContainer>
-                        {
-                            reqInfo.data.input_datatype === 'EXP' &&
-                            <StyledPlotArea width='40%'>
-                                {
-                                    volcanoPlotData.ready ?
-                                    <VolcanoPlotContainer 
-                                        parameters={parameters} 
-                                        setParameters={setParameters} 
-                                        volcanoPlotData={volcanoPlotData} 
-                                        getForestPlotData={getForestPlotData} 
-                                        onthefly={true}
-                                    />
-                                    :
-                                    volcanoPlotData.loading ?
-                                        <LoaderContainer>
-                                            <Loader type="Oval" color={colors.blue} height={80} width={80}/>
-                                        </LoaderContainer>
-                                        :
-                                        <div>
-                                            <h3>Volcano Plot</h3>
-                                            <div className='forestPlotMessage'>
-                                                Select outcome and model to view the volcano plot.
-                                            </div>
-                                        </div>
-                                }
-                            </StyledPlotArea>
-                        }
-                        <StyledPlotArea width='60%'>
-                        {
-                            forestPlotData.ready ?
-                            <ForestPlotContainer 
-                                parameters={parameters} 
-                                forestPlotData={forestPlotData} 
-                                getModalData={getModalData} 
-                            />
-                            :
-                            forestPlotData.loading ?
-                                <LoaderContainer>
-                                    <Loader type="Oval" color={colors.blue} height={80} width={80}/>
-                                </LoaderContainer>
-                                :
-                                <div>
-                                    <h3>Forest Plot</h3>
-                                    <div className='forestPlotMessage'>
-                                        {
-                                            reqInfo.data.input_datatype === 'EXP' ?
-                                            'Click on a signature point on the volcano plot to display a corresponding forest plot.'
-                                            :
-                                            'Select outcome and model to view the forest plot.'
-                                        }
-                                        
-                                    </div>
-                                </div>
-                        }
-                        </StyledPlotArea>
-                    </PlotContainer>
-                    <PlotContainer>
-                    {
-                        modalData.ready &&
-                        <ModalContainer
-                            modalData={modalData}
-                            removeModalData = {removeModalData}
-                        /> 
-                    }
-                    </PlotContainer>
-                </React.Fragment>
-            }
-            {
-                reqInfo.ready && outcomeDropdown.length === 0 &&
-                <h3>The analysis did not return any significant results with the given input.</h3>
+                renderContent()
             }
         </Layout>
     );
