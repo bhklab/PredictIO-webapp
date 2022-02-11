@@ -22,8 +22,8 @@ def execute_script(parameters):
     """function used to call R script in subprocess"""
     cwd = os.path.abspath(os.getcwd())
     print(cwd)
-    r_path = os.path.join(cwd, 'r-scripts', 'io_meta', 'Run_Compute_Result.R')
-    r_wd = os.path.join(cwd, 'r-scripts', 'io_meta')
+    r_path = os.path.join(cwd, 'r-scripts', 'biomarker_eval', 'Run_Compute_Result.R')
+    r_wd = os.path.join(cwd, 'r-scripts', 'biomarker_eval')
     print('Running analysis')
     print(parameters)
     # command to be executed
