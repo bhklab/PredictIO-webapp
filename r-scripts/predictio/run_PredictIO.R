@@ -12,8 +12,8 @@ run <- function(analysis_id, input_expression_file) {
   
   # convert results to json string
   predictio_df <- data.frame(PredictIO)
-  predictio_df $sample_id <- rownames(predictio_df )
-  predictio_df $analysis_id <- analysis_id
+  predictio_df$patient_id <- rownames(predictio_df )
+  predictio_df$analysis_id <- analysis_id
   json <- jsonlite::toJSON(predictio_df)
   return(json)
 }

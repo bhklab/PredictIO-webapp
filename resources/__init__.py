@@ -16,7 +16,7 @@ from db.db import db
 from db.seed_database import seed
 from db.seed_database import create_table
 from db.seed_database import delete_table_rows
-from db.maintenance import delete_old_requests
+from db.maintenance import delete_old_requests, backup_requested_data, restore_requested_data
 
 # mail object
 from utils.mail import mail
@@ -125,5 +125,13 @@ def create_app():
     @app.cli.command("delete-old-requests")
     def delete_data():
         delete_old_requests()
+    
+    @app.cli.command("backup-requested-data")
+    def backup_data():
+        backup_requested_data()
+    
+    @app.cli.command("restore-requested-data")
+    def restore_data():
+        restore_requested_data()
 
     return app

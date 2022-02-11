@@ -55,6 +55,7 @@ class BiomarkerEvaluationRequest(Resource):
 
             analysis = AnalysisRequest(**{
                 'analysis_id': parameters['analysis_id'],
+                'analysis_type': 'biomarker_eval',
                 'email': query['email'],
                 'error': False,
                 'error_message': '',

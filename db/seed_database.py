@@ -14,9 +14,9 @@ from .models import signature_user_requested
 from .models import signature_network
 from .models import signature_kegg_network
 from .models import analysis_request
+from .models import predictio_result
 
 # processes dataframes and creates respective table instances
-
 
 def Add_Records(df, table):
     for index, row in df.iterrows():
@@ -205,15 +205,15 @@ def seed():
 # used to create specific tables only
 def create_table():
     try:
-        analysis_request.AnalysisRequest.__table__.create(db.session.bind)
-        signature_user_requested.UserRequested.__table__.create(db.session.bind)
-        signature_network.SignatureNetwork.__table__.create(db.session.bind)
-        signature_kegg_network.SignatureKeggNetwork.__table__.create(db.session.bind)
-        dataset_identifier.DatasetIdentifier.__table__.create(db.session.bind)
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        dataset_identifier_file = os.path.join(dir_path, 'seedfiles/dataset_identifier.csv')
-        dataset_identifier_data = pd.read_csv(dataset_identifier_file, quotechar='\"', skipinitialspace=True)
-        Add_Records(dataset_identifier_data, 'dataset_identifier')
+        # analysis_request.AnalysisRequest.__table__.create(db.session.bind)
+        # signature_user_requested.UserRequested.__table__.create(db.session.bind)
+        # signature_network.SignatureNetwork.__table__.create(db.session.bind)
+        # signature_kegg_network.SignatureKeggNetwork.__table__.create(db.session.bind)
+        # dataset_identifier.DatasetIdentifier.__table__.create(db.session.bind)
+        # dir_path = os.path.dirname(os.path.realpath(__file__))
+        # dataset_identifier_file = os.path.join(dir_path, 'seedfiles/dataset_identifier.csv')
+        # dataset_identifier_data = pd.read_csv(dataset_identifier_file, quotechar='\"', skipinitialspace=True)
+        # Add_Records(dataset_identifier_data, 'dataset_identifier')
         db.session.commit()
     except Exception as e:
         print('Exception ', e)
