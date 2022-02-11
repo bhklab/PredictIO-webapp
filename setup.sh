@@ -204,5 +204,5 @@ sudo supervisorctl reread
 # 17. Enable execution of the supervisor process
 sudo supervisorctl update
 
-
-
+# If any script executed with worker was changed or moved to another directory, you need to restart supervisor, so the new changes take place:
+sudo supervisorctl restart rq-worker
