@@ -50,9 +50,10 @@ sudo apt install -y r-base r-base-core
 # 3. If not already installed, install git to clone the app repository
 sudo apt install git
 
-# 4. Clone the IO.db repository
+# 4. Clone the PredictIO-webapp repository
 git clone https://github.com/bhklab/PredictIO-webapp.git
-# after this, use SCP to transfer untracked files (.env and RData files in r-scripts/data/io_meta/) 
+# after this, use SCP to transfer untracked files (.env and RData files in r-scripts/data/{biomarker_eval,predictio}) 
+# also make r-scripts/data/tmp dir to temporarily store user uploaded files for the predictIO feature.
 scp -i <path to the key> <path to file or dir> <username>@<hostname>:/<path>
 
 # 5. Install Python dependencies
