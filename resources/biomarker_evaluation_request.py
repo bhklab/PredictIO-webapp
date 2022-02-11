@@ -52,7 +52,7 @@ class BiomarkerEvaluationRequest(Resource):
                 'gene': ",".join(query['gene'])
             }
             print(parameters)
-            print(datetime.now())
+
             analysis = AnalysisRequest(**{
                 'analysis_id': parameters['analysis_id'],
                 'email': query['email'],
@@ -75,6 +75,7 @@ class BiomarkerEvaluationRequest(Resource):
             # adds a new job to redis queue to be executed with current parameters
             q.enqueue('utils.r_script_exec.execute_script',
                       job_timeout=3600, args=(parameters,))
+            
             # development code. executes the analysis script without enqueing to redis server
             # r_script_exec.execute_script(parameters)
 

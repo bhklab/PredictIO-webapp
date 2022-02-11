@@ -101,6 +101,19 @@ tryCatch({
 	# process input arguments
 	args <- commandArgs(trailingOnly = TRUE)
 	
+	# args values used to debug the script.
+	# input = c(
+	#   '~/Documents/GitHub/PredictIO-webapp/r-scripts/biomarker_eval',
+	#   '683a3829-5abe-4ea2-87ac-61204235fb07', 
+	#   'Braun,Fumet.1,Fumet.2,Gide,Hugo,Hwang,INSPIRE,Jerby_Arnon,Jung,Kim,Liu,Mariathasan,Miao.1,Nathanson,Puch,Riaz,Roh,Shiuan,Snyder,VanDenEnde,Van_Allen', 
+	#   'F,M', 
+	#   'Bladder,Breast,Esophageal,Gastric,HNC,Kidney,Liver,Lung,Lymph_node,Melanoma,Ovary,Ureteral', 
+	#   'CTLA4,Combo,PD-1/PD-L1', 
+	#   'EXP', 
+	#   'FPKM,TPM', 
+	#   'B2M,CDY11P,GZMA'
+	# )
+	
 	# set working directory to the script directory
 	setwd(args[1])
 
@@ -109,7 +122,7 @@ tryCatch({
 	source("Get_Outcome_Signature.R")
 	source("Get_Signature_Network.R")
 
-   	run(args)
+  run(args)
 	
 }, error=function(c){
     errorOut <- list(

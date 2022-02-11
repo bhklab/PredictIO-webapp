@@ -12,7 +12,7 @@ Get_Network = function( gene ){
 	signature = as.data.frame( t( read.csv( file= "../data/biomarker_eval/ALL_sig.csv" , sep=";" , header=FALSE , stringsAsFactor=FALSE) ) )
 	data = melt( signature, id.vars= "V1" )
 	data = as.data.frame( rbind( as.matrix( data[ !( data$value %in% "" ) , ][ , -2 ] ) , cbind( "custom" , gene ) ) )
-	colnames( data ) = c( "signature" , "value" )
+	colnames( data ) = c( "signature", "value" )
 
 	data$signature = as.character( data$signature )
 	data$value = as.character( data$value )
@@ -79,7 +79,7 @@ get_KEGG_network = function( network , gene ){
 
 	data = melt( signature, id.vars= "V1" )
 	data = as.data.frame( rbind( as.matrix( data[ !( data$value %in% "" ) , ][ , -2 ] ) , cbind( "custom" , gene ) ) )
-	colnames( data ) = c( "signature" , "value" )
+	colnames( data ) = c( "signature", "value" )
 
 	data$signature = as.character( data$signature )
 	data$value = as.character( data$value )
@@ -104,6 +104,7 @@ get_KEGG_network = function( network , gene ){
 		kegg = rbind( kegg , cbind( clust[ i ] , enriched[[1]][ 1:3 , 1 ] ) )
 	}
 	kegg = as.data.frame( kegg )
+	print(kegg)
 	colnames(kegg) = c( "cluster" , "pathway" )
 	
 	kegg$cluster = as.character( kegg$cluster )

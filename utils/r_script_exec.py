@@ -60,6 +60,7 @@ def execute_script(parameters):
     # converts output to json (dictionary)
     output = json.loads(out)
     email = ''
+    # print(output)
     try:
         # Add data to signature_user_requested table and update analysis request with finished date and time
         analysis_id = output['analysis_id'][0]
