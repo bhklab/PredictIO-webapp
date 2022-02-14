@@ -30,8 +30,8 @@ from resources.dropdown_explore import ExploreDropdownOption
 from resources.biomarker_evaluation_query import BiomarkerEvaluationQuery
 from resources.search_gene import SearchGene
 from resources.user_analysis_request import UserAnalysisRequest
-# from resources.biomarker_evaluation_request import BiomarkerEvaluationRequest
 from resources.biomarker_evaluation_result import BiomarkerEvaluationResult, BiomarkerEvaluationVolcanoPlot, BiomarkerEvaluationForestPlot
+from resources.upload_file import UploadFile
 from resources.datasets import Datasets
 from resources.itnt_visualization import ITNTVisualization
 
@@ -81,6 +81,7 @@ def create_app():
     api.add_resource(ForestPlot, '/api/explore/forest_plot')
     api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
     api.add_resource(UserAnalysisRequest, '/api/analysis/request')
+    api.add_resource(UploadFile, '/api/upload_file')
     api.add_resource(BiomarkerEvaluationQuery,
                      '/api/explore/biomarker/query/<dropdown_type>')
     api.add_resource(BiomarkerEvaluationResult,
@@ -89,7 +90,6 @@ def create_app():
                      '/api/explore/biomarker/result/volcano_plot/<analysis_id>')
     api.add_resource(BiomarkerEvaluationForestPlot,
                      '/api/explore/biomarker/result/forest_plot/<analysis_id>')
-
     api.add_resource(DescriptionModal, '/api/explore/description_modal')
     api.add_resource(Datasets, '/api/datasets')
 

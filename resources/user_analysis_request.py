@@ -38,9 +38,9 @@ class UserAnalysisRequest(Resource):
         try:
             # parse request
             query = request.get_json()
-            
+            analysis = None
             parameters = {
-                'analysis_id': str(uuid.uuid4()),
+                'analysis_id': str(uuid.uuid4()) if query['analysis_type'] == 'biomarker_eval' else query['analysis_id'],
                 'analysis_type': query['analysis_type']
             }
             if(query['analysis_type'] == 'biomarker_eval'):
@@ -59,16 +59,17 @@ class UserAnalysisRequest(Resource):
                 'error': False,
                 'error_message': '',
                 'time_submitted': datetime.now(),
-                'time_completed': None,
-                'input_genes': parameters['gene'] if parameters['gene'] is not None else None,
-                'input_datatype': parameters['dataType'] if parameters['dataType'] is not None else None,
-                'input_sex': parameters['sex'] if parameters['sex'] is not None else None,
-                'input_primary': parameters['primary'] if parameters['primary'] is not None else None,
-                'input_drug_type': parameters['drugType'] if parameters['drugType'] is not None else None,
-                'input_sequencing': parameters['sequencingType'] if parameters['sequencingType'] is not None else None,
-                'input_study': parameters['study'] if parameters['study'] is not None else None
-            })
-
+                'time_completed': None
+            })    
+            if(query['analysis_type'] == 'biomarker_eval'):
+                analysis.input_genes = parameters['gene']
+                analysis.input_datatype = parameters['dataType']
+                analysis.input_sex = parameters['sex']
+                analysis.input_primary = parameters['primary']
+                analysis.input_drug_type = parameters['drugType']
+                analysis.input_sequencing = parameters['sequencingType']
+                analysis.input_study = parameters['study']            
+            
             # Insert analysis request into database.
             db.session.add(analysis)
             db.session.commit()

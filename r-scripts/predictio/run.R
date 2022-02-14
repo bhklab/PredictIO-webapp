@@ -1,7 +1,7 @@
 library(jsonlite)
 
-run <- function(analysis_id, input_expression_file) {
-  expr = read.table( file = paste0("../data/tmp/", input_expression_file) , sep="\t" , stringsAsFactors=FALSE , header = TRUE )
+run <- function(analysis_id) {
+  expr = read.table( file = paste0("../data/tmp/", analysis_id, '.txt') , sep="\t" , stringsAsFactors=FALSE , header = TRUE )
   rownames(expr) = expr[ , 1 ]
   expr = expr[ , -1 ]
   
@@ -25,12 +25,11 @@ run <- function(analysis_id, input_expression_file) {
 
 tryCatch({
   # process input arguments
-  # args <- commandArgs(trailingOnly = TRUE)
-  args <- c(
-    "~/Documents/IOdb/r-scripts/predictio",
-    "12345678",
-    "EXPR.txt"
-  )
+  args <- commandArgs(trailingOnly = TRUE)
+  # args <- c(
+  #   "~/Documents/IOdb/r-scripts/predictio",
+  #   "babef5e-0-1d1a-0fab-813a824206ec"
+  # )
   
   # set working directory to the script directory
   setwd(args[1])
@@ -39,7 +38,7 @@ tryCatch({
   source("Get_PredictIO.R")
   load( "../data/predictio/PredictIO_gene.RData" )
   
-  run(args[2], args[3])
+  run(args[2])
   
 }, error=function(c){
   errorOut <- list(

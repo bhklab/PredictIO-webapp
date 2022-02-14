@@ -22,7 +22,7 @@ from db.models.analysis_request import AnalysisRequest
 
 def execute_script(parameters):
     """function used to call R script in subprocess"""
-    print('Running analysis')
+    print('Running analysis: ' + parameters['analysis_type'])
     cmd = get_cmd(parameters)
     print(cmd)
 
