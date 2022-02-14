@@ -105,8 +105,9 @@ const BiomarkerEvaluationRequest = () => {
             default:
                 break;
         }
-        const res = await axios.post('/api/explore/biomarker/request', {
+        const res = await axios.post('/api/analysis/request', {
             ...parameters, 
+            analysis_type: 'biomarker_eval',
             gene: parameters.gene.map(g => g.name),
             dataType: dataType
         });

@@ -1,5 +1,5 @@
 """
-Module for the on the fly gene signature meta analysis feature
+Module for the on the fly analysis feature
 """
 # import threading
 from worker import conn
@@ -23,9 +23,9 @@ Task queue
 q = Queue(connection=conn)
 
 """
-GeneSignatureReauest Route class.
+UserAnalysisRequest Route class.
 """
-class BiomarkerEvaluationRequest(Resource):
+class UserAnalysisRequest(Resource):
     def get(self):
         return "Only post method is allowed", 400
 
@@ -38,32 +38,35 @@ class BiomarkerEvaluationRequest(Resource):
         try:
             # parse request
             query = request.get_json()
+            
             parameters = {
                 'analysis_id': str(uuid.uuid4()),
-                'analysis_type': 'biomarker_eval',
-                'study': ",".join(query['study']),
-                'sex': ",".join(query['sex']),
-                'primary': ",".join(query['primary']),
-                'drugType': ",".join(query['drugType']),
-                'dataType': query['dataType'],
-                'sequencingType': ",".join(query['sequencingType']),
-                'gene': ",".join(query['gene'])
+                'analysis_type': query['analysis_type']
             }
+            if(query['analysis_type'] == 'biomarker_eval'):
+                parameters['study'] = ",".join(query['study'])
+                parameters['sex'] = ",".join(query['sex'])
+                parameters['primary'] = ",".join(query['primary'])
+                parameters['drugType'] = ",".join(query['drugType'])
+                parameters['dataType'] = query['dataType']
+                parameters['sequencingType'] = ",".join(query['sequencingType'])
+                parameters['gene'] = ",".join(query['gene'])
+            
             analysis = AnalysisRequest(**{
                 'analysis_id': parameters['analysis_id'],
-                'analysis_type': 'biomarker_eval',
+                'analysis_type': parameters['analysis_type'],
                 'email': query['email'],
                 'error': False,
                 'error_message': '',
                 'time_submitted': datetime.now(),
                 'time_completed': None,
-                'input_genes': parameters['gene'],
-                'input_datatype': parameters['dataType'],
-                'input_sex': parameters['sex'],
-                'input_primary': parameters['primary'],
-                'input_drug_type': parameters['drugType'],
-                'input_sequencing': parameters['sequencingType'],
-                'input_study': parameters['study']
+                'input_genes': parameters['gene'] if parameters['gene'] is not None else None,
+                'input_datatype': parameters['dataType'] if parameters['dataType'] is not None else None,
+                'input_sex': parameters['sex'] if parameters['sex'] is not None else None,
+                'input_primary': parameters['primary'] if parameters['primary'] is not None else None,
+                'input_drug_type': parameters['drugType'] if parameters['drugType'] is not None else None,
+                'input_sequencing': parameters['sequencingType'] if parameters['sequencingType'] is not None else None,
+                'input_study': parameters['study'] if parameters['study'] is not None else None
             })
 
             # Insert analysis request into database.

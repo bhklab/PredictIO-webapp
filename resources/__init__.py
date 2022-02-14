@@ -29,7 +29,8 @@ from resources.modal_data import DescriptionModal
 from resources.dropdown_explore import ExploreDropdownOption
 from resources.biomarker_evaluation_query import BiomarkerEvaluationQuery
 from resources.search_gene import SearchGene
-from resources.biomarker_evaluation_request import BiomarkerEvaluationRequest
+from resources.user_analysis_request import UserAnalysisRequest
+# from resources.biomarker_evaluation_request import BiomarkerEvaluationRequest
 from resources.biomarker_evaluation_result import BiomarkerEvaluationResult, BiomarkerEvaluationVolcanoPlot, BiomarkerEvaluationForestPlot
 from resources.datasets import Datasets
 from resources.itnt_visualization import ITNTVisualization
@@ -79,10 +80,9 @@ def create_app():
 
     api.add_resource(ForestPlot, '/api/explore/forest_plot')
     api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
+    api.add_resource(UserAnalysisRequest, '/api/analysis/request')
     api.add_resource(BiomarkerEvaluationQuery,
                      '/api/explore/biomarker/query/<dropdown_type>')
-    api.add_resource(BiomarkerEvaluationRequest,
-                     '/api/explore/biomarker/request')
     api.add_resource(BiomarkerEvaluationResult,
                      '/api/explore/biomarker/result/<analysis_id>')
     api.add_resource(BiomarkerEvaluationVolcanoPlot,
@@ -93,6 +93,7 @@ def create_app():
     api.add_resource(DescriptionModal, '/api/explore/description_modal')
     api.add_resource(Datasets, '/api/datasets')
 
+    # unused 
     api.add_resource(ITNTVisualization, '/api/explore/itnt_data')
 
     # Setup that enables react routing when serving static files

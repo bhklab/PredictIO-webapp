@@ -21,6 +21,7 @@ class BiomarkerEvaluationResult(Resource):
             analysis = analysis.serialize()
             result['reqInfo'] = {
                 'analysis_id': analysis['analysis_id'],
+                'analysis_type': analysis['analysis_type'],
                 'time_submitted': analysis['time_submitted'].strftime('%Y-%m-%d, %H:%M:%S'),
                 'time_completed': analysis['time_completed'].strftime('%Y-%m-%d, %H:%M:%S'),
                 'input_genes': analysis['input_genes'].split(','),

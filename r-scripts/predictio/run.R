@@ -14,8 +14,13 @@ run <- function(analysis_id, input_expression_file) {
   predictio_df <- data.frame(PredictIO)
   predictio_df$patient_id <- rownames(predictio_df )
   predictio_df$analysis_id <- analysis_id
-  json <- jsonlite::toJSON(predictio_df)
-  return(json)
+  json <- list(
+		error=FALSE,
+		analysis_id=analysis_id,
+		data=predictio_df
+	)
+  json <- jsonlite::toJSON(json)
+	return(json)
 }
 
 tryCatch({
