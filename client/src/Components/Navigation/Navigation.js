@@ -14,13 +14,13 @@ const Navigation = () => {
         <StyledNavigation>
             <NavigationContent>
                 <LogoContainer>
-                    <img alt='IO.db' src='./images/logos/logo-white.png'/>
+                    <img alt='PredictIO' src='./images/logos/logo-white.png'/>
                 </LogoContainer>
                 <StyledLinks>
                     <Link to='/'>Home</Link>
                     <Link to='/explore/precomputed'>Pre-computed Signatures</Link>
                     <Link to='/explore/biomarker/request'>Biomarker Evaluation</Link>
-                    <Link to='/predict/main'>PredictIO</Link>
+                    <Link to='/predictio/request'>PredictIO</Link>
                     <Link to='/datasets'>Datasets</Link>
                     <Link to='/about'>About</Link>
                     <Link to='/contact'>Contact</Link>

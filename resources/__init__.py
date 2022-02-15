@@ -31,7 +31,7 @@ from resources.biomarker_evaluation_query import BiomarkerEvaluationQuery
 from resources.search_gene import SearchGene
 from resources.user_analysis_request import UserAnalysisRequest
 from resources.biomarker_evaluation_result import BiomarkerEvaluationResult, BiomarkerEvaluationVolcanoPlot, BiomarkerEvaluationForestPlot
-from resources.upload_file import UploadFile
+from resources.predictio_file import UploadFile, DownloadExampleFile
 from resources.datasets import Datasets
 from resources.itnt_visualization import ITNTVisualization
 
@@ -81,7 +81,8 @@ def create_app():
     api.add_resource(ForestPlot, '/api/explore/forest_plot')
     api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
     api.add_resource(UserAnalysisRequest, '/api/analysis/request')
-    api.add_resource(UploadFile, '/api/upload_file')
+    api.add_resource(UploadFile, '/api/predictio/upload_file')
+    api.add_resource(DownloadExampleFile, '/api/predictio/download_example')
     api.add_resource(BiomarkerEvaluationQuery,
                      '/api/explore/biomarker/query/<dropdown_type>')
     api.add_resource(BiomarkerEvaluationResult,
