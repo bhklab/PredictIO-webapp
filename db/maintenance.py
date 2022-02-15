@@ -24,6 +24,7 @@ def delete_old_requests():
         old_data = AnalysisRequest.query.filter(AnalysisRequest.time_submitted <= datetime.datetime.today() - datetime.timedelta(days=60)).all()
         for row in old_data:
             print('deleting: ' + row.analysis_id)
+            PredictIOResult.query.filter(PredictIOResult.analysis_id == row.analysis_id).delete()
             UserRequested.query.filter(UserRequested.analysis_id == row.analysis_id).delete()
             SignatureNetwork.query.filter(SignatureNetwork.analysis_id == row.analysis_id).delete()
             SignatureKeggNetwork.query.filter(SignatureKeggNetwork.analysis_id == row.analysis_id).delete()
