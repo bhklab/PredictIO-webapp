@@ -240,7 +240,6 @@ const BiomarkerEvaluationResult = () => {
         <Layout>
             <h3>Biomarker Evaluation Result</h3>
             {
-                
                 !reqInfo.ready ?
                 <React.Fragment>
                     <h3>Loading...</h3>

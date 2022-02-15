@@ -16,9 +16,22 @@ class BiomarkerEvaluationResult(Resource):
         }
 
         # get analysis by id
-        analysis = AnalysisRequest.query.filter(AnalysisRequest.analysis_id == analysis_id).first()
+        analysis = AnalysisRequest.query.filter(AnalysisRequest.analysis_id == analysis_id, AnalysisRequest.analysis_type == 'biomarker_eval').first()
         if analysis:
-            result['reqInfo'] = analysis.serialize()
+            analysis = analysis.serialize()
+            result['reqInfo'] = {
+                'analysis_id': analysis['analysis_id'],
+                'analysis_type': analysis['analysis_type'],
+                'time_submitted': analysis['time_submitted'].strftime('%Y-%m-%d, %H:%M:%S'),
+                'time_completed': analysis['time_completed'].strftime('%Y-%m-%d, %H:%M:%S'),
+                'input_genes': analysis['input_genes'].split(','),
+                'input_datatype': analysis['input_datatype'],
+                'input_sex': analysis['input_sex'].split(','),
+                'input_primary': analysis['input_primary'].split(','),
+                'input_drug_type': analysis['input_drug_type'].split(','),
+                'input_sequencing': analysis['input_sequencing'].split(','),
+                'input_study': analysis['input_study'].split(',')
+            }
             
             # get dropdown options for outcome and model that exist in the analysis
             dropdown_values = UserRequested.query.with_entities(

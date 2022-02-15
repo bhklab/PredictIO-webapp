@@ -124,7 +124,9 @@ const Explore = ({ location }) => {
                             <ModalContainer
                                 modalData={modalData}
                                 removeModalData = {removeModalData}
-                            /> :
+                                modalType='dataset'
+                            /> 
+                            :
                             <StyledPlotArea/>
                     }
                 </PlotContainer>

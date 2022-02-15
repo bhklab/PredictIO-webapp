@@ -6,21 +6,30 @@ from flask import current_app
 
 mail = Mail()
 
-def send_mail(email, output):
+def send_mail(email, output, analysis_type):
     """sends email"""
 
-    header = "Your analysis is ready"
+    analysis_name = ''
+    url = ''
+    if(analysis_type == 'biomarker_eval'):
+        analysis_name = 'Biomarker Evaluation'
+        url = '/explore/biomarker/result/'
+    if(analysis_type == 'predictio'):
+        analysis_name = 'PredictIO'
+        url = '/predictio/result/'
 
-    content = '''<div style='font-size:14px;'>Your requested analysis is ready and available at:<br /><a href={0}{1}{2}>{0}{1}{2}</a></div>\
+    header = "Your {0} analysis is ready".format(analysis_name)
+
+    content = '''<div style='font-size:14px;'>Your {3} analysis is ready and available at:<br /><a href={0}{1}{2}>{0}{1}{2}</a></div>\
         <div style='font-size:14px; font-weight:bold;'>Please note that the analyses that are more than 30 days old may be deleted at any time.</div>'''\
-    .format(current_app.config['APP_DOMAIN'], '/explore/biomarker/result/', output['analysis_id'][0])
+        .format(current_app.config['APP_DOMAIN'], url, output['analysis_id'][0], analysis_name)
 
     footer = '''<div style='font-size:12px;'>\
         Thank you for using PredictIO, powered by <a href=https://www.pmgenomics.ca/bhklab/>BHK Lab</a>.\
         </div>'''
 
     if(output["error"][0]):
-        header = "Error occurred during analysis"
+        header = "Error occurred during {0} analysis".format(analysis_name)
 
         content = '''<div style='font-size:14px;'>\
             Error occurred during your analysis.<br />\

@@ -31,7 +31,7 @@ const DataLine = (props) => {
 
 const ResultInfo = (props) => {
 
-    const {reqInfo} = props;
+    const { reqInfo, analysisType } = props;
 
     return(
         <StyledResultInfo>
@@ -40,18 +40,23 @@ const ResultInfo = (props) => {
                 <DataLine title='Time Submitted' value={reqInfo.time_submitted} />
                 <DataLine title='Time Completed' value={reqInfo.time_completed} />
             </StyledRow>
-            <StyledRow>
-                <DataLine title='Data Type' value={reqInfo.input_datatype} />
-                <DataLine title='Sequencing Type' value={reqInfo.input_sequencing.join(', ')} />
-                <DataLine title='Drug Type' value={reqInfo.input_drug_type.join(', ')} />
-                <DataLine title='Sex' value={reqInfo.input_sex.map(s => s === 'M' ? 'Male' : 'Female').join(', ')} />
-            </StyledRow>
-            <StyledRow>
-                <DataLine title='Gene(s)' value={reqInfo.input_genes.join(', ')} />
-            </StyledRow>
-            <StyledRow>
-                <DataLine title='Primary' value={reqInfo.input_primary.join(', ')} />
-            </StyledRow>
+            {
+                analysisType !== 'predictio' &&
+                <React.Fragment>
+                    <StyledRow>
+                        <DataLine title='Data Type' value={reqInfo.input_datatype} />
+                        <DataLine title='Sequencing Type' value={reqInfo.input_sequencing.join(', ')} />
+                        <DataLine title='Drug Type' value={reqInfo.input_drug_type.join(', ')} />
+                        <DataLine title='Sex' value={reqInfo.input_sex.map(s => s === 'M' ? 'Male' : 'Female').join(', ')} />
+                    </StyledRow>
+                    <StyledRow>
+                        <DataLine title='Gene(s)' value={reqInfo.input_genes.join(', ')} />
+                    </StyledRow>
+                    <StyledRow>
+                        <DataLine title='Primary' value={reqInfo.input_primary.join(', ')} />
+                    </StyledRow>
+                </React.Fragment>
+            }
         </StyledResultInfo>
     );
 }
