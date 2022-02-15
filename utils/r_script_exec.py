@@ -19,7 +19,6 @@ from db.models.analysis_request import AnalysisRequest
 # app = create_app()
 # app.app_context().push()
 
-
 def execute_script(parameters):
     """function used to call R script in subprocess"""
     print('Running analysis: ' + parameters['analysis_type'])
@@ -71,7 +70,7 @@ def execute_script(parameters):
     finally:
         db.session.close()
         # send notification email
-        # send_mail(email, output)
+        send_mail(email, output, parameters['analysis_type'])
         return 'Done'
 
 def get_cmd(parameters):

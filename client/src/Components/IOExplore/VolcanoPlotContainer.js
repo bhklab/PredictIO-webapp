@@ -38,6 +38,7 @@ const VolcanoPlotContainer = (props) => {
 
     useEffect(() => {
         console.log(volcanoPlotData.data);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const downloadPlotImage = (e) => {

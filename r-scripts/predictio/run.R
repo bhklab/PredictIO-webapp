@@ -1,11 +1,17 @@
 library(jsonlite)
 
 run <- function(analysis_id) {
-  expr = read.table( file = paste0("../data/tmp/", analysis_id, '.txt') , sep="\t" , stringsAsFactors=FALSE , header = TRUE )
+  input_file = paste0("../data/tmp/", analysis_id, '.txt')
+  expr = read.table( file = input_file , sep="\t" , stringsAsFactors=FALSE , header = TRUE )
   rownames(expr) = expr[ , 1 ]
   expr = expr[ , -1 ]
   
   expr = expr[ rownames(expr) %in% predictIO_gene$gene , ]
+  
+  # delete the uploaded file
+  if (file.exists(input_file)) {
+    file.remove(input_file)
+  }
   
   PredictIO = NULL
   if( ncol( expr ) ){ PredictIO <- getIOscore_GSVA( data = expr , meta_res= predictIO_gene ) }

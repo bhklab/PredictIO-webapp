@@ -32,6 +32,7 @@ from resources.search_gene import SearchGene
 from resources.user_analysis_request import UserAnalysisRequest
 from resources.biomarker_evaluation_result import BiomarkerEvaluationResult, BiomarkerEvaluationVolcanoPlot, BiomarkerEvaluationForestPlot
 from resources.predictio_file import UploadFile, DownloadExampleFile
+from resources.predictio_result import PredictIO
 from resources.datasets import Datasets
 from resources.itnt_visualization import ITNTVisualization
 
@@ -91,6 +92,7 @@ def create_app():
                      '/api/explore/biomarker/result/volcano_plot/<analysis_id>')
     api.add_resource(BiomarkerEvaluationForestPlot,
                      '/api/explore/biomarker/result/forest_plot/<analysis_id>')
+    api.add_resource(PredictIO, '/api/predictio/result/<analysis_id>')
     api.add_resource(DescriptionModal, '/api/explore/description_modal')
     api.add_resource(Datasets, '/api/datasets')
 

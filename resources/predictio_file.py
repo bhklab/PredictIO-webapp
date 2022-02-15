@@ -32,7 +32,7 @@ class DownloadExampleFile(Resource):
     def get(self):
         print('get file')
         cwd = os.path.abspath(os.getcwd())
-        filepath = os.path.join(cwd, 'r-scripts', 'example_file', 'EXPR.txt')
+        filepath = os.path.join(cwd, 'r-scripts', 'data', 'example_file', 'EXPR.txt')
         return send_file(filepath, as_attachment=True, attachment_filename='EXPR.txt')
     
     def post(self):

@@ -27,6 +27,21 @@ const StyledMessages = styled(Messages)`
     }
 `;
 
+const WarningMessage = styled.div`
+    width: 100%;
+    font-size: 14px;
+    border: 1px solid ${colors.red};
+    padding: 20px 20px;
+    border-radius: 10px;
+    color: ${colors.red};
+    line-height: 1.5;
+    .title {
+        padding-bottom: 10px;
+        font-weight: bold;
+    }
+    background-color: #ffdae0;
+`;
+
 const StyledFormContainer = styled.div`
     max-width: 1000px;
 `;
@@ -43,6 +58,12 @@ const StyledInputFile = styled.div`
         color: ${colors.blue};
         text-decoration: underline;
     }
+`;
+
+const StyledUploadedButton = styled.div`
+    color: ${colors.blue};
+    font-size: 14px;
+    font-weight: bold;
 `;
 
 const PredictIO = () => {
@@ -85,7 +106,7 @@ const PredictIO = () => {
                     sticky: false
                 }
             ]);
-            e.target.value = null;
+            inputFileRef.current.value = null;
         }
     }
 
@@ -161,12 +182,29 @@ const PredictIO = () => {
         }
     }
 
+    const reset = async (e) => {
+        e.preventDefault();
+        setParameters({
+            email: '',
+            analysis_id: '',
+            fileUploaded: false,
+            submitting: false
+        });
+        inputFileRef.current.value = null;
+    }
+
     return(
         <Layout>
             <Container>
                 <h4>Get PredictIO Values</h4>
                 <StyledMessages ref={messages} />
                 <StyledFormContainer>
+                    <WarningMessage>
+                        <div className='title'>WARNING: The PredictIO feature requires uploading of patient data to a cloud server.</div>
+                        While the data file is <b>not</b> permanently stored on the server and is only used to read data for the analysis, 
+                        the users should be aware that the patient data file will be stored temporily in a remote server that is likely to be outside of their institutions patient data/privacy protection policy.<br />
+                        <b>Users should upload the data only if it is de-identified, or it can be disclosed publicly.</b>
+                    </WarningMessage>
                     <StyledForm flexDirection='column'>
                         <div className='formField'>
                             <div className='label'>Upload a data file: </div>
@@ -190,6 +228,11 @@ const PredictIO = () => {
                                 uploading ?
                                 <Loader type="Oval" color={colors.blue} height={35} width={35}/>
                                 :
+                                parameters.fileUploaded ?
+                                <StyledUploadedButton>
+                                    Uploaded <i className='pi pi-check'></i>
+                                </StyledUploadedButton>
+                                :
                                 <ActionButton 
                                     onClick={uploadFile} 
                                     text='Upload' 
@@ -208,7 +251,7 @@ const PredictIO = () => {
                         </div>
                         <div className='formField buttonField'>
                             <ActionButton
-                                onClick={(e) => {setParameters({...parameters, email: ''})}}
+                                onClick={reset}
                                 text='Reset'
                                 type='reset'
                                 style={{width: '90px', height: '34px', fontSize: '14px', marginRight: '10px'}}
