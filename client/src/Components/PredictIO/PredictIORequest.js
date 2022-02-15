@@ -137,7 +137,7 @@ const PredictIO = () => {
             messages.current.show([
                 { 
                     severity: 'error', 
-                    summary: 'Unable to upload the data tile', 
+                    summary: 'Unable to upload the data file', 
                     detail: 'Please try again, or contact support@predictio.ca.', 
                     sticky: true
                 }

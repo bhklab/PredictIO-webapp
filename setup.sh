@@ -78,6 +78,7 @@ sudo rm /etc/nginx/sites-enabled/default
 
 # create predictio.nginx file under /etc/nginx/sites-available directory, and add the following:
     server {
+        client_max_body_size 20M;
         listen 80;
         root /home/ubuntu/PredictIO/client/build; # Sets the root directory to React's build file.
         index index.html; # The index file in the build directory.
@@ -149,6 +150,7 @@ sudo ufw allow ssh http https
     # 4. Change the nginx config as follows (Reference: https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https):
     server {
         server_name predictio.ca www.predictio.ca; # Domain name set as server name
+        client_max_body_size 20M;
         listen 443 ssl; # Port changed to 443
         root /home/ubuntu/PredictIO/client/build; # Sets the root directory to React's build file.
         index index.html; # The index file in the build directory.

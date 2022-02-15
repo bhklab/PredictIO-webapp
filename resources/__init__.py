@@ -49,7 +49,7 @@ def create_app():
         "pool_pre_ping": True,
         "pool_recycle": 300,
     }
-    app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
+    app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024
     db.init_app(app)
 
     CORS(app)
