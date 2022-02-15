@@ -1,7 +1,6 @@
 """
 Includes functions to execute R script in a separate thread
 """
-from concurrent.futures import process
 import os
 import subprocess
 import json

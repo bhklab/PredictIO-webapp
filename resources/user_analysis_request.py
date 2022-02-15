@@ -14,9 +14,7 @@ from db.models.analysis_request import AnalysisRequest
 from datetime import datetime
 
 # dev code
-from utils import r_script_exec
-
-import time
+# from utils import r_script_exec
 """
 Task queue
 """
