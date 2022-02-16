@@ -1,5 +1,6 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import ReactGA from 'react-ga';
 
 // individual page components
 import {
@@ -19,6 +20,11 @@ import {
 import GlobalStyles from './styles/GlobalStyles';
 
 const App = () => {
+    // Google Analytics set up
+	useEffect(() => {
+		ReactGA.initialize('G-NKMP8P3WXW')
+		ReactGA.pageview(window.location.pathname + window.location.search)
+	}, []);
   return (
     <React.Fragment>
       <GlobalStyles />

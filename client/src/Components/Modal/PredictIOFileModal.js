@@ -48,6 +48,7 @@ const PredictIOFileModal = (props) => {
                 The PredictIO feature follows strict input file format as described below. <b>Uploading data in incorrect format will cause error in the analysis process.</b>
                 <ul>
                     <li>A text file with .txt extension.</li>
+                    <li>The maximum file size is 50MB.</li>
                     <li>Data in tabular format. Each column needs to be separated by a tab character.</li>
                     <li>The first line should be column names.</li>
                     <li>The first column should be genes, followed by patient data.</li>
