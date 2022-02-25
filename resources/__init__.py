@@ -34,6 +34,7 @@ from resources.biomarker_evaluation_result import BiomarkerEvaluationResult, Bio
 from resources.predictio_file import UploadFile, DownloadExampleFile
 from resources.predictio_result import PredictIO
 from resources.datasets import Datasets
+from resources.single_dataset import SingleDataset
 from resources.itnt_visualization import ITNTVisualization
 
 
@@ -96,6 +97,7 @@ def create_app():
     api.add_resource(PredictIO, '/api/predictio/result/<analysis_id>')
     api.add_resource(DescriptionModal, '/api/explore/description_modal')
     api.add_resource(Datasets, '/api/datasets')
+    api.add_resource(SingleDataset, '/api/dataset/<dataset_id>')
 
     # unused 
     api.add_resource(ITNTVisualization, '/api/explore/itnt_data')

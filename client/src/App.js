@@ -11,6 +11,7 @@ import {
   PredictIORequest,
   PredictIOResult,
   Datasets,
+  Dataset,
   About,
   Contact,
   Test,
@@ -38,6 +39,7 @@ const App = () => {
               <Route path='/predictio/request' exact component={PredictIORequest} />
               <Route path='/predictio/result/:id' exact component={PredictIOResult} />
               <Route path='/datasets' exact component={Datasets} />
+              <Route path='/dataset/:id' exact component={Dataset} />
               <Route path='/about' exact component={About} />
               <Route path='/contact' exact component={Contact} />
               <Route path='/download' exact component={Home} />

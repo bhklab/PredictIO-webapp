@@ -11,7 +11,12 @@ const Datasets = () => {
     const columns = [
         {
             Header: 'Name',
-            accessor: 'dataset_name'
+            accessor: 'dataset_name',
+            Cell: (item) => (
+                <a href={`/dataset/${item.row.original.dataset_id}`}>
+                    {item.value}
+                </a>
+            )
         },
         {
             Header: 'Source',
