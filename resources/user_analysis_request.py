@@ -66,7 +66,7 @@ class UserAnalysisRequest(Resource):
                 analysis.input_primary = parameters['primary']
                 analysis.input_drug_type = parameters['drugType']
                 analysis.input_sequencing = parameters['sequencingType']
-                analysis.input_study = parameters['study']            
+                analysis.input_study = parameters['study']           
             
             # Insert analysis request into database.
             db.session.add(analysis)

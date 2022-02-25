@@ -1,24 +1,43 @@
 # app-specific libraries
 library(jsonlite)
 
+get_parameters <- function(param) {
+  if( length( grep( ',' , as.character( param ) ) ) ){
+    return(as.character( sapply( as.character( param ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] ))
+  } else{
+    return(as.character( param ))
+  }
+}
+
 run <- function(input) {
+  
+  study = get_parameters(input[3])
+  sex = get_parameters(input[4])
+  
+  if( sum( sex == c( "M" , "F" ) ) %in% 2 ) { sex = c( "M" , "F" , NA ) }
+  
+  primary = get_parameters(input[5])
+  drug_type = get_parameters(input[6])
+  data_type = get_parameters(input[7])
+  sequencing_type = get_parameters(input[8])
+  gene = get_parameters(input[9])
 
-	study = as.character( sapply( as.character( input[3] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
-
-	sex = as.character( sapply( as.character( input[4] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
-
-	if( sum( sex == c( "M" , "F" ) ) %in% 2 ) { sex = c( "M" , "F" , NA ) }
-
-	primary = as.character( sapply( as.character( input[5] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
-	drug_type = as.character( sapply( as.character( input[6] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
-	data_type = as.character( input[7] )
-	sequencing_type = as.character( sapply( as.character( input[8] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
-
-	if( length( grep( ',' , as.character( input[9] ) ) ) ){
-		gene = as.character( sapply( as.character( input[9] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
-	} else{
-		gene = as.character( input[9] )
-	}
+	# study = as.character( sapply( as.character( input[3] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
+	# 
+	# sex = as.character( sapply( as.character( input[4] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
+	# 
+	# if( sum( sex == c( "M" , "F" ) ) %in% 2 ) { sex = c( "M" , "F" , NA ) }
+	# 
+	# primary = as.character( sapply( as.character( input[5] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
+	# drug_type = as.character( sapply( as.character( input[6] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
+	# data_type = as.character( input[7] )
+	# sequencing_type = as.character( sapply( as.character( input[8] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
+	# 
+	# if( length( grep( ',' , as.character( input[9] ) ) ) ){
+	# 	gene = as.character( sapply( as.character( input[9] ) , function( x ) unlist( strsplit( x , "," , fixed= TRUE ) ) )[ , 1 ] )
+	# } else{
+	# 	gene = as.character( input[9] )
+	# }
 
 	output = network = KEGG_network = NULL
 
@@ -102,16 +121,16 @@ tryCatch({
 	args <- commandArgs(trailingOnly = TRUE)
 	
 	# args values used to debug the script.
-	# input = c(
+	# args = c(
 	#   '~/Documents/GitHub/PredictIO-webapp/r-scripts/biomarker_eval',
-	#   '683a3829-5abe-4ea2-87ac-61204235fb07', 
-	#   'Braun,Fumet.1,Fumet.2,Gide,Hugo,Hwang,INSPIRE,Jerby_Arnon,Jung,Kim,Liu,Mariathasan,Miao.1,Nathanson,Puch,Riaz,Roh,Shiuan,Snyder,VanDenEnde,Van_Allen', 
-	#   'F,M', 
-	#   'Bladder,Breast,Esophageal,Gastric,HNC,Kidney,Liver,Lung,Lymph_node,Melanoma,Ovary,Ureteral', 
-	#   'CTLA4,Combo,PD-1/PD-L1', 
-	#   'EXP', 
-	#   'FPKM,TPM', 
-	#   'B2M,CDY11P,GZMA'
+	#   '683a3829-5abe-4ea2-87ac-61204235fb07',
+	#   'Braun',
+	#   'F,M',
+	#   'Bladder,Breast,Esophageal,Gastric,HNC,Kidney,Liver,Lung,Lymph_node,Melanoma,Ovary,Ureteral',
+	#   'CTLA4,Combo,PD-1/PD-L1',
+	#   'EXP',
+	#   'FPKM,TPM',
+	#   'STAT1'
 	# )
 	
 	# set working directory to the script directory
@@ -121,7 +140,7 @@ tryCatch({
 	source("Get_Outcome_Gene.R")
 	source("Get_Outcome_Signature.R")
 	source("Get_Signature_Network.R")
-
+	
   run(args)
 	
 }, error=function(c){
