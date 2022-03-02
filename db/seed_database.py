@@ -205,7 +205,57 @@ def seed():
 # used to create specific tables only
 def create_table():
     try:
-        predictio_result.PredictIOResult.__table__.create(db.session.bind)
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        # signature_individual.Individual.query.delete()
+        # signature_meta.Meta.query.delete()
+        # patient.Patient.query.delete()
+
+        patient_file = os.path.join(dir_path, 'seedfiles/patient_new.csv')
+        patient_data = pd.read_csv(
+            patient_file, quotechar='\"', skipinitialspace=True, keep_default_na=False)
+        Add_Records(patient_data, 'patient')
+
+        # sig_ind_file = os.path.join(
+        #     dir_path, 'seedfiles/Signature_Individual.txt')
+        # sig_ind_data = pd.read_csv(sig_ind_file, sep='\t')
+        # sig_ind_data = pd.DataFrame(sig_ind_data, columns=[
+        #     'signature',
+        #     'signatureType',
+        #     'outcome',
+        #     'model',
+        #     'study',
+        #     'Primary',
+        #     'Sequencing',
+        #     'N',
+        #     'Effect_size',
+        #     'SE',
+        #     '95CI_low',
+        #     '95CI_high',
+        #     'Pval'
+        # ])
+        # sig_ind_data = sig_ind_data.replace({np.nan: None})
+        # Add_Records(sig_ind_data, 'signature_individual')
+        # sig_meta_file = os.path.join(
+        #     dir_path, 'seedfiles/Signature_Meta_analysis.txt')
+        # sig_meta_data = pd.read_csv(sig_meta_file, sep='\t')
+        # sig_meta_data = pd.DataFrame(sig_meta_data, columns=[
+        #     'signature',
+        #     'signatureType',
+        #     'outcome',
+        #     'model',
+        #     'Subgroup',
+        #     'Type',
+        #     'N',
+        #     'Effect_size',
+        #     'SE',
+        #     '95CI_low',
+        #     '95CI_high',
+        #     'Pval',
+        #     'I2',
+        #     'Pval_I2'
+        # ])
+        # sig_meta_data = sig_meta_data.replace({np.nan: None})
+        # Add_Records(sig_meta_data, 'signature_meta')
         db.session.commit()
     except Exception as e:
         print('Exception ', e)
