@@ -210,7 +210,7 @@ def create_table():
         # signature_meta.Meta.query.delete()
         # patient.Patient.query.delete()
 
-        patient_file = os.path.join(dir_path, 'seedfiles/patient_new.csv')
+        patient_file = os.path.join(dir_path, 'seedfiles/patient.csv')
         patient_data = pd.read_csv(
             patient_file, quotechar='\"', skipinitialspace=True, keep_default_na=False)
         Add_Records(patient_data, 'patient')
@@ -235,6 +235,7 @@ def create_table():
         # ])
         # sig_ind_data = sig_ind_data.replace({np.nan: None})
         # Add_Records(sig_ind_data, 'signature_individual')
+
         # sig_meta_file = os.path.join(
         #     dir_path, 'seedfiles/Signature_Meta_analysis.txt')
         # sig_meta_data = pd.read_csv(sig_meta_file, sep='\t')
@@ -256,6 +257,7 @@ def create_table():
         # ])
         # sig_meta_data = sig_meta_data.replace({np.nan: None})
         # Add_Records(sig_meta_data, 'signature_meta')
+
         db.session.commit()
     except Exception as e:
         print('Exception ', e)
