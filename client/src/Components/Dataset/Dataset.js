@@ -22,6 +22,9 @@ const StyledDatasetSummary = styled.table`
     .data {
         padding-left: 10px;
     }
+    a {
+        color: ${colors.blue};
+    }
 `;
 
 const StyledPlotContainer = styled.div`

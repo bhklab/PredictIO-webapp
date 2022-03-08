@@ -3,6 +3,7 @@ import { StyledButton } from './ModalStyles';
 
 const Modal = (props) => {
     const {
+        dataset_id,
         dataset_name,
         title,
         // authors,
@@ -28,6 +29,17 @@ const Modal = (props) => {
                 <div>
                     <StyledButton
                         style={{width: '90px', height: '34px', fontSize: '14px', marginLeft: '100px'}}
+                        as="a"
+                        href={`/dataset/${dataset_id}`}
+                        target="_blank"
+                        rel="noopener"
+                        primary>
+                        Info
+                    </StyledButton>
+                </div>
+                <div>
+                    <StyledButton
+                        style={{width: '90px', height: '34px', fontSize: '14px', marginLeft: '10px'}}
                         // style={{width: '90px', height: '34px', fontSize: '14px'}}
                         as="a"
                         href={pmid}
