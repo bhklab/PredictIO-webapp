@@ -5,16 +5,17 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 const Plot = createPlotlyComponent(Plotly);
 
 const BarChart = (props) => {
-    const { data, text } = props;
+    const { data, text, orientation, hoverinfo } = props;
     return(
         <Plot 
-            data={[{
-                    x: data.x,
-                    y: data.y,
-                    type: 'bar',
-                    hoverinfo: 'x', 
-                    orientation: 'h'
-            }]}
+            data={data.map(item => ({
+                x: item.x,
+                y: item.y,
+                name: item.name,
+                type: 'bar',
+                hoverinfo: hoverinfo, 
+                orientation: orientation ? orientation : 'h'
+            }))}
             layout={{
                 title: text,
                 font: {
@@ -22,7 +23,7 @@ const BarChart = (props) => {
                     family: 'Noto Sans',
                 },
                 height: 400,
-                width: 500,
+                width: 400,
                 margin: {
                     l: 50,
                     r: 10,

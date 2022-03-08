@@ -25,6 +25,7 @@ const StyledDatasetSummary = styled.table`
 `;
 
 const StyledPlotContainer = styled.div`
+    margin-top: 20px;
     .title {
         display: flex;
         align-items: center;
@@ -39,8 +40,8 @@ const getSortedUniqueItem = (arr, field) => {
 }
 
 const getAgeGroup = (ages) => {
-    let ageRanges = ['90+', '85-89', '80-84', '75-79', '70-74', '65-69', '60-64', '55-59', '50-54', '45-49', '40-44', '35-39', '30-34', '25-29', '20-24', '>19'];
-    let ageGroups = [{range: 'Unknown', count: ages.filter(age => age === 0).length}];
+    let ageRanges = ['>19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79', '80-84', '85-89', '90+'];
+    let ageGroups = [];
     ageGroups = ageGroups.concat(ageRanges.map(range => {
         if(range === '90+'){
             return({range: range, count: ages.filter(age => age !== 0 && age >= 90).length});
@@ -51,6 +52,7 @@ const getAgeGroup = (ages) => {
         let nums = range.split('-');
         return({range: range, count: ages.filter(age => age >= nums[0] && age <= nums[1]).length})
     }));
+    ageGroups.push({range: 'Unknown', count: ages.filter(age => age === 0).length});
     return ageGroups;
 }
 
@@ -69,13 +71,15 @@ const Dataset = () => {
                 pmid: res.data.dataset.pmid,
                 patients: res.data.dataset_patient,
                 ageGroups: getAgeGroup(res.data.dataset_patient.map(patient => patient.age)),
-                patient_f: res.data.dataset_patient.filter(item => item.sex === 'F').length,
-                patient_m: res.data.dataset_patient.filter(item => item.sex === 'M').length,
-                patient_unknown: res.data.dataset_patient.filter(item => item.sex.length === 0).length,
+                sexGroups: {
+                    female: res.data.dataset_patient.filter(item => item.sex === 'F').length, 
+                    male: res.data.dataset_patient.filter(item => item.sex === 'M').length,
+                    unknown: res.data.dataset_patient.filter(item => item.sex.length === 0).length
+                },
                 primary: getSortedUniqueItem(res.data.dataset_patient, 'primary_tissue'),
                 drugTypes: getSortedUniqueItem(res.data.dataset_patient, 'drug_type'),
-                sequencingTypesDNA: getSortedUniqueItem(res.data.dataset_patient, 'dna').filter(item => item.length > 0).map(item => `${item.toUpperCase()} (DNA)`), 
-                sequencingTypesRNA: getSortedUniqueItem(res.data.dataset_patient, 'rna').filter(item => item.length > 0).map(item => `${item.toUpperCase()} (RNA)`), 
+                sequencingTypesDNA: getSortedUniqueItem(res.data.dataset_patient, 'dna').filter(item => item.length > 0), 
+                sequencingTypesRNA: getSortedUniqueItem(res.data.dataset_patient, 'rna').filter(item => item.length > 0), 
                 datatype: [
                     {type: 'Expression', available: res.data.dataset_patient.map(item => item.expression).find(item => item === 1)},
                     {type: 'CNA', available: res.data.dataset_patient.map(item => item.cna).find(item => item === 1)},
@@ -114,9 +118,9 @@ const Dataset = () => {
                                 <td className='label'>Number of Patients</td>
                                 <td className='data'>
                                     {dataset.patients.length} (
-                                        {dataset.patient_f > 0 ? `F:${dataset.patient_f} ` : ''} 
-                                        {dataset.patient_m > 0 ? `M:${dataset.patient_m} ` : ''} 
-                                        {dataset.patient_unknown > 0 ? `Unknown:${dataset.patient_unknown}` : ''}
+                                        {dataset.sexGroups.female > 0 ? `F:${dataset.sexGroups.female} ` : ''} 
+                                        {dataset.sexGroups.male > 0 ? `M:${dataset.sexGroups.male} ` : ''} 
+                                        {dataset.sexGroups.unknown > 0 ? `Unknown:${dataset.sexGroups.unknown}` : ''}
                                     )
                                 </td>
                             </tr>
@@ -149,15 +153,15 @@ const Dataset = () => {
                     <StyledPlotContainer>
                         <BarChart 
                             text='Age'
-                            data={{
+                            data={[{
                                 y: dataset.ageGroups.map(item => item.range),
                                 x: dataset.ageGroups.map(item => item.count)
-                            }}
+                            }]}
                         />
                         <PieChart 
                             text='Sex'
                             data={{
-                                values: [dataset.patient_f, dataset.patient_m, dataset.patient_unknown],
+                                values: [dataset.sexGroups.female, dataset.sexGroups.male, dataset.sexGroups.unknown],
                                 labels: ['F', 'M', 'Unknown'],
                             }}
                         />
@@ -167,6 +171,38 @@ const Dataset = () => {
                                 values: dataset.primary.map(item => dataset.patients.filter(patient => patient.primary_tissue === item).length),
                                 labels: dataset.primary.map(item => item.length > 0 ? item : 'Unknown'),
                             }}
+                        />
+                        <PieChart 
+                            text='Drug Type'
+                            data={{
+                                values: dataset.drugTypes.map(item => dataset.patients.filter(patient => patient.drug_type === item).length),
+                                labels: dataset.drugTypes.map(item => item.length > 0 ? item : 'Unknown'),
+                            }}
+                        />
+                        <BarChart 
+                            text='Sequencing Type'
+                            data={[
+                                {
+                                    name: 'DNA',
+                                    x: dataset.sequencingTypesDNA,
+                                    y: dataset.sequencingTypesDNA.map(item => dataset.patients.filter(patient => patient.dna === item).length)
+                                },
+                                {
+                                    name: 'RNA',
+                                    x: dataset.sequencingTypesRNA,
+                                    y: dataset.sequencingTypesRNA.map(item => dataset.patients.filter(patient => patient.rna === item).length)
+                                }
+                            ]}
+                            orientation='v'
+                        />
+                        <BarChart 
+                            text='Data Type'
+                            data={dataset.datatype.map(item => ({
+                                name: item.type,
+                                x: [item.type],
+                                y: [dataset.patients.filter(patient => patient[item.type.toLowerCase()]).length]
+                            }))}
+                            orientation='v'
                         />
                     </StyledPlotContainer>
                 </Container>
