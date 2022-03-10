@@ -39,7 +39,7 @@ const selectedTemplate = (option) => {
 }
 
 const CustomMultiSelect = (props) => {
-    const {className, value, options, onChange, placeholder, disabled, checkbox} = props;
+    const {className, value, options, onChange, placeholder, disabled, checkbox, tooltip} = props;
 
     return(
         <StyledMultiSelect 
@@ -52,6 +52,7 @@ const CustomMultiSelect = (props) => {
             placeholder={placeholder}
             disabled={disabled}
             checkbox={checkbox}
+            tooltip={tooltip}
         />
     );
 }
