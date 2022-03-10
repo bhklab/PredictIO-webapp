@@ -14,7 +14,10 @@ const BarChart = (props) => {
                 name: item.name,
                 type: 'bar',
                 hoverinfo: hoverinfo, 
-                orientation: orientation ? orientation : 'h'
+                orientation: orientation ? orientation : 'h',
+                marker: {
+                    color: item.color
+                }
             }))}
             layout={{
                 title: text,
@@ -22,8 +25,8 @@ const BarChart = (props) => {
                     size: 11,
                     family: 'Noto Sans',
                 },
-                height: 400,
-                width: 400,
+                height: 300,
+                width: 300,
                 margin: {
                     l: 50,
                     r: 10,

@@ -6,7 +6,7 @@ import Loader from 'react-loader-spinner';
 import { LoaderContainer } from '../../styles/PlotStyles';
 import styled from 'styled-components';
 import { Container } from '../../styles/StyledComponents';
-import { colors } from '../../styles/colors';
+import { colors, plotColors } from '../../styles/colors';
 import PieChart from './PieChart';
 import BarChart from './BarChart';
 
@@ -158,7 +158,8 @@ const Dataset = () => {
                             text='Age'
                             data={[{
                                 y: dataset.ageGroups.map(item => item.range),
-                                x: dataset.ageGroups.map(item => item.count)
+                                x: dataset.ageGroups.map(item => item.count),
+                                color: plotColors[0]
                             }]}
                         />
                         <PieChart 
@@ -166,6 +167,7 @@ const Dataset = () => {
                             data={{
                                 values: [dataset.sexGroups.female, dataset.sexGroups.male, dataset.sexGroups.unknown],
                                 labels: ['F', 'M', 'Unknown'],
+                                colors: plotColors
                             }}
                         />
                         <PieChart 
@@ -173,6 +175,7 @@ const Dataset = () => {
                             data={{
                                 values: dataset.primary.map(item => dataset.patients.filter(patient => patient.primary_tissue === item).length),
                                 labels: dataset.primary.map(item => item.length > 0 ? item : 'Unknown'),
+                                colors: plotColors
                             }}
                         />
                         <PieChart 
@@ -180,6 +183,7 @@ const Dataset = () => {
                             data={{
                                 values: dataset.drugTypes.map(item => dataset.patients.filter(patient => patient.drug_type === item).length),
                                 labels: dataset.drugTypes.map(item => item.length > 0 ? item : 'Unknown'),
+                                colors: plotColors
                             }}
                         />
                         <BarChart 
@@ -188,22 +192,25 @@ const Dataset = () => {
                                 {
                                     name: 'DNA',
                                     x: dataset.sequencingTypesDNA,
-                                    y: dataset.sequencingTypesDNA.map(item => dataset.patients.filter(patient => patient.dna === item).length)
+                                    y: dataset.sequencingTypesDNA.map(item => dataset.patients.filter(patient => patient.dna === item).length),
+                                    color: plotColors[0]
                                 },
                                 {
                                     name: 'RNA',
                                     x: dataset.sequencingTypesRNA,
-                                    y: dataset.sequencingTypesRNA.map(item => dataset.patients.filter(patient => patient.rna === item).length)
+                                    y: dataset.sequencingTypesRNA.map(item => dataset.patients.filter(patient => patient.rna === item).length),
+                                    color: plotColors[1]
                                 }
                             ]}
                             orientation='v'
                         />
                         <BarChart 
                             text='Data Type'
-                            data={dataset.datatype.map(item => ({
+                            data={dataset.datatype.map((item, i) => ({
                                 name: item.type,
                                 x: [item.type],
-                                y: [dataset.patients.filter(patient => patient[item.type.toLowerCase()]).length]
+                                y: [dataset.patients.filter(patient => patient[item.type.toLowerCase()]).length],
+                                color: plotColors[i]
                             }))}
                             orientation='v'
                         />

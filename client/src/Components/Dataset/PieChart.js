@@ -13,13 +13,16 @@ const PieChart = (props) => {
                 labels: data.labels,
                 type: 'pie',
                 hole: .4,
+                marker: {
+                    colors: data.colors
+                }
             }]}
             layout = {{
-                height: 400,
-                width: 500,
+                height: 350,
+                width: 350,
                 annotations: [{
                     font: {
-                        size: 20
+                        size: 12
                     },
                     showarrow: false,
                     text: text,
