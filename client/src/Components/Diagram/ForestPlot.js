@@ -135,7 +135,8 @@ const ForestPlot = (props) => {
         const onClick = (data) => {
             let selectedPoint = dataset[data].study;
             getModalData({
-                dataset_name: selectedPoint
+                dataset_name: selectedPoint,
+                type: 'dataset'
             });
         }
 

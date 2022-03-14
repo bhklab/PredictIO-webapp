@@ -6,7 +6,8 @@ export const colors = {
     hover_red: '#9f2d30',
     orange_highlight: '#F2950B',
     gray_text: '#666666',
-    light_gray: '#999999'
+    light_gray: '#999999',
+    hyper_link: '#6699cc'
 };
 
 export const plotColors = [

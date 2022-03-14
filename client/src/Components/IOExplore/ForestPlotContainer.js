@@ -5,8 +5,11 @@ import { FaSortAmountDown, FaSortAmountUpAlt } from "react-icons/fa";
 import ForestPlot from '../Diagram/ForestPlot';
 import FileSaver from 'file-saver';
 import DownloadButton from '../UtilComponents/DownloadButton';
+import TextButton from '../UtilComponents/TextButton';
 import * as saveSvg from 'save-svg-as-png';
 import { models } from '../../util/enum';
+import ModalContainer from "./ModalContainer";
+import axios from 'axios';
 
 const Container = styled.div`
     width: 100%;
@@ -72,18 +75,18 @@ const PlotHeader = styled.div`
 
 const ForestPlotContainer = (props) => {
 
-    const {parameters, forestPlotData, getModalData} = props;
+    const {parameters, forestPlotData } = props;
     const [plotData, setPlotdata] = useState({ready: false, individuals: [], meta: []});
     const [sort, setSort] = useState({value: 'effect_size', asc: true});
     const [tissueValue, setTissueValue] = useState('ALL');
     const [sequenceValue, setSequenceValue] = useState('ALL');
-
     const [tissueOptions, setTissueOptions] = useState([]);
     const [sequenceOptions, setSequenceOptions] = useState([]);
     const sortOptions = [
         {value: 'effect_size', label: models[parameters.model]},
         {value: 'study', label: 'Studies'},
     ];
+    const [modalData, setModalData] = useState({data: {}, show: false});
 
     useEffect(() => {
         // const getModalData = props
@@ -191,6 +194,22 @@ const ForestPlotContainer = (props) => {
         FileSaver.saveAs(csvData, 'forest-plot.csv');
     }
 
+    const getModalData = async (params) => {
+        setModalData({data: {}, show: false}); // reset the data object so that the plot is redrawn.
+        if(params.type === 'dataset'){
+            const res = await axios.post('/api/explore/description_modal', params);
+            setModalData({data: res.data, type: 'dataset', show: true});
+        }
+        if(params.type === 'signature'){
+            const res = await axios.get('/api/explore/signature_modal', {params: params});
+            setModalData({data: res.data, type: 'signature', signatureType: parameters.signature, show: true});
+        }
+    };
+
+    const removeModalData = () => {
+        setModalData({data: {}, show: false}); // reset the data object so that the plot is redrawn.
+    };
+
     return(
         <div>
             {
@@ -203,7 +222,18 @@ const ForestPlotContainer = (props) => {
                     </div>
                     <PlotHeader>
                         <div className='parameterLine'>
-                            Signature: <span className='value'>{parameters.signature ? parameters.signature : 'Custom'}</span>
+                            Signature: <span className='value'>{
+                                parameters.signature ? 
+                                <TextButton 
+                                    onClick={(e) => {
+                                        e.preventDefault(); 
+                                        getModalData({type: 'signature', name: parameters.signature});
+                                    }} 
+                                    label={parameters.signature}
+                                />
+                                : 
+                                'Custom'
+                            }</span>
                         </div>
                         <div className='filter'>
                             <span className='label'>Sort By:</span>
@@ -271,6 +301,14 @@ const ForestPlotContainer = (props) => {
                         attributes={{xAxis: models[parameters.model]}}
                     />
                 </Container>
+            }
+            {
+                modalData.show &&
+                <ModalContainer
+                    modalData={modalData}
+                    removeModalData = {removeModalData}
+                    modalType={modalData.type}
+                /> 
             }
         </div>
     );

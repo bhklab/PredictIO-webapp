@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Layout from '../UtilComponents/Layout';
-// import styled from 'styled-components';
-import { Container } from '../../styles/StyledComponents';
 import Table from '../UtilComponents/Table/Table';
 
 const Datasets = () => {
@@ -11,7 +8,12 @@ const Datasets = () => {
     const columns = [
         {
             Header: 'Name',
-            accessor: 'dataset_name'
+            accessor: 'dataset_name',
+            Cell: (item) => (
+                <a href={`/dataset/${item.row.original.dataset_id}`}>
+                    {item.value}
+                </a>
+            )
         },
         {
             Header: 'Source',
@@ -61,14 +63,12 @@ const Datasets = () => {
     }, []);
 
     return(
-        <Layout>
-            <Container>
-                <h3>Datasets</h3>
-                <div>
-                    <Table columns={columns} data={datasets} pageRowNum={25} />
-                </div>
-            </Container>
-        </Layout>
+        <React.Fragment>
+            <h3>Datasets</h3>
+            <div>
+                <Table columns={columns} data={datasets} pageRowNum={25} />
+            </div>
+        </React.Fragment>
     );
 }
 

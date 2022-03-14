@@ -75,7 +75,7 @@ const BiomarkerEvaluationRequest = () => {
     const disableSubmit = () => {
         const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
         return(
-            parameters.study.length === 0 || 
+            parameters.study.length < 3 || 
             parameters.sex.length === 0 ||
             parameters.primary.length === 0 ||
             parameters.drugType.length === 0 ||
@@ -424,6 +424,7 @@ const BiomarkerEvaluationRequest = () => {
                             checkbox={true}
                             placeholder='Select...'
                             disabled={studyOptions.disabled}
+                            tooltip='Seletct at least three studies.'
                         />
                     </div>
                     <div className='formField'>

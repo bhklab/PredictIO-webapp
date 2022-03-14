@@ -10,7 +10,7 @@ const Main = styled.main`
     max-width: 1500px;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 200px;
+    margin-bottom: 500px;
     display: flex;
     flex-direction: column;
 `;

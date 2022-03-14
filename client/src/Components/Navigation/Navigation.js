@@ -21,7 +21,7 @@ const Navigation = () => {
                     <Link to='/explore/precomputed'>Pre-computed Signatures</Link>
                     <Link to='/explore/biomarker/request'>Biomarker Evaluation</Link>
                     <Link to='/predictio/request'>PredictIO</Link>
-                    <Link to='/datasets'>Datasets</Link>
+                    <Link to='/datasets_signatures'>Datasets and Signatures</Link>
                     <Link to='/about'>About</Link>
                     <Link to='/contact'>Contact</Link>
                 </StyledLinks>

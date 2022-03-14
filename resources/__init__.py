@@ -25,6 +25,7 @@ from utils.mail import mail
 from resources.test import Test
 from resources.plot_data import VolcanoPlot, ForestPlot
 from resources.modal_data import DescriptionModal
+from resources.modal_data import SignatureModal
 # from resources.dropdown_option import DropdownOption
 from resources.dropdown_explore import ExploreDropdownOption
 from resources.biomarker_evaluation_query import BiomarkerEvaluationQuery
@@ -34,6 +35,8 @@ from resources.biomarker_evaluation_result import BiomarkerEvaluationResult, Bio
 from resources.predictio_file import UploadFile, DownloadExampleFile
 from resources.predictio_result import PredictIO
 from resources.datasets import Datasets
+from resources.signatures import Signatures
+from resources.single_dataset import SingleDataset
 from resources.itnt_visualization import ITNTVisualization
 
 
@@ -95,7 +98,10 @@ def create_app():
                      '/api/explore/biomarker/result/forest_plot/<analysis_id>')
     api.add_resource(PredictIO, '/api/predictio/result/<analysis_id>')
     api.add_resource(DescriptionModal, '/api/explore/description_modal')
+    api.add_resource(SignatureModal, '/api/explore/signature_modal')
     api.add_resource(Datasets, '/api/datasets')
+    api.add_resource(Signatures, '/api/signatures')
+    api.add_resource(SingleDataset, '/api/dataset/<dataset_id>')
 
     # unused 
     api.add_resource(ITNTVisualization, '/api/explore/itnt_data')

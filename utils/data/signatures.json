@@ -1,0 +1,282 @@
+[
+  {
+    "signature": "ADO",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31953314/",
+    "method": "GSVA",
+    "association": "resistance",
+    "definition": "Gene expression signature capturing the adenosine (ADO) pathway activity. This adenosine signature was significantly associated with reduced efficacy of anti-PD1 therapy in published cohorts."
+  },
+  {
+    "signature": "C_ECM",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/30410077/",
+    "method": "weighted_mean",
+    "association": "resistance",
+    "definition": "Gene expression signature capturing the cancer extracellular matrix (C_ECM) marker genes activity. This C_ECM signature was a predictor of the failure of PD-1 blockade and outperforms previously-proposed biomarkers."
+  },
+  {
+    "signature": "COX_IS",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/33220234/",
+    "method": "specific",
+    "association": "resistance",
+    "definition": "Gene expression signature capturing the pro-tumoral COX Inflammatory activity. This COX Inflammatory Signature (COX-IS) was a predictor of the failure of CTLA-4 and PD-(L)1 blockade in several published cohorts."
+  },
+  {
+    "signature": "CRMA",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/29656892/",
+    "method": "GSVA",
+    "association": "resistance",
+    "definition": "\"Gene expression signature capturing the Cancer-Germline Antigen activity. This \"\"anti-CTLA-4 resistance associated MAGE-A\"\" (CRMA) signature was a predictor of the failure of CTLA-4 blockade in published cohorts.\""
+  },
+  {
+    "signature": "EMT_Thompson",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31683225/",
+    "method": "weighted_mean",
+    "association": "resistance",
+    "definition": "Gene expression signature capturing the epithelial-to-mesenchymal transition (EMT) activity. This EMT signature was a predictor of the failure of PD-(L)1 blockade in Lung patients."
+  },
+  {
+    "signature": "IPRES",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31683225/",
+    "method": "specific",
+    "association": "resistance",
+    "definition": "\"Gene expression signature capturing the combined epithelial-to-mesenchymal transition (EMT) and Inflammation activities. This EMT/Inflammation signature, called \"\"innate anti-PD1 resistance\"\" (IPRES) was a predictor of the failure of PD-(L)1 blockade in Lung patients.\""
+  },
+  {
+    "signature": "LRRC15_CAF",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31699795/",
+    "method": "GSVA",
+    "association": "resistance",
+    "definition": "Gene expression signature capturing the presence of LRRC15+ carcinoma-associated fibroblasts (CAFs). This LRRC15_CAF signature was a predictor of the failure of PD-L1 blockade in published cohorts."
+  },
+  {
+    "signature": "MPS",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/32284588/",
+    "method": "weighted_mean",
+    "association": "resistance",
+    "definition": "Gene expression signature capturing the melanocytic plasticity (MPS) activity. This MPS signature was a predictor of the failure of CTLA-4 and PD-1 blockade in published cohorts."
+  },
+  {
+    "signature": "Myeloid_DC",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31942075/",
+    "method": "GSVA",
+    "association": "resistance",
+    "definition": "Gene expression signature capturing the myeloid dendritic cells (Myeloid_DC) activity. This Myeloid_DC signature was significantly more expressed in non-responder ICB-treated patients."
+  },
+  {
+    "signature": "NonResponse_Ivy",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/32907939/",
+    "method": "GSVA",
+    "association": "resistance",
+    "definition": "The authors investigated the responsiveness of breast tumors to anti-PD-1 blockade in a mice bilateral tumor approach. They identified several genes associated with resistance to PD-1 blockade and validated there signature in published ICB cohorts."
+  },
+  {
+    "signature": "PTEN_MITF",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/32245160/",
+    "method": "weighted_mean",
+    "association": "resistance",
+    "definition": "Gene expression signature capturing the loss of PTEN in context of MITF expression. This PTEN_MITF signature was a predictor of the failure of ICB in Melanoma patients."
+  },
+  {
+    "signature": "T_cell_exclusion",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/30388455/",
+    "method": "weighted_mean",
+    "association": "resistance",
+    "definition": "Gene expression signature capturing the mechanism of T-cell exclusion. This T_cell_exclusion signature was a predictor of the failure of PD-1 blockade in Melanoma patients."
+  },
+  {
+    "signature": "TGFB_Mariathasan",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/29443960/",
+    "method": "GSVA",
+    "association": "resistance",
+    "definition": "Gene expression signature capturing the fibroblast TGFB activity. This TGFB signature was a predictor of the failure of PD-(L)1 blockade in published cohorts."
+  },
+  {
+    "signature": "TIDE",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/30127393/",
+    "method": "specific",
+    "association": "resistance",
+    "definition": "To predict ICB response, the authors developed TIDE, a computational method to model two primary mechanisms of tumor immune evasion: the induction of T cell dysfunction in tumors with high infiltration of cytotoxic T lymphocytes (CTL) and the prevention of T cell infiltration in tumors with low CTL level. This TIDE signature was a predictor of the response of CTLA-4 and PD-1 in published cohorts."
+  },
+  {
+    "signature": "APM_Thompson",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/33028693/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the antigen processing and presentation machinery (APM) activity. This APM signature was a predictor of the response of PD-(L)1 blockade in Lung and Melanoma patients."
+  },
+  {
+    "signature": "APM_Wang",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31767055/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the antigen processing and presentation machinery (APM) activity. This APM signature was a predictor of the response of PD-(L)1 blockade in published cohorts."
+  },
+  {
+    "signature": "B_cell_Budczies",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/33520406/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the B-cells activity. This B_cell signature was a predictor of the response of PD-(L)1 blockade in Lung patients."
+  },
+  {
+    "signature": "B_cell_Helmink",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31942075/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the B-cells activity. This B_cell signature was a predictor of the response of ICB in published cohorts."
+  },
+  {
+    "signature": "Blood_Response",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/28807052/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature, derieved from whole-blood RNA-Sequencing, capturing the expression level of genes associated with response to CTLA-4 blockade. "
+  },
+  {
+    "signature": "CD8_Jiang",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/30127393/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the CD8 T cell activity. This CD8 signature was a predictor of the response of CTLA-4 and PD-1 blockade in Melanoma patients."
+  },
+  {
+    "signature": "CD8_SF",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/30388456/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the CD8 T cell activity. This CD8 signature was a predictor of the response of ICB published cohorts."
+  },
+  {
+    "signature": "CYT",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/25594174/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the local immune cytolytic (CYT) activity. This CYT signature was a predictor of the response of ICB published cohorts."
+  },
+  {
+    "signature": "IFNG",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/28650338/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the level of IFNG. This IFNG signature was a predictor of the response of PD-1 blockade published cohorts."
+  },
+  {
+    "signature": "ImmuneCells",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/33033253/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the presence of immune cells associated with response to immunotherapy. This ImmuneCells signature was a predictor of the response of ICB published cohorts."
+  },
+  {
+    "signature": "IMPRES",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/30127394/",
+    "method": "weighted_mean",
+    "association": "sensitive",
+    "definition": "Immuno-predictive score (IMPRES), a predictor of ICB response in melanoma which encompasses 15 pairwise transcriptomics relations between immune checkpoint genes. This IMPRES signature was a predictor of the response of CTLA-4 and PD-1 blockade in published cohorts."
+  },
+  {
+    "signature": "Inflammatory",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31683225/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the level of tumor Inflammation. This Inflammation signature was a predictor of the response of ICB published cohorts."
+  },
+  {
+    "signature": "IPS",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/28052254/",
+    "method": "specific",
+    "association": "sensitive",
+    "definition": "Using machine learning, the authors identified determinants of tumor immunogenicity and developed a scoring scheme for the quantification termed immunophenoscore (IPS). This IPS signature was a predictor of the response of CTLA-4 and PD-1 in published cohorts."
+  },
+  {
+    "signature": "IRG_Ayers",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/28650338/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the expression level of several Immune Regulatory Genes (IRG). This IRG signature was a predictor of the response of PD-1 blockade in published cohorts."
+  },
+  {
+    "signature": "IRG_Yang",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31741756/",
+    "method": "weighted_mean",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the expression level of several Immune Regulatory Genes (IRG). This IRG signature was a predictor of the response of CTLA-4 and PD-1 blockade in published cohorts."
+  },
+  {
+    "signature": "KDM5A",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/32908002/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the histone 3 lysine 4 demethylase KDM5A activity. This KDM5A signature was a predictor of the response of PD-1 blockade in published cohorts."
+  },
+  {
+    "signature": "M1",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31959763/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the presenc Macrophage M1 cells. This M1 signature was a predictor of the response of PD-1 blockade in Lung patients."
+  },
+  {
+    "signature": "Macrophage",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/33520406/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the presence Macrophage cells. This Macrophage signature was a predictor of the response of ICB in Lung cohorts."
+  },
+  {
+    "signature": "PDL1",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/30127393/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the level of PDL1. This PDL1 signature was a predictor of the response of ICB in published cohorts."
+  },
+  {
+    "signature": "peri_Tcell",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31959763/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the presence of peripheral T cell (peri_Tcell). This peri_Tcell signature was a predictor of the response of PD-1 blockade in Lung patients."
+  },
+  {
+    "signature": "PredictIO",
+    "pmid": "",
+    "method": "specific",
+    "association": "sensitive",
+    "definition": "The authors developed a de novo gene expression signature (PredictIO) from a meta-analysis of more than 1,000 pan-cancer patients and demonstrated its superior predictive value over other biomarkers."
+  },
+  {
+    "signature": "Response_Ivy",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/32907939/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "The authors investigated the responsiveness of breast tumors to anti-PD-1 blockade in a mice bilateral tumor approach. They identified several genes associated with response to PD-1 blockade and validated there signature in published ICB cohorts."
+  },
+  {
+    "signature": "STAT1",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31316010/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the STAT1-activating cytokine interferon-_ (IFN_) activity. This STAT1 signature was a predictor of the response of ICB in published cohorts."
+  },
+  {
+    "signature": "T_cell_inflamed",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/30804515/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the level of Inlfamed T-cell (T_cell_inflamed). This T_cell_inflamed signature was a predictor of the response of PD-1 blockade in Melanoma patients."
+  },
+  {
+    "signature": "TIS",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31684954/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the level of local tumor inflammation. This Tumor Inflammation signature (TIS) was a predictor of the response of PD-1 blockade in pan-cancer patients."
+  },
+  {
+    "signature": "TLS",
+    "pmid": "https://pubmed.ncbi.nlm.nih.gov/31942071/",
+    "method": "GSVA",
+    "association": "sensitive",
+    "definition": "Gene expression signature capturing the presence of Tertiary lymphoid structures (TLS). This TLS signature was a predictor of the response of ICB in Melanoma patients."
+  }
+]
