@@ -28,6 +28,7 @@ class Datasets(Resource):
                 })
             else:
                 result[found]["identifiers"].append({"identifier": item[1], "link": item[2]})
+        
         return result, 200
 
     def post(self):
