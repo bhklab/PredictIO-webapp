@@ -5,6 +5,7 @@ import { FaSortAmountDown, FaSortAmountUpAlt } from "react-icons/fa";
 import ForestPlot from '../Diagram/ForestPlot';
 import FileSaver from 'file-saver';
 import DownloadButton from '../UtilComponents/DownloadButton';
+import TextButton from '../UtilComponents/TextButton';
 import * as saveSvg from 'save-svg-as-png';
 import { models } from '../../util/enum';
 import ModalContainer from "./ModalContainer";
@@ -200,8 +201,8 @@ const ForestPlotContainer = (props) => {
             setModalData({data: res.data, type: 'dataset', show: true});
         }
         if(params.type === 'signature'){
-            
-            setModalData({data: {}, type: 'signature', show: true});
+            const res = await axios.get('/api/explore/signature_modal', {params: params});
+            setModalData({data: res.data, type: 'signature', signatureType: parameters.signature, show: true});
         }
     };
 
@@ -223,10 +224,13 @@ const ForestPlotContainer = (props) => {
                         <div className='parameterLine'>
                             Signature: <span className='value'>{
                                 parameters.signature ? 
-                                <button onClick={(e) => {
-                                    e.preventDefault(); 
-                                    getModalData({type: 'signature'});
-                                }}>{parameters.signature}</button> 
+                                <TextButton 
+                                    onClick={(e) => {
+                                        e.preventDefault(); 
+                                        getModalData({type: 'signature', name: parameters.signature});
+                                    }} 
+                                    label={parameters.signature}
+                                />
                                 : 
                                 'Custom'
                             }</span>

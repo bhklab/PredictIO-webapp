@@ -1,5 +1,6 @@
 '''Routes used to get study Descriptions.'''
-from flask import request
+import os
+from flask import request, json
 from flask_restful import Resource
 from db.models.dataset import Dataset
 
@@ -35,3 +36,13 @@ class DescriptionModal(Resource):
 
         # parse and return the output data
         return result, 200
+
+class SignatureModal(Resource):
+    def get(self):
+        name = request.args.get('name')
+        path = os.path.join(os.path.dirname(__file__), '../utils/data/signatures.json')
+        data = json.load(open(path))
+        match = next((sig for sig in data if sig['signature'] == name), None)
+        return match, 200
+    def post(self):
+        return "Only get method is allowed", 400

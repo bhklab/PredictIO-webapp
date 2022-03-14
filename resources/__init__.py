@@ -25,6 +25,7 @@ from utils.mail import mail
 from resources.test import Test
 from resources.plot_data import VolcanoPlot, ForestPlot
 from resources.modal_data import DescriptionModal
+from resources.modal_data import SignatureModal
 # from resources.dropdown_option import DropdownOption
 from resources.dropdown_explore import ExploreDropdownOption
 from resources.biomarker_evaluation_query import BiomarkerEvaluationQuery
@@ -96,6 +97,7 @@ def create_app():
                      '/api/explore/biomarker/result/forest_plot/<analysis_id>')
     api.add_resource(PredictIO, '/api/predictio/result/<analysis_id>')
     api.add_resource(DescriptionModal, '/api/explore/description_modal')
+    api.add_resource(SignatureModal, '/api/explore/signature_modal')
     api.add_resource(Datasets, '/api/datasets')
     api.add_resource(SingleDataset, '/api/dataset/<dataset_id>')
 
