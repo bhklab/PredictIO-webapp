@@ -23,7 +23,7 @@ import GlobalStyles from './styles/GlobalStyles';
 const App = () => {
     // Google Analytics set up
 	useEffect(() => {
-		ReactGA.initialize('G-NKMP8P3WXW')
+		ReactGA.initialize('UA-102362625-12')
 		ReactGA.pageview(window.location.pathname + window.location.search)
 	}, []);
   return (
