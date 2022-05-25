@@ -36,13 +36,57 @@ const VolcanoPlot = (props) => {
         pointSize: []
     });
 
+    const [labelData, setLabelData] = useState({
+        customSig: {},
+        label: {}
+    });
+
     const [selectedPointIndex, setSelectedPointIndex] = useState(undefined);
 
     useEffect(() => {
+
+        const getMedian = (values) => {
+            let arr = [...values];
+            arr.sort((a, b) => a - b);
+            let half = Math.floor(arr.length / 2);
+            if (arr.length % 2)
+                return arr[half];
+                return (arr[half - 1] + arr[half]) / 2.0;
+        }
+        const maxDiff = (values, median) => {
+            let maxVal = 0;
+            let dist = 0;
+            for(const value of values){
+                let diff = Math.abs(value - median);
+                if(diff > dist){
+                    dist = diff;
+                    maxVal = value
+                }
+            }
+            return maxVal
+        }
+        const x = data.map(item => (item.effect_size));
+        const y = data.map(item => (item.logPval));
+        const customSig = data.find(point => point.analysis_id);
+        const xMedian = getMedian(x);
+        const yMedian = getMedian(y);
+
+        setLabelData({
+            customSig: {
+                x: customSig.effect_size,
+                y: customSig.logPval
+            },
+            label: {
+                x: x.length > 1 ? maxDiff(x, xMedian) / 1.05 : x[0],
+                y: y.length > 1 ? maxDiff(y, yMedian) / 1.05 : y[0]
+            }
+        });
+
         setPlotData({
-            x: data.map(item => (item.effect_size)),
-            y: data.map(item => (item.logPval)),
+            x: x,
+            y: y,
             click_ids: data.map((item, i) => (i)),
+
             hovertext: getHoverText(data),
             pointColor: getPointColor(data),
             pointSize: getPointSize(data),
@@ -80,16 +124,15 @@ const VolcanoPlot = (props) => {
      * @param {*} points 
      */
     const getPointSize = (points) => {
-        let size = [];
-        points.forEach(point => {
+        let size = points.map(point => {
             if(point.se <= 0.05){
-                size.push(6);
+                return(6);
             }else if(point.se > 0.05 && point.se <= 0.1){
-                size.push(8);
+                return(8);
             }else if(point.se > 0.1 && point.se <= 0.15){
-                size.push(10);
-            }else if(point.se > 0.15){
-                size.push(12);
+                return(10);
+            }else{
+                return(12);
             }
         });
         return size;
@@ -106,7 +149,6 @@ const VolcanoPlot = (props) => {
                 pointColors.push(colors.orange_highlight);
                 continue;
             }
-
             if(points[i].analysis_id){
                 pointColors.push(colors.purple);
             }else{
@@ -150,17 +192,14 @@ const VolcanoPlot = (props) => {
      * @param {*} points 
      */
     const getHoverText = (points) => {
-        let hoverText = [];
-        points.forEach(point => {
-            hoverText.push(
+        let hoverText = points.map(point => (
                 `${onthefly ? '' : `Subgroup: ${point.subgroup}<br>`}` +
                 `Signature: ${point.signature ? point.signature : 'Custom'}<br>` + 
                 `Coef: ${Math.round(point.effect_size * 1000) / 1000}<br>` +
                 `P-value: ${Math.round(point.pval * 10000) / 10000}<br>` +
                 `I2: ${Math.round(point.i2 * 10000) / 10000}<br>` +
                 `Q P-value: ${Math.round(point.pval_i2 * 1000) / 1000}`
-            )
-        });
+        ));
         return hoverText;
     }
 
@@ -184,6 +223,24 @@ const VolcanoPlot = (props) => {
                             line: plotData.pointLine
                         },
                         name: 'points',
+                    },
+                    {
+                        showlegend: false,
+                        type: 'scatter',
+                        mode: 'lines+text',
+                        x: [labelData.customSig.x, labelData.label.x],
+                        y: [labelData.customSig.y, labelData.label.y],
+                        hoverinfo: 'none',
+                        line: {
+                            color: colors.purple,
+                            width: 0.7
+                        },
+                        text: ['', '<b>Custom<br />Signature</b>'],
+                        textposition: 'top center',
+                        textfont : {
+                            color: colors.purple
+                        },
+                        name: 'label',
                     }
                 ]}
                 layout={{

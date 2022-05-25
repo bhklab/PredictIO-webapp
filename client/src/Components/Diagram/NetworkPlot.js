@@ -44,10 +44,17 @@ const NetworkPlot = (props) => {
             hovertext: cluster.points.signature,
             showlegend: false,
             type: 'scatter',
-            mode: 'markers',
+            mode: 'markers+text',
             marker: {
                 color: cluster.points.signature.map(item => item === 'custom' ? colors.purple : plotColors[i]),
+                size: cluster.points.signature.map(sig => sig === 'custom' ? 10 : 8)
             },
+            text: cluster.points.signature.map(sig => sig === 'custom' ? '<b>Custom<br />Signature</b>' : ''),
+            textposition: 'right center',
+            textfont: {
+                size: 11,
+                color: colors.purple
+            }
         }));
 
         let clusterData = clusterLines.concat(clusterPoints);
