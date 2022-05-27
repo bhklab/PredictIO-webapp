@@ -28,23 +28,10 @@ const VolcanoPlot = (props) => {
         attributes
     } = props;
 
-    const [plotData, setPlotData] = useState({
-        x: [], 
-        y: [], 
-        hovertext: [], 
-        pointColor: [],
-        pointSize: []
-    });
-
-    const [labelData, setLabelData] = useState({
-        customSig: {},
-        label: {}
-    });
-
+    const [traces, setTraces] = useState([]);
     const [selectedPointIndex, setSelectedPointIndex] = useState(undefined);
 
     useEffect(() => {
-
         const getMedian = (values) => {
             let arr = [...values];
             arr.sort((a, b) => a - b);
@@ -68,30 +55,45 @@ const VolcanoPlot = (props) => {
         const x = data.map(item => (item.effect_size));
         const y = data.map(item => (item.logPval));
         const customSig = data.find(point => point.analysis_id);
-        const xMedian = getMedian(x);
-        const yMedian = getMedian(y);
-
-        setLabelData({
-            customSig: {
-                x: customSig.effect_size,
-                y: customSig.logPval
-            },
-            label: {
-                x: x.length > 1 ? maxDiff(x, xMedian) / 1.05 : x[0],
-                y: y.length > 1 ? maxDiff(y, yMedian) / 1.05 : y[0]
-            }
-        });
-
-        setPlotData({
+        let traceData = [{
+            showlegend: false,
+            type: 'scatter',
+            mode: 'markers',
             x: x,
             y: y,
             click_ids: data.map((item, i) => (i)),
-
+            hoverinfo: 'text',
             hovertext: getHoverText(data),
-            pointColor: getPointColor(data),
-            pointSize: getPointSize(data),
-            pointLine: getPointOutline(data)
-        });
+            marker: {
+                color: getPointColor(data),
+                size: getPointSize(data),
+                line: getPointOutline(data)
+            },
+            name: 'points',
+        }];
+        if(customSig){
+            const xMedian = getMedian(x);
+            const yMedian = getMedian(y);
+            traceData.push({
+                showlegend: false,
+                type: 'scatter',
+                mode: 'lines+text',
+                x: [customSig.effect_size, x.length > 1 ? maxDiff(x, xMedian) / 1.05 : x[0]],
+                y: [customSig.logPval, y.length > 1 ? maxDiff(y, yMedian) / 1.05 : y[0]],
+                hoverinfo: 'none',
+                line: {
+                    color: colors.purple,
+                    width: 0.7
+                },
+                text: ['', '<b>Custom<br />Signature</b>'],
+                textposition: 'top center',
+                textfont : {
+                    color: colors.purple
+                },
+                name: 'label',
+            });
+        }
+        setTraces(traceData);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -99,11 +101,13 @@ const VolcanoPlot = (props) => {
         if(typeof selectedPointIndex !== 'undefined'){
             let pointColor = getPointColor(data, selectedPointIndex);
             let pointLine = getPointOutline(data, selectedPointIndex);
-            setPlotData({
-                ...plotData, 
+            let updated = [...traces];
+            updated[0] = {
+                ...traces[0],
                 pointColor: pointColor,
                 pointLine: pointLine
-            });
+            };
+            setTraces(updated);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedPointIndex]);
@@ -207,42 +211,7 @@ const VolcanoPlot = (props) => {
         <div>
             <Plot
                 divId={plotId}
-                data={[
-                    {
-                        showlegend: false,
-                        type: 'scatter',
-                        mode: 'markers',
-                        x: plotData.x,
-                        y: plotData.y,
-                        click_ids: plotData.click_ids,
-                        hoverinfo: 'text',
-                        hovertext: plotData.hovertext,
-                        marker: {
-                            color: plotData.pointColor,
-                            size: plotData.pointSize,
-                            line: plotData.pointLine
-                        },
-                        name: 'points',
-                    },
-                    {
-                        showlegend: false,
-                        type: 'scatter',
-                        mode: 'lines+text',
-                        x: [labelData.customSig.x, labelData.label.x],
-                        y: [labelData.customSig.y, labelData.label.y],
-                        hoverinfo: 'none',
-                        line: {
-                            color: colors.purple,
-                            width: 0.7
-                        },
-                        text: ['', '<b>Custom<br />Signature</b>'],
-                        textposition: 'top center',
-                        textfont : {
-                            color: colors.purple
-                        },
-                        name: 'label',
-                    }
-                ]}
+                data={traces}
                 layout={{
                     width: props.size.width,
                     height: props.size.width * 0.8,
