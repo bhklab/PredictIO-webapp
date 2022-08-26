@@ -48,7 +48,14 @@ const BiomarkerEvaluationResult = () => {
 
     const getForestPlotData = async (params) => {
         setForestPlotData({data: {}, loading: true, ready: false}); // reset the data object so that the plot is redrawn.
-        setParameters(params);
+        if(params.model === 'Log_regression'){
+            setParameters({
+                ...params,
+                model: 'LogReg'
+            });
+        }else{
+            setParameters(params);
+        }
         let res = {};
         if(params.signature === 'Custom'){
             res = await axios.get(`/api/explore/biomarker/result/forest_plot/${id}?model=${params.model}&outcome=${params.outcome}`);
@@ -78,6 +85,11 @@ const BiomarkerEvaluationResult = () => {
             if(res.data.found){
                 setNetworkData({data: res.data.network, ready: true});
                 setOutcomeDropdown(res.data.outcomeDropdown);
+                res.data.modelDropdown.forEach(item => {
+                    if(item.value === 'LogReg'){
+                        item.label = 'Log_regression';
+                    }
+                })
                 setModelDropdown(res.data.modelDropdown);
             }
         }
@@ -86,6 +98,9 @@ const BiomarkerEvaluationResult = () => {
     }, []);
 
     useEffect(() => {
+        setVolcanoPlotData({data: {}, loading: false, ready: false});
+        setForestPlotData({data: {}, loading: false, ready: false});
+        
         if(parameters.outcome === 'Response'){
             setParameters({...parameters, model: 'LogReg'});
             let models = modelDropdown.map(item => ({...item, disabled: item.value !== 'LogReg'}));

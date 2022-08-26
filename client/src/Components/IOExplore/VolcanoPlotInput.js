@@ -7,7 +7,7 @@ import CustomMultiSelect from '../UtilComponents/CustomMultiSelect';
 
 const VolcanoPlotInput = (props) => {
 
-    const { parameters, setParameters, onSubmit, onReset } = props;
+    const { parameters, setParameters, onSubmit, onReset, onOutcomeChange=undefined } = props;
 
     const [signatureOptions, setSignatureOptions] = useState([]);
     const [outcomeOptions, setOutcomeOptions] = useState([]);
@@ -22,6 +22,11 @@ const VolcanoPlotInput = (props) => {
     };
 
     const onOutcomeSelect = (selected) => {
+        
+        if(onOutcomeChange){
+            onOutcomeChange(); // reset the volcano plot and forest plot values
+        }
+         
         let modelValue = '';
         let modelOptionsCopy = JSON.parse(JSON.stringify(modelOptions));
 
