@@ -18,6 +18,7 @@ from resources import create_app
 app = create_app()
 app.app_context().push()
 
+
 def execute_script(parameters):
     """function used to call R script in subprocess"""
     print('Running analysis: ' + parameters['analysis_type'])
@@ -49,9 +50,9 @@ def execute_script(parameters):
             AnalysisRequest.analysis_id == analysis_id).first()
         email = analysis_request.email
         if not output['error'][0]:
-            if(parameters['analysis_type'] == 'biomarker_eval'):
+            if (parameters['analysis_type'] == 'biomarker_eval'):
                 process_biomarker_eval_result(analysis_id, output)
-            if(parameters['analysis_type'] == 'predictio'):
+            if (parameters['analysis_type'] == 'predictio'):
                 process_predictio_result(analysis_id, output)
             analysis_request.time_completed = datetime.now()
         else:
@@ -68,12 +69,15 @@ def execute_script(parameters):
     finally:
         db.session.close()
         # send notification email
+        print('send email')
         send_mail(email, output, parameters['analysis_type'])
         return 'Done'
 
+
 def get_cmd(parameters):
     cwd = os.path.abspath(os.getcwd())
-    r_path = os.path.join(cwd, 'r-scripts', parameters['analysis_type'], 'run.R')
+    r_path = os.path.join(
+        cwd, 'r-scripts', parameters['analysis_type'], 'run.R')
     r_wd = os.path.join(cwd, 'r-scripts', parameters['analysis_type'])
 
     # command to be executed
@@ -83,7 +87,7 @@ def get_cmd(parameters):
         r_wd,
         parameters['analysis_id']  # analysis id
     ]
-    if(parameters['analysis_type'] == 'biomarker_eval'):
+    if (parameters['analysis_type'] == 'biomarker_eval'):
         cmd = cmd + [
             parameters['study'],
             parameters['sex'],
@@ -93,7 +97,8 @@ def get_cmd(parameters):
             parameters['sequencingType'],
             parameters['gene']
         ]
-    return(cmd)
+    return (cmd)
+
 
 def process_biomarker_eval_result(analysis_id, output):
     # insert on-the-fly gene signature data
@@ -121,7 +126,7 @@ def process_biomarker_eval_result(analysis_id, output):
         })
         db.session.add(result_row)
 
-    if bool(output['network']) and bool(output['kegg']) :
+    if bool(output['network']) and bool(output['kegg']):
         # insert network data
         for row in output['network']:
             network_row = SignatureNetwork(**{
@@ -145,11 +150,12 @@ def process_biomarker_eval_result(analysis_id, output):
     else:
         print('no network data')
 
+
 def process_predictio_result(analysis_id, output):
     for row in output['data']:
         result_row = PredictIOResult(**{
             'analysis_id': analysis_id,
             'patient_id': row['patient_id'],
-            'predictio_value': row['PredictIO'] 
+            'predictio_value': row['PredictIO']
         })
         db.session.add(result_row)

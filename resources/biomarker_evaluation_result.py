@@ -9,15 +9,19 @@ from db.models.signature_network import SignatureNetwork
 from db.models.signature_kegg_network import SignatureKeggNetwork
 from db.models.signature_meta import Meta
 
+
 class BiomarkerEvaluationResult(Resource):
     def get(self, analysis_id):
         result = {
-            'found': False
+            'found': False,
+            'not_ready': True
         }
 
         # get analysis by id
-        analysis = AnalysisRequest.query.filter(AnalysisRequest.analysis_id == analysis_id, AnalysisRequest.analysis_type == 'biomarker_eval').first()
-        if analysis:
+        analysis = AnalysisRequest.query.filter(
+            AnalysisRequest.analysis_id == analysis_id, AnalysisRequest.analysis_type == 'biomarker_eval').first()
+
+        if (analysis and analysis['time_completed']):
             analysis = analysis.serialize()
             result['reqInfo'] = {
                 'analysis_id': analysis['analysis_id'],
@@ -32,7 +36,7 @@ class BiomarkerEvaluationResult(Resource):
                 'input_sequencing': analysis['input_sequencing'].split(','),
                 'input_study': analysis['input_study'].split(',')
             }
-            
+
             # get dropdown options for outcome and model that exist in the analysis
             dropdown_values = UserRequested.query.with_entities(
                 UserRequested.model,
@@ -46,11 +50,13 @@ class BiomarkerEvaluationResult(Resource):
             model = list(set(map((lambda item: item[0]), dropdown_values)))
             outcome = list(set(map((lambda item: item[1]), dropdown_values)))
             result['outcomeDropdown'] = sorted(
-                list(map((lambda item: {'label': item, 'value': item}), outcome)), 
+                list(
+                    map((lambda item: {'label': item, 'value': item}), outcome)),
                 key=lambda k: k["label"]
             )
             result['modelDropdown'] = sorted(
-                list(map((lambda item: {'label': item, 'value': item}), model)), 
+                list(
+                    map((lambda item: {'label': item, 'value': item}), model)),
                 key=lambda k: k["label"]
             )
 
@@ -69,12 +75,13 @@ class BiomarkerEvaluationResult(Resource):
 
                 clusters = list(map((lambda x: x['cluster']), network))
                 clusters = set(clusters)
-                
+
                 for cluster in clusters:
-                    filtered = list(filter((lambda x: x['cluster'] == cluster), network))
+                    filtered = list(
+                        filter((lambda x: x['cluster'] == cluster), network))
                     x = list(map((lambda x: x['x']), filtered))
                     y = list(map((lambda x: x['y']), filtered))
-                    
+
                     # Use df to find the nearest point to the cluster center
                     df = pd.DataFrame(
                         {'x': x, 'y': y},
@@ -94,11 +101,17 @@ class BiomarkerEvaluationResult(Resource):
 
             result['network'] = network_clusters
             result['found'] = True
+            result['not_ready'] = False
+
+        if (analysis and analysis["error"]):
+            result["error"] = True
+            result["analysis_id"] = analysis['analysis_id']
 
         return result, 200
 
     def post(self):
         return "Only get method is allowed", 400
+
 
 class BiomarkerEvaluationVolcanoPlot(Resource):
     def get(self, analysis_id):
@@ -121,7 +134,7 @@ class BiomarkerEvaluationVolcanoPlot(Resource):
         # get pre-computed data
         if model == 'LogReg':
             model = 'Log_regression'
-            
+
         precomputed = Meta.query.filter(
             Meta.outcome == outcome,
             Meta.model == model,
@@ -132,11 +145,12 @@ class BiomarkerEvaluationVolcanoPlot(Resource):
         volcano = user_requested + precomputed
         for row in volcano:
             row['logPval'] = -math.log10(row['pval'])
-    
+
         return volcano, 200
 
     def post(self):
         return "Only get method is allowed", 400
+
 
 class BiomarkerEvaluationForestPlot(Resource):
     def get(self, analysis_id):
@@ -144,7 +158,7 @@ class BiomarkerEvaluationForestPlot(Resource):
 
         model = request.args.get('model')
         outcome = request.args.get('outcome')
-        
+
         total_list = UserRequested.query.filter(
             UserRequested.analysis_id == analysis_id,
             UserRequested.model == model,
@@ -154,8 +168,10 @@ class BiomarkerEvaluationForestPlot(Resource):
         for row in total_list:
             del row['analysis_request']
 
-        result['individuals'] = [item for item in total_list if item['meta_analysis'] == 0]
-        result['meta'] = [item for item in total_list if item['meta_analysis'] == 1]
+        result['individuals'] = [
+            item for item in total_list if item['meta_analysis'] == 0]
+        result['meta'] = [
+            item for item in total_list if item['meta_analysis'] == 1]
 
         return result, 200
 
