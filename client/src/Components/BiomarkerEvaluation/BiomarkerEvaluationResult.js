@@ -1,257 +1,295 @@
-import React, {useState, useEffect} from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import Loader from 'react-loader-spinner';
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import Loader from "react-loader-spinner";
 
-import Layout from '../UtilComponents/Layout';
-import ResultInfo from './ResultInfo';
-import StyledForm from '../UtilComponents/StyledForm';
-import CustomDropdown from '../UtilComponents/CustomDropdown';
-import ActionButton from '../UtilComponents/ActionButton';
-import NetworkPlotContainer from './NetworkPlotContainer';
-import VolcanoPlotContainer from '../IOExplore/VolcanoPlotContainer';
-import ForestPlotContainer from '../IOExplore/ForestPlotContainer';
+import Layout from "../UtilComponents/Layout";
+import ResultInfo from "./ResultInfo";
+import StyledForm from "../UtilComponents/StyledForm";
+import CustomDropdown from "../UtilComponents/CustomDropdown";
+import ActionButton from "../UtilComponents/ActionButton";
+import NetworkPlotContainer from "./NetworkPlotContainer";
+import VolcanoPlotContainer from "../IOExplore/VolcanoPlotContainer";
+import ForestPlotContainer from "../IOExplore/ForestPlotContainer";
 import ModalContainer from "../IOExplore/ModalContainer";
-import { PlotContainer, StyledPlotArea, LoaderContainer } from '../../styles/PlotStyles';
-import { colors } from '../../styles/colors';
+import {
+  PlotContainer,
+  StyledPlotArea,
+  LoaderContainer,
+} from "../../styles/PlotStyles";
+import { colors } from "../../styles/colors";
 
 const BiomarkerEvaluationResult = () => {
+  const { id } = useParams();
+  const [reqInfo, setReqInfo] = useState({ data: {}, ready: false });
+  const [networkData, setNetworkData] = useState({ data: {}, ready: false });
+  const [parameters, setParameters] = useState({
+    signatures: ["ALL"],
+    outcome: "",
+    model: "",
+  });
+  const [outcomeDropdown, setOutcomeDropdown] = useState([]);
+  const [modelDropdown, setModelDropdown] = useState([]);
+  const [volcanoPlotData, setVolcanoPlotData] = useState({
+    data: {},
+    loading: false,
+    ready: false,
+  });
+  const [forestPlotData, setForestPlotData] = useState({
+    data: {},
+    loading: false,
+    ready: false,
+  });
+  const [modalData, setModalData] = useState({ data: {}, ready: false });
 
-    const { id } = useParams();
-    const [reqInfo, setReqInfo] = useState({data: {}, ready: false});
-    const [networkData, setNetworkData] = useState({data: {}, ready: false});
-    const [parameters, setParameters] = useState({signatures: ['ALL'], outcome: '', model: ''});
-    const [outcomeDropdown, setOutcomeDropdown] = useState([]);
-    const [modelDropdown, setModelDropdown] = useState([]);
-    const [volcanoPlotData, setVolcanoPlotData] = useState({data: {}, loading: false, ready: false});
-    const [forestPlotData, setForestPlotData] = useState({data: {}, loading: false, ready: false});
-    const [modalData, setModalData] = useState({data: {}, ready: false});
+  const disableSubmit = () => {
+    return parameters.outcome.length === 0 || parameters.model.length === 0;
+  };
 
-    const disableSubmit = () => {
-        return parameters.outcome.length === 0 || parameters.model.length === 0;
-    }
+  const reset = (e) => {
+    e.preventDefault();
+    setParameters({ signatures: ["ALL"], outcome: "", model: "" });
+    setVolcanoPlotData({ data: {}, loading: false, ready: false });
+    setForestPlotData({ data: {}, loading: false, ready: false });
+  };
 
-    const reset = (e) => {
-        e.preventDefault();
-        setParameters({signatures: ['ALL'], outcome: '', model: ''});
-        setVolcanoPlotData({data: {}, loading: false, ready: false});
-        setForestPlotData({data: {}, loading: false, ready: false});
-    }
-
-    const getVolcanoPlotData = async (e) => {
-        e.preventDefault();
-        setForestPlotData({data: {}, loading: false, ready: false});
-        setVolcanoPlotData({data: {}, loading: true, ready: false}); // reset the data object so that the plot is drawn
-        const res = await axios.get(`/api/explore/biomarker/result/volcano_plot/${id}?outcome=${parameters.outcome}&model=${parameters.model}`);
-        setVolcanoPlotData({data: res.data, loading: false, ready: true});
-    }
-
-    const getForestPlotData = async (params) => {
-        setForestPlotData({data: {}, loading: true, ready: false}); // reset the data object so that the plot is redrawn.
-        setParameters(params);
-        let res = {};
-        if(params.signature === 'Custom'){
-            res = await axios.get(`/api/explore/biomarker/result/forest_plot/${id}?model=${params.model}&outcome=${params.outcome}`);
-        }else{
-            res = await axios.post('/api/explore/forest_plot', params);
-        }
-        setForestPlotData({data: res.data, loading: false, ready: true});
-    }
-
-    const getModalData = async (params) => {
-        // setModalData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
-        const res = await axios.post('/api/explore/description_modal', params);
-        console.log(res.data)
-        setModalData({data: res.data, ready: true});
-    };
-
-    const removeModalData = () => {
-        setModalData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
-    };
-
-    useEffect(() => {
-        const getData = async () => {
-            console.log(id);
-            const res = await axios.get(`/api/explore/biomarker/result/${id}`);
-            console.log(res.data);
-            setReqInfo({data: res.data.reqInfo, found: res.data.found, ready: true});
-            if(res.data.found){
-                setNetworkData({data: res.data.network, ready: true});
-                setOutcomeDropdown(res.data.outcomeDropdown);
-                setModelDropdown(res.data.modelDropdown);
-            }
-        }
-        getData();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
-    useEffect(() => {
-        if(parameters.outcome === 'Response'){
-            setParameters({...parameters, model: 'LogReg'});
-            let models = modelDropdown.map(item => ({...item, disabled: item.value !== 'LogReg'}));
-            setModelDropdown(models);
-        }else if(parameters.outcome === 'OS' || parameters.outcome === 'PFS'){
-            setParameters({...parameters, model: ''});
-            let models = modelDropdown.map(item => ({...item, disabled: item.value === 'LogReg'}));
-            setModelDropdown(models);
-        }else{
-            setParameters({...parameters, model: ''});
-            let models = modelDropdown.map(item => ({...item, disabled: false}));
-            setModelDropdown(models);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [parameters.outcome]);
-
-    const renderContent = () => {
-        if(!reqInfo.found){
-            return(
-                <h3>The analysis has been deleted since it was more than 30 days old.</h3>
-            );
-        }
-        if(outcomeDropdown.length === 0){
-            return(
-                <h3>The analysis did not return any significant results with the given input.</h3>
-            );
-        }
-        return(
-            <React.Fragment>
-                <ResultInfo reqInfo={reqInfo.data} />
-                {
-                    networkData.ready && networkData.data.length > 0 &&
-                    <PlotContainer>
-                        <StyledPlotArea width='100%'>
-                            <NetworkPlotContainer data={networkData.data} />
-                        </StyledPlotArea>
-                    </PlotContainer>  
-                }
-                <StyledForm flexDirection='row'>
-                    <div className='formField'>
-                        <div className='label'>Outcome: </div>
-                        <CustomDropdown
-                            className='input'
-                            value={parameters.outcome}
-                            options={outcomeDropdown}
-                            onChange={(e) => {setParameters({...parameters, outcome: e.value})}}
-                            placeholder="Select..."
-                        />
-                    </div>
-                    <div className='formField'>
-                        <div className='label'>Model: </div>
-                        <CustomDropdown
-                            className='input'
-                            value={parameters.model}
-                            options={modelDropdown}
-                            onChange={(e) => {setParameters({...parameters, model: e.value})}}
-                            placeholder="Select..."
-                            disabled={parameters.outcome.length === 0}
-                        />
-                    </div>
-                    <div className='formField buttonField'>
-                        <ActionButton 
-                            className='left'
-                            onClick={(e) => {
-                                if(reqInfo.data.input_datatype === 'EXP'){
-                                    getVolcanoPlotData(e);
-                                }else{
-                                    getForestPlotData({...parameters, signature: 'Custom'});
-                                }
-                            }} 
-                            text='Submit'
-                            disabled={disableSubmit()}
-                        />
-                        <ActionButton
-                            onClick={reset}
-                            text='Reset'
-                            type='reset'
-                        />
-                    </div>
-                </StyledForm>
-                <PlotContainer>
-                    {
-                        reqInfo.data.input_datatype === 'EXP' &&
-                        <StyledPlotArea width='40%'>
-                            {
-                                volcanoPlotData.ready ?
-                                <VolcanoPlotContainer 
-                                    parameters={parameters} 
-                                    setParameters={setParameters} 
-                                    volcanoPlotData={volcanoPlotData} 
-                                    getForestPlotData={getForestPlotData} 
-                                    onthefly={true}
-                                />
-                                :
-                                volcanoPlotData.loading ?
-                                    <LoaderContainer>
-                                        <Loader type="Oval" color={colors.blue} height={80} width={80}/>
-                                    </LoaderContainer>
-                                    :
-                                    <div>
-                                        <h3>Volcano Plot</h3>
-                                        <div className='forestPlotMessage'>
-                                            Select outcome and model to view the volcano plot.
-                                        </div>
-                                    </div>
-                            }
-                        </StyledPlotArea>
-                    }
-                    <StyledPlotArea width='60%'>
-                    {
-                        forestPlotData.ready ?
-                        <ForestPlotContainer 
-                            parameters={parameters} 
-                            forestPlotData={forestPlotData} 
-                            getModalData={getModalData} 
-                        />
-                        :
-                        forestPlotData.loading ?
-                            <LoaderContainer>
-                                <Loader type="Oval" color={colors.blue} height={80} width={80}/>
-                            </LoaderContainer>
-                            :
-                            <div>
-                                <h3>Forest Plot</h3>
-                                <div className='forestPlotMessage'>
-                                    {
-                                        reqInfo.data.input_datatype === 'EXP' ?
-                                        'Click on a signature point on the volcano plot to display a corresponding forest plot.'
-                                        :
-                                        'Select outcome and model to view the forest plot.'
-                                    }
-                                    
-                                </div>
-                            </div>
-                    }
-                    </StyledPlotArea>
-                </PlotContainer>
-                <PlotContainer>
-                {
-                    modalData.ready &&
-                    <ModalContainer
-                        modalData={modalData}
-                        removeModalData = {removeModalData}
-                    /> 
-                }
-                </PlotContainer>
-            </React.Fragment>
-        );
-    }
-
-    return(
-        <Layout>
-            <h3>Biomarker Evaluation Result</h3>
-            {
-                !reqInfo.ready ?
-                <React.Fragment>
-                    <h3>Loading...</h3>
-                    <LoaderContainer>
-                        <Loader type="Oval" color={colors.blue} height={80} width={80}/>
-                    </LoaderContainer>
-                </React.Fragment>
-                :
-                renderContent()
-            }
-        </Layout>
+  const getVolcanoPlotData = async (e) => {
+    e.preventDefault();
+    setForestPlotData({ data: {}, loading: false, ready: false });
+    setVolcanoPlotData({ data: {}, loading: true, ready: false }); // reset the data object so that the plot is drawn
+    const res = await axios.get(
+      `/api/explore/biomarker/result/volcano_plot/${id}?outcome=${parameters.outcome}&model=${parameters.model}`
     );
-}
+    setVolcanoPlotData({ data: res.data, loading: false, ready: true });
+  };
+
+  const getForestPlotData = async (params) => {
+    setForestPlotData({ data: {}, loading: true, ready: false }); // reset the data object so that the plot is redrawn.
+    setParameters(params);
+    let res = {};
+    if (params.signature === "Custom") {
+      res = await axios.get(
+        `/api/explore/biomarker/result/forest_plot/${id}?model=${params.model}&outcome=${params.outcome}`
+      );
+    } else {
+      res = await axios.post("/api/explore/forest_plot", params);
+    }
+    setForestPlotData({ data: res.data, loading: false, ready: true });
+  };
+
+  const getModalData = async (params) => {
+    // setModalData({data: {}, ready: false}); // reset the data object so that the plot is redrawn.
+    const res = await axios.post("/api/explore/description_modal", params);
+    console.log(res.data);
+    setModalData({ data: res.data, ready: true });
+  };
+
+  const removeModalData = () => {
+    setModalData({ data: {}, ready: false }); // reset the data object so that the plot is redrawn.
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      console.log(id);
+      const res = await axios.get(`/api/explore/biomarker/result/${id}`);
+      console.log(res.data);
+      setReqInfo({
+        data: res.data.reqInfo,
+        found: res.data.found,
+        error: res.data.error,
+        analysisNotReady: res.data.not_ready,
+        analysisId: res.data.analysis_id,
+        ready: true,
+      });
+      if (res.data.found && !res.data.error) {
+        setNetworkData({ data: res.data.network, ready: true });
+        setOutcomeDropdown(res.data.outcomeDropdown);
+        setModelDropdown(res.data.modelDropdown);
+      }
+    };
+    getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (parameters.outcome === "Response") {
+      setParameters({ ...parameters, model: "LogReg" });
+      let models = modelDropdown.map((item) => ({
+        ...item,
+        disabled: item.value !== "LogReg",
+      }));
+      setModelDropdown(models);
+    } else if (parameters.outcome === "OS" || parameters.outcome === "PFS") {
+      setParameters({ ...parameters, model: "" });
+      let models = modelDropdown.map((item) => ({
+        ...item,
+        disabled: item.value === "LogReg",
+      }));
+      setModelDropdown(models);
+    } else {
+      setParameters({ ...parameters, model: "" });
+      let models = modelDropdown.map((item) => ({ ...item, disabled: false }));
+      setModelDropdown(models);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [parameters.outcome]);
+
+  const renderContent = () => {
+    let message = undefined;
+    if (!reqInfo.found) {
+      message =
+        "The analysis has been deleted since it was more than 30 days old.";
+    }
+    if (reqInfo.found && reqInfo.analysisNotReady) {
+      message = "The analysis is being processed. Please try again later.";
+    }
+    if (reqInfo.found && reqInfo.error) {
+      message = `An error occurred during analysis. Please contact support@predictio.ca by referencing the analysis id: ${reqInfo.analysisId}.`;
+    }
+    if (!message && outcomeDropdown.length === 0) {
+      message =
+        "The analysis did not return any significant results with the given input.";
+    }
+    if (message) {
+      return <h3>{message}</h3>;
+    }
+    return (
+      <React.Fragment>
+        <ResultInfo reqInfo={reqInfo.data} />
+        {networkData.ready && networkData.data.length > 0 && (
+          <PlotContainer>
+            <StyledPlotArea width="100%">
+              <NetworkPlotContainer data={networkData.data} />
+            </StyledPlotArea>
+          </PlotContainer>
+        )}
+        <StyledForm flexDirection="row">
+          <div className="formField">
+            <div className="label">Outcome: </div>
+            <CustomDropdown
+              className="input"
+              value={parameters.outcome}
+              options={outcomeDropdown}
+              onChange={(e) => {
+                setParameters({ ...parameters, outcome: e.value });
+              }}
+              placeholder="Select..."
+            />
+          </div>
+          <div className="formField">
+            <div className="label">Model: </div>
+            <CustomDropdown
+              className="input"
+              value={parameters.model}
+              options={modelDropdown}
+              onChange={(e) => {
+                setParameters({ ...parameters, model: e.value });
+              }}
+              placeholder="Select..."
+              disabled={parameters.outcome.length === 0}
+            />
+          </div>
+          <div className="formField buttonField">
+            <ActionButton
+              className="left"
+              onClick={(e) => {
+                if (reqInfo.data.input_datatype === "EXP") {
+                  getVolcanoPlotData(e);
+                } else {
+                  getForestPlotData({ ...parameters, signature: "Custom" });
+                }
+              }}
+              text="Submit"
+              disabled={disableSubmit()}
+            />
+            <ActionButton onClick={reset} text="Reset" type="reset" />
+          </div>
+        </StyledForm>
+        <PlotContainer>
+          {reqInfo.data.input_datatype === "EXP" && (
+            <StyledPlotArea width="40%">
+              {volcanoPlotData.ready ? (
+                <VolcanoPlotContainer
+                  parameters={parameters}
+                  setParameters={setParameters}
+                  volcanoPlotData={volcanoPlotData}
+                  getForestPlotData={getForestPlotData}
+                  onthefly={true}
+                />
+              ) : volcanoPlotData.loading ? (
+                <LoaderContainer>
+                  <Loader
+                    type="Oval"
+                    color={colors.blue}
+                    height={80}
+                    width={80}
+                  />
+                </LoaderContainer>
+              ) : (
+                <div>
+                  <h3>Volcano Plot</h3>
+                  <div className="forestPlotMessage">
+                    Select outcome and model to view the volcano plot.
+                  </div>
+                </div>
+              )}
+            </StyledPlotArea>
+          )}
+          <StyledPlotArea width="60%">
+            {forestPlotData.ready ? (
+              <ForestPlotContainer
+                parameters={parameters}
+                forestPlotData={forestPlotData}
+                getModalData={getModalData}
+              />
+            ) : forestPlotData.loading ? (
+              <LoaderContainer>
+                <Loader
+                  type="Oval"
+                  color={colors.blue}
+                  height={80}
+                  width={80}
+                />
+              </LoaderContainer>
+            ) : (
+              <div>
+                <h3>Forest Plot</h3>
+                <div className="forestPlotMessage">
+                  {reqInfo.data.input_datatype === "EXP"
+                    ? "Click on a signature point on the volcano plot to display a corresponding forest plot."
+                    : "Select outcome and model to view the forest plot."}
+                </div>
+              </div>
+            )}
+          </StyledPlotArea>
+        </PlotContainer>
+        <PlotContainer>
+          {modalData.ready && (
+            <ModalContainer
+              modalData={modalData}
+              removeModalData={removeModalData}
+            />
+          )}
+        </PlotContainer>
+      </React.Fragment>
+    );
+  };
+
+  return (
+    <Layout>
+      <h3>Biomarker Evaluation Result</h3>
+      {!reqInfo.ready ? (
+        <React.Fragment>
+          <h3>Loading...</h3>
+          <LoaderContainer>
+            <Loader type="Oval" color={colors.blue} height={80} width={80} />
+          </LoaderContainer>
+        </React.Fragment>
+      ) : (
+        renderContent()
+      )}
+    </Layout>
+  );
+};
 
 export default BiomarkerEvaluationResult;

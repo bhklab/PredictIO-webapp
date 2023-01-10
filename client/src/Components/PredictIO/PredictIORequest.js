@@ -11,6 +11,7 @@ import ActionButton from "../UtilComponents/ActionButton";
 import { colors } from "../../styles/colors";
 import Loader from "react-loader-spinner";
 import ModalContainer from "../IOExplore/ModalContainer";
+import { emailRegex } from "../../util/constants";
 
 const StyledMessages = styled(Messages)`
   .p-message {
@@ -79,12 +80,11 @@ const PredictIO = () => {
   const [showModal, setShowModal] = useState(false);
 
   const disableSubmit = () => {
-    const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     return (
       parameters.analysis_id.length === 0 ||
       !parameters.fileUploaded ||
       parameters.email.length === 0 ||
-      !regex.test(parameters.email)
+      !emailRegex.test(parameters.email)
     );
   };
 

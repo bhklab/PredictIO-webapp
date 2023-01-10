@@ -21,7 +21,7 @@ class BiomarkerEvaluationResult(Resource):
         analysis = AnalysisRequest.query.filter(
             AnalysisRequest.analysis_id == analysis_id, AnalysisRequest.analysis_type == 'biomarker_eval').first()
 
-        if (analysis and analysis['time_completed']):
+        if (analysis and analysis.time_completed):
             analysis = analysis.serialize()
             result['reqInfo'] = {
                 'analysis_id': analysis['analysis_id'],
@@ -102,10 +102,15 @@ class BiomarkerEvaluationResult(Resource):
             result['network'] = network_clusters
             result['found'] = True
             result['not_ready'] = False
+        elif (analysis and analysis.time_completed is None):
+            result['found'] = True
+            result['not_ready'] = True
 
-        if (analysis and analysis["error"]):
+        if (analysis and hasattr(analysis, 'error') and analysis.error):
+            result['found'] = True
             result["error"] = True
-            result["analysis_id"] = analysis['analysis_id']
+            result['not_ready'] = False
+            result["analysis_id"] = analysis.analysis_id
 
         return result, 200
 

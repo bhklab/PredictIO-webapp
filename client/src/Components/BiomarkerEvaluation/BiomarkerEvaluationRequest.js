@@ -14,6 +14,7 @@ import CustomInputText from "../UtilComponents/CustomInputText";
 import CustomDropdown from "../UtilComponents/CustomDropdown";
 import GeneSearch from "./GeneSearch";
 import { Container } from "../../styles/StyledComponents";
+import { emailRegex } from "../../util/constants";
 
 const LoaderOverlay = styled.div`
   position: absolute;
@@ -85,7 +86,6 @@ const BiomarkerEvaluationRequest = () => {
   });
 
   const disableSubmit = () => {
-    const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
     return (
       parameters.study.length < 3 ||
       parameters.sex.length === 0 ||
@@ -94,7 +94,7 @@ const BiomarkerEvaluationRequest = () => {
       parameters.dataType.length === 0 ||
       parameters.sequencingType.length === 0 ||
       parameters.email.length === 0 ||
-      !regex.test(parameters.email) ||
+      !emailRegex.test(parameters.email) ||
       parameters.submitting
     );
   };
