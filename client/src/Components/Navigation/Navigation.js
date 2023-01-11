@@ -1,6 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import {StyledNavigation, NavigationContent, LogoContainer, StyledLinks} from './NavigationStyles';
+import React from "react";
+import { Link } from "react-router-dom";
+import {
+  StyledNavigation,
+  NavigationContent,
+  LogoContainer,
+  StyledLinks,
+} from "./NavigationStyles";
 
 /**
  * Component for the navigation with links and logo.
@@ -10,24 +15,25 @@ import {StyledNavigation, NavigationContent, LogoContainer, StyledLinks} from '.
  *
  */
 const Navigation = () => {
-    return (
-        <StyledNavigation>
-            <NavigationContent>
-                <LogoContainer>
-                    <img alt='PredictIO' src='./images/logos/logo-white.png'/>
-                </LogoContainer>
-                <StyledLinks>
-                    <Link to='/'>Home</Link>
-                    <Link to='/explore/precomputed'>Pre-computed Signatures</Link>
-                    <Link to='/explore/biomarker/request'>Biomarker Evaluation</Link>
-                    <Link to='/predictio/request'>PredictIO</Link>
-                    <Link to='/datasets_signatures'>Datasets and Signatures</Link>
-                    <Link to='/about'>About</Link>
-                    <Link to='/contact'>Contact</Link>
-                </StyledLinks>
-            </NavigationContent>
-        </StyledNavigation>
-    );
+  return (
+    <StyledNavigation>
+      <NavigationContent>
+        <LogoContainer>
+          <img alt="PredictIO" src="./images/logos/logo-white.png" />
+        </LogoContainer>
+        <StyledLinks>
+          <Link to="/">Home</Link>
+          <Link to="/explore/precomputed">Pre-computed Signatures</Link>
+          <Link to="/explore/biomarker/request">Biomarker Evaluation</Link>
+          <Link to="/predictio/request">PredictIO</Link>
+          <Link to="/datasets_signatures">Datasets and Signatures</Link>
+          <Link to="/analysis_status">Analysis Status</Link>
+          <Link to="/about">About</Link>
+          <Link to="/contact">Contact</Link>
+        </StyledLinks>
+      </NavigationContent>
+    </StyledNavigation>
+  );
 };
 
 export default Navigation;

@@ -6,7 +6,7 @@ import os
 from flask import Flask, send_from_directory
 from flask_restful import Api
 from flask_cors import CORS
-from urllib.parse import quote 
+from urllib.parse import quote
 
 # used to get values from .env file
 from decouple import config
@@ -31,6 +31,7 @@ from resources.dropdown_explore import ExploreDropdownOption
 from resources.biomarker_evaluation_query import BiomarkerEvaluationQuery
 from resources.search_gene import SearchGene
 from resources.user_analysis_request import UserAnalysisRequest
+from resources.user_analysis_status import UserAnalysisStatus
 from resources.biomarker_evaluation_result import BiomarkerEvaluationResult, BiomarkerEvaluationVolcanoPlot, BiomarkerEvaluationForestPlot
 from resources.predictio_file import UploadFile, DownloadExampleFile
 from resources.predictio_result import PredictIO
@@ -47,7 +48,8 @@ def create_app():
 
     # initialize flask_sqlalchemy
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://" + config('DB_USER') + ":" + quote(config('DB_PWD')) + "@" + config('DB_HOST') + "/" + config('DB_NAME')
+    app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://" + config('DB_USER') + ":" + quote(
+        config('DB_PWD')) + "@" + config('DB_HOST') + "/" + config('DB_NAME')
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
         "pool_pre_ping": True,
         "pool_recycle": 300,
@@ -86,6 +88,7 @@ def create_app():
     api.add_resource(ForestPlot, '/api/explore/forest_plot')
     api.add_resource(VolcanoPlot, '/api/explore/volcano_plot')
     api.add_resource(UserAnalysisRequest, '/api/analysis/request')
+    api.add_resource(UserAnalysisStatus, '/api/analysis/status')
     api.add_resource(UploadFile, '/api/predictio/upload_file')
     api.add_resource(DownloadExampleFile, '/api/predictio/download_example')
     api.add_resource(BiomarkerEvaluationQuery,
@@ -103,7 +106,7 @@ def create_app():
     api.add_resource(Signatures, '/api/signatures')
     api.add_resource(SingleDataset, '/api/dataset/<dataset_id>')
 
-    # unused 
+    # unused
     api.add_resource(ITNTVisualization, '/api/explore/itnt_data')
 
     # Setup that enables react routing when serving static files
@@ -128,19 +131,19 @@ def create_app():
     @app.cli.command("create-table")
     def create_single_table():
         create_table()
-    
+
     @app.cli.command("delete-table-rows")
     def delete_table():
         delete_table_rows()
-    
+
     @app.cli.command("delete-old-requests")
     def delete_data():
         delete_old_requests()
-    
+
     @app.cli.command("backup-requested-data")
     def backup_data():
         backup_requested_data()
-    
+
     @app.cli.command("restore-requested-data")
     def restore_data():
         restore_requested_data()

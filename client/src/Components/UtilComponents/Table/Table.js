@@ -38,7 +38,7 @@ import PropTypes from 'prop-types';
  * @param {Array} data - an array of data for the table.
  * @param {boolean} disablePagination - a boolean value to whether disable the pagination or not.
  */
-const Table = ({ columns, data, disablePagination = false, pageRowNum = 10 }) => {
+const Table = ({ columns, data, disablePagination = false, showGlobalFilter = true, pageRowNum = 10 }) => {
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -131,11 +131,14 @@ const Table = ({ columns, data, disablePagination = false, pageRowNum = 10 }) =>
   return (
     <TableStyles>
       <div className="top-settings">
-        <GlobalFilter
-          preGlobalFilteredRows={preGlobalFilteredRows}
-          globalFilter={globalFilter}
-          setGlobalFilter={setGlobalFilter}
-        />
+        {
+          showGlobalFilter &&
+          <GlobalFilter
+            preGlobalFilteredRows={preGlobalFilteredRows}
+            globalFilter={globalFilter}
+            setGlobalFilter={setGlobalFilter}
+          />
+        }
       </div>
       <table {...getTableProps()}>
         <thead>
