@@ -56,6 +56,10 @@ const Explore = ({ location }) => {
                     setParameters={setParameters} 
                     onSubmit={getVolcanoPlotData} 
                     onReset={resetData}
+                    onOutcomeChange={() => {
+                        setVolcanoPlotData({data: {}, loading: false, ready: false});
+                        setForestPlotData({data: {}, loading: false, ready: false});
+                    }}
                     flexDirection='row' 
                 />
                 <PlotContainer>
