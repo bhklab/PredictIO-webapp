@@ -13,10 +13,10 @@ from db.models.signature_network import SignatureNetwork
 from db.models.signature_kegg_network import SignatureKeggNetwork
 from db.models.predictio_result import PredictIOResult
 from db.models.analysis_request import AnalysisRequest
-# from resources import create_app
-# # gets application context
-# app = create_app()
-# app.app_context().push()
+from resources import create_app
+# gets application context
+app = create_app()
+app.app_context().push()
 
 
 def execute_script(parameters):

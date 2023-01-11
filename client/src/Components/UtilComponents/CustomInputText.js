@@ -17,7 +17,7 @@ const InputTextWithLabel = styled.span`
 `;
 
 const CustomInputText = (props) => {
-    const {id, className, value, onChange, placeholder, disabled, withLabel, label} = props;
+    const {id, className, value, onChange, onKeyDown, placeholder, disabled, withLabel, label} = props;
 
     return(
         <React.Fragment>
@@ -29,6 +29,7 @@ const CustomInputText = (props) => {
                         className={className}
                         value={value}
                         onChange={onChange} 
+                        onKeyDown={onKeyDown}
                         placeholder={placeholder}
                         disabled={disabled}
                     />
@@ -40,6 +41,7 @@ const CustomInputText = (props) => {
                     className={className}
                     value={value}
                     onChange={onChange} 
+                    onKeyDown={onKeyDown}
                     placeholder={placeholder}
                     disabled={disabled}
                 />
