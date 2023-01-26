@@ -16,7 +16,7 @@ const Datasets = () => {
             )
         },
         {
-            Header: 'Source',
+            Header: 'Publication',
             accessor: 'pmid',
             Cell: (item) => (
                 <a href={item.value} target="_blank" rel="noopener noreferrer">
@@ -25,7 +25,7 @@ const Datasets = () => {
             )
         },
         {
-            Header: 'Identifier',
+            Header: 'Source',
             accessor: 'identifiers',
             Cell: (item) => {
                 if(item.value.length > 0){
@@ -47,7 +47,7 @@ const Datasets = () => {
                         </span>
                     );
                 }else{
-                    return 'Currently unavailable'
+                    return 'Data Access Restricted'
                 }
             }
         }
