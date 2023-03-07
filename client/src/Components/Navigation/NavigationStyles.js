@@ -27,13 +27,15 @@ export const LogoContainer = styled.div`
 `
 
 export const StyledLinks = styled.div`
-    width: 70%;
+    width: 100%;
     min-width: 560px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 0px 30px;
     a {
         color: #ffffff;
+        margin-right: 20px;
     }
     a:last-child {
         margin-right: 0;

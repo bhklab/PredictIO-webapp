@@ -16,6 +16,7 @@ import {
   About,
   Contact,
   Test,
+  Layout
 } from "./Components/index";
 
 // styled component
@@ -32,7 +33,7 @@ const App = () => {
       <GlobalStyles />
       <Router>
         <Switch>
-          <Suspense fallback={<div />}>
+          <Suspense fallback={<Layout />}>
             <Route path="/" exact component={Home} />
             <Route path="/explore/precomputed" exact component={Explore} />
             <Route

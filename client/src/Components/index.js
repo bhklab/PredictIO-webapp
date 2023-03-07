@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import Layout from "./UtilComponents/Layout";
 const Home = lazy(() => import("./Home/Home"));
 const Explore = lazy(() => import("./IOExplore/Explore"));
 const BiomarkerEvaluationRequest = lazy(() =>
@@ -31,4 +32,5 @@ export {
   About,
   Contact,
   Test,
+  Layout
 };
