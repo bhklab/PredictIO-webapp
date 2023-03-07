@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import Layout from "./UtilComponents/Layout";
+import Suspension from "./Suspension";
 const Home = lazy(() => import("./Home/Home"));
 const Explore = lazy(() => import("./IOExplore/Explore"));
 const BiomarkerEvaluationRequest = lazy(() =>
@@ -32,5 +32,5 @@ export {
   About,
   Contact,
   Test,
-  Layout
+  Suspension
 };
