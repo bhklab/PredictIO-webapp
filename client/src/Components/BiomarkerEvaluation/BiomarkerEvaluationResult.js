@@ -158,12 +158,14 @@ const BiomarkerEvaluationResult = () => {
 
   const renderContent = () => {
     let message = undefined;
+    let subText = undefined;
     if (!reqInfo.found) {
       message =
         "The analysis has been deleted since it was more than 30 days old.";
     }
     if (reqInfo.found && reqInfo.analysisNotReady) {
-      message = "The analysis is being processed. Please try again later.";
+      message = "The analysis is being processed. Please come back again later";
+      subText = <span>You can also check the status of your analyses on <a href='/analysis_status'>the Status page</a></span>
     }
     if (reqInfo.found && reqInfo.error) {
       message = `An error occurred during analysis. Please contact support@predictio.ca by referencing the analysis id: ${reqInfo.analysisId}.`;
@@ -173,7 +175,15 @@ const BiomarkerEvaluationResult = () => {
         "The analysis did not return any significant results with the given input.";
     }
     if (message) {
-      return <h3>{message}</h3>;
+      return(
+        <React.Fragment>
+          <h3>{message}</h3>
+          {
+            subText &&
+            <div>{subText}</div>
+          }
+        </React.Fragment>
+      );
     }
     return (
       <React.Fragment>

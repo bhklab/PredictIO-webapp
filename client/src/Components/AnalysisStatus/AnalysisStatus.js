@@ -111,7 +111,7 @@ const AnalysisStatus = () => {
     <Layout>
       <Container>
         <h3>Analysis Status</h3>
-        <div>View status of your analysis requests.</div>
+        <div>View status of your analysis requests by entering the email address associated with your request submissions:</div>
         <StyledForm flexDirection="column">
           <div className="formField">
             <div className="label">Email: </div>

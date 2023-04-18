@@ -84,12 +84,14 @@ const PredictIOResult = () => {
 
   const renderContent = () => {
     let message = undefined;
+    let subText = undefined;
     if (!predictIO.found) {
       message =
         "The analysis has been deleted since it was more than 30 days old.";
     }
     if (predictIO.found && predictIO.analysisNotReady) {
-      message = "The analysis is being processed. Please try again later.";
+      message = "The analysis is being processed. Please come back again later";
+      subText = <span>You can also check the status of your analyses on <a href='/analysis_status'>the Status page</a></span>
     }
     if (predictIO.found && predictIO.error) {
       message = `An error occurred during analysis. Please contact support@predictio.ca by referencing the analysis id: ${predictIO.analysisId}.`;
@@ -98,7 +100,15 @@ const PredictIOResult = () => {
       message = "PredictIO scores could not be calculated with a given data.";
     }
     if (message) {
-      return <h3>{message}</h3>;
+      return(
+        <React.Fragment>
+          <h3>{message}</h3>
+          {
+            subText &&
+            <div>{subText}</div>
+          }
+        </React.Fragment>
+      );
     }
     return (
       <React.Fragment>

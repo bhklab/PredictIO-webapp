@@ -144,7 +144,7 @@ const BiomarkerEvaluationRequest = () => {
               <h3>Request has been submitted</h3>
               <div>
                 <p>Your analysis ID is {res.data.analysis_id}. You will receive an email notification once your request is complete.</p>
-                <p>When it is ready, you can review the results at <a href={`https://predictio.ca/predictio/result/${res.data.analysis_id}`}>https://predictio.ca/predictio/result/{res.data.analysis_id}</a>.</p>
+                <p>When it is ready, you can review the results at <a href={`https://predictio.ca/explore/biomarker/result/${res.data.analysis_id}`}>https://predictio.ca/predictio/result/{res.data.analysis_id}</a>.</p>
                 <p>You can also check status of your analysis request on <a href='/analysis_status'>Analysis Status</a>.</p>
               </div>
             </div>
