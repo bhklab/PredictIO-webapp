@@ -33,6 +33,9 @@ run <- function(analysis_id) {
   )
   json <- jsonlite::toJSON(json)
 
+  # removes the uploaded file
+  file.remove(input_file)
+
   return(json)
 }
 
